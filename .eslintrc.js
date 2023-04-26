@@ -38,6 +38,8 @@ module.exports = {
     ],
     //#endregion  //*======== Unused Import ===========
 
+    '@typescript-eslint/no-non-null-assertion': 'off',
+
     //#region  //*=========== Import Sort ===========
     'simple-import-sort/exports': 'warn',
     'simple-import-sort/imports': [
