@@ -18,6 +18,7 @@ export const initialState: SubstrateState = {
   apiError: null,
   apiState: null,
   currentAccount: null,
+  accounts: [],
 };
 
 export interface SubstrateState {
@@ -29,6 +30,7 @@ export interface SubstrateState {
   api: ApiPromise | null;
   apiError: string | null;
   apiState: string | null;
+  accounts: KeyringAddress[] | null;
   currentAccount: KeyringAddress | null;
 }
 

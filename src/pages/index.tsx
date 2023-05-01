@@ -1,4 +1,4 @@
-import { KeyringAddress } from '@polkadot/ui-keyring/types';
+import { AbiMessage } from '@polkadot/api-contract/types';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 
@@ -6,6 +6,7 @@ import Button from '@/components/buttons/Button';
 import Layout from '@/components/layout/Layout';
 import Seo from '@/components/Seo';
 
+import { useContract } from '@/context/contract/ContractContextProvider';
 import {
   useSubstrate,
   useSubstrateState,
@@ -25,14 +26,125 @@ import {
 
 export default function HomePage() {
   const { setCurrentAccount } = useSubstrate();
-  const { keyring, currentAccount } = useSubstrateState();
-  const [accounts, setAccounts] = useState<KeyringAddress[]>([]);
+  const { accounts, currentAccount } = useSubstrateState();
+  const { contract } = useContract();
+  const [results, setResults] = useState<unknown[]>([]);
+  const [_message, setMessage] = useState<AbiMessage>();
 
-  useEffect(() => {
-    if (keyring) {
-      setAccounts(keyring.getAccounts());
+  useEffect((): void => {
+    if (!accounts || accounts.length === 0) return;
+    setCurrentAccount(accounts[0]);
+  }, [accounts, setCurrentAccount]);
+
+  const queryMessage = async (message: string) => {
+    if (!contract.abi.messages.find((e) => e.method === message))
+      return alert('no such message');
+
+    if (!currentAccount) {
+      return alert('select current account');
     }
-  }, [keyring]);
+
+    const gasLimit = 0;
+    // a limit to how much Balance to be used to pay for the storage created by the contract call
+    // if null is passed, unlimited balance can be used
+    const storageDepositLimit = null;
+
+    try {
+      const { gasRequired, result, output, ...everything } =
+        await contract.query[message](currentAccount.address, {
+          gasLimit,
+          storageDepositLimit,
+        });
+
+      // The actual result from RPC as `ContractExecResult`
+      console.log(result.toHuman());
+
+      // the gas consumed for contract execution
+      console.log(gasRequired.toHuman());
+
+      console.log('isOk ', result.isOk);
+      console.log('isErr ', result.isErr);
+
+      console.log('everything ', everything);
+
+      const dispatchError =
+        result.isErr && result.asErr.isModule
+          ? contract.registry.findMetaError(result.asErr.asModule)
+          : undefined;
+
+      console.log('dispatch erro ', dispatchError);
+
+      // check if the call was successful
+      if (result.isOk) {
+        // output the return value
+        console.log('Success', output?.toHuman());
+      } else {
+        console.error(`Error: ${result.asErr}`);
+      }
+    } catch (error) {
+      console.log('error ', error);
+    }
+  };
+
+  const callMessage = async (message: string) => {
+    if (!contract.abi.messages.find((e) => e.method === message))
+      return alert('no such message');
+
+    if (!currentAccount) {
+      return alert('select current account');
+    }
+
+    setMessage(contract.abi.messages.find((e) => e.method === message));
+
+    const { web3FromAddress } = await import('@polkadot/extension-dapp');
+
+    const injector = await web3FromAddress(currentAccount!.address);
+
+    const gasLimit = 3947587584;
+    // a limit to how much Balance to be used to pay for the storage created by the contract call
+    // if null is passed, unlimited balance can be used
+    const storageDepositLimit = null;
+
+    try {
+      const value = contract.tx[message]({
+        value: undefined,
+        gasLimit,
+        storageDepositLimit,
+      });
+
+      await value.signAndSend(
+        currentAccount!.address,
+        {
+          signer: injector.signer,
+        },
+        async (result) => {
+          if (result.isInBlock) {
+            setResults([
+              ...results,
+              {
+                id: result.txIndex,
+                message,
+                time: Date.now(),
+                events: result.events,
+                error: result.dispatchError?.isModule
+                  ? contract?.registry.findMetaError(
+                      result.dispatchError.asModule
+                    )
+                  : undefined,
+              },
+            ]);
+
+            alert(result.dispatchInfo);
+            await queryMessage(message);
+          }
+        }
+      );
+    } catch (error: unknown) {
+      const err = error as Error;
+      console.log('error ', error);
+      alert(err.message);
+    }
+  };
 
   return (
     <Layout>
@@ -83,8 +195,72 @@ export default function HomePage() {
                         : 'No'}
                     </td>
                     <td className='px-6 py-4'>
-                      <Button onClick={() => setCurrentAccount(account)}>
+                      <Button
+                        disabled={Boolean(
+                          currentAccount &&
+                            account.address === currentAccount.address
+                        )}
+                        onClick={() => setCurrentAccount(account)}
+                      >
                         Set account
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
+
+        <h1 className='my-4'>MESSAGES</h1>
+
+        <div className='relative overflow-x-auto'>
+          <table className='w-full max-w-[1000px] text-left text-sm text-gray-500 dark:text-gray-400'>
+            <thead className='bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400'>
+              <tr>
+                <th scope='col' className='px-6 py-3'>
+                  Method name
+                </th>
+                <th scope='col' className='px-6 py-3'>
+                  description
+                </th>
+                <th scope='col' className='px-6 py-3'>
+                  args
+                </th>
+                <th scope='col' className='px-6 py-3'>
+                  action
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {contract &&
+                contract.abi &&
+                contract.abi.messages.map((message) => (
+                  <tr
+                    key={message.method}
+                    className='border-b bg-white dark:border-gray-700 dark:bg-gray-800'
+                  >
+                    <th
+                      scope='row'
+                      className='whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white'
+                    >
+                      {message.method}()
+                    </th>
+                    <td className='px-6 py-4'>{message.docs}</td>
+                    <th scope='row' className='px-6 py-4'>
+                      {message.args.map((arg) => (
+                        <>
+                          <p>
+                            {arg.name}: <span>{arg.type.displayName}</span>
+                          </p>
+                        </>
+                      ))}
+                    </th>
+                    <td className='px-6 py-4'>
+                      <Button
+                        disabled={!currentAccount}
+                        onClick={() => callMessage(message.method)}
+                      >
+                        Call
                       </Button>
                     </td>
                   </tr>

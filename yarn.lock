@@ -1589,6 +1589,20 @@
     rxjs "^7.8.0"
     tslib "^2.5.0"
 
+"@polkadot/api-contract@^10.4.1":
+  version "10.4.1"
+  resolved "https://registry.yarnpkg.com/@polkadot/api-contract/-/api-contract-10.4.1.tgz#dda86030af140ffb3175696283d208a2f129679c"
+  integrity sha512-nuAuMx1bJ8PTFM42AsoTe2tfPIzW6OXMpGp+gBXNSPelmHM5XKPvb+C5E794JdZaIL/ipoXN3B7zf0Ngl8hyDA==
+  dependencies:
+    "@polkadot/api" "10.4.1"
+    "@polkadot/types" "10.4.1"
+    "@polkadot/types-codec" "10.4.1"
+    "@polkadot/types-create" "10.4.1"
+    "@polkadot/util" "^12.0.1"
+    "@polkadot/util-crypto" "^12.0.1"
+    rxjs "^7.8.0"
+    tslib "^2.5.0"
+
 "@polkadot/api-derive@10.4.1":
   version "10.4.1"
   resolved "https://registry.yarnpkg.com/@polkadot/api-derive/-/api-derive-10.4.1.tgz#98aa809bf7690c6d51ceb52eb09de3a16dda3af5"

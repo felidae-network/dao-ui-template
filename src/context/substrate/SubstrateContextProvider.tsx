@@ -43,6 +43,7 @@ const reducer = (
       return {
         ...state,
         keyring: action.payload!.keyring,
+        accounts: action.payload!.accounts,
         keyringState: 'READY',
       };
     case 'KEYRING_ERROR':
@@ -71,7 +72,8 @@ const connect = async (
   const _api = await ApiPromise.create({ provider: wsProvider });
 
   await _api.isReady;
-  dispatch({ type: 'CONNECT', payload: { ...state, _api } });
+
+  dispatch({ type: 'CONNECT', payload: { ...state, api: _api } });
   dispatch({ type: 'CONNECT_SUCCESS' });
 
   // Set listeners for disconnection and reconnection event.
@@ -113,23 +115,26 @@ const loadAccounts = (
         '@polkadot/extension-dapp'
       );
       await web3Enable(APP_NAME);
-      let allAccounts = await web3Accounts();
+      const allAccounts = await web3Accounts();
 
-      allAccounts = allAccounts.map(({ address, meta }) => ({
-        address,
-        meta: { ...meta, name: `${meta.name} (${meta.source})` },
-      }));
+      const accounts = allAccounts.map(
+        ({ address, meta }) =>
+          ({
+            address,
+            meta: { ...meta, name: `${meta.name} (${meta.source})` },
+          } as unknown)
+      ) as KeyringAddress[];
 
       // Logics to check if the connecting chain is a dev chain, coming from polkadot-js Apps
       // ref: https://github.com/polkadot-js/apps/blob/15b8004b2791eced0dde425d5dc7231a5f86c682/packages/react-api/src/Api.tsx?_pjax=div%5Bitemtype%3D%22http%3A%2F%2Fschema.org%2FSoftwareSourceCode%22%5D%20%3E%20main#L101-L110
       const { systemChain } = await retrieveChainInfo(api!);
       const isDevelopment = isTestChain(systemChain);
 
-      Keyring.loadAll({ isDevelopment }, allAccounts);
+      Keyring.loadAll({ isDevelopment }, accounts);
 
       dispatch({
         type: 'SET_KEYRING',
-        payload: { ...state, keyring: Keyring },
+        payload: { ...state, keyring: Keyring, accounts },
       });
     } catch (e) {
       dispatch({ type: 'KEYRING_ERROR' });

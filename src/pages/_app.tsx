@@ -4,6 +4,7 @@ import '@/styles/globals.css';
 // !STARTERCONF This is for demo purposes, remove @/styles/colors.css import immediately
 import '@/styles/colors.css';
 
+import { ContractContextProvider } from '@/context/contract/ContractContextProvider';
 import { SubstrateContextProvider } from '@/context/substrate/SubstrateContextProvider';
 
 /**
@@ -14,7 +15,9 @@ import { SubstrateContextProvider } from '@/context/substrate/SubstrateContextPr
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <SubstrateContextProvider>
-      <Component {...pageProps} />
+      <ContractContextProvider>
+        <Component {...pageProps} />
+      </ContractContextProvider>
     </SubstrateContextProvider>
   );
 }
