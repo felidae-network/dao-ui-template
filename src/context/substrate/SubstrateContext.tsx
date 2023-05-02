@@ -5,6 +5,7 @@ import { KeyringAddress } from '@polkadot/ui-keyring/types';
 import { createContext } from 'react';
 
 import { CUSTOM_RPC_METHODS, PROVIDER_SOCKET } from '@/config';
+import { ApiChainProps } from '@/helpers/api/types';
 
 const connectedSocket = PROVIDER_SOCKET;
 
@@ -19,6 +20,7 @@ export const initialState: SubstrateState = {
   apiState: null,
   currentAccount: null,
   accounts: [],
+  chainProps: null,
 };
 
 export interface SubstrateState {
@@ -32,6 +34,7 @@ export interface SubstrateState {
   apiState: string | null;
   accounts: KeyringAddress[] | null;
   currentAccount: KeyringAddress | null;
+  chainProps: ApiChainProps | null;
 }
 
 export interface SubstrateContextType {

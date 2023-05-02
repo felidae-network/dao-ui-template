@@ -1,5 +1,5 @@
 import { ApiPromise, WsProvider } from '@polkadot/api';
-import { TypeRegistry } from '@polkadot/types/create';
+// import { TypeRegistry } from '@polkadot/types/create';
 import { keyring as Keyring } from '@polkadot/ui-keyring';
 import { KeyringAddress } from '@polkadot/ui-keyring/types';
 import { isTestChain } from '@polkadot/util';
@@ -11,10 +11,11 @@ import {
   SubstrateContext,
   SubstrateState,
 } from '@/context/substrate/SubstrateContext';
+import { getChainProperties } from '@/helpers/api/apiChainProperties';
 
 import { APP_NAME, PROVIDER_SOCKET } from '../../config';
 
-const registry = new TypeRegistry();
+// const registry = new TypeRegistry();
 
 ///
 // Reducer function for `useReducer`
@@ -44,6 +45,7 @@ const reducer = (
         ...state,
         keyring: action.payload!.keyring,
         accounts: action.payload!.accounts,
+        chainProps: action.payload!.chainProps,
         keyringState: 'READY',
       };
     case 'KEYRING_ERROR':
@@ -86,19 +88,19 @@ const connect = async (
   _api.on('error', (err) => dispatch({ type: 'CONNECT_ERROR', payload: err }));
 };
 
-const retrieveChainInfo = async (api: ApiPromise) => {
-  const [systemChain, systemChainType] = await Promise.all([
-    api.rpc.system.chain(),
-    api.rpc.system.chainType
-      ? api.rpc.system.chainType()
-      : Promise.resolve(registry.createType('ChainType', 'Live')),
-  ]);
+// const retrieveChainInfo = async (api: ApiPromise) => {
+//   const [systemChain, systemChainType] = await Promise.all([
+//     api.rpc.system.chain(),
+//     api.rpc.system.chainType
+//       ? api.rpc.system.chainType()
+//       : Promise.resolve(registry.createType('ChainType', 'Live')),
+//   ]);
 
-  return {
-    systemChain: (systemChain || '<unknown>').toString(),
-    systemChainType,
-  };
-};
+//   return {
+//     systemChain: (systemChain || '<unknown>').toString(),
+//     systemChainType,
+//   };
+// };
 
 ///
 // Loading accounts from dev and polkadot-js extension
@@ -127,14 +129,20 @@ const loadAccounts = (
 
       // Logics to check if the connecting chain is a dev chain, coming from polkadot-js Apps
       // ref: https://github.com/polkadot-js/apps/blob/15b8004b2791eced0dde425d5dc7231a5f86c682/packages/react-api/src/Api.tsx?_pjax=div%5Bitemtype%3D%22http%3A%2F%2Fschema.org%2FSoftwareSourceCode%22%5D%20%3E%20main#L101-L110
-      const { systemChain } = await retrieveChainInfo(api!);
-      const isDevelopment = isTestChain(systemChain);
+      const chainProps = await getChainProperties(api!);
+      const isDevelopment = isTestChain(chainProps.systemChain);
 
       Keyring.loadAll({ isDevelopment }, accounts);
 
+      // addDevAccounts(Keyring);
       dispatch({
         type: 'SET_KEYRING',
-        payload: { ...state, keyring: Keyring, accounts },
+        payload: {
+          ...state,
+          keyring: Keyring,
+          accounts: Keyring.getAccounts(),
+          chainProps,
+        },
       });
     } catch (e) {
       dispatch({ type: 'KEYRING_ERROR' });

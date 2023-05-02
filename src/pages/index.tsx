@@ -1,6 +1,5 @@
 import { AbiMessage } from '@polkadot/api-contract/types';
 import * as React from 'react';
-import { useEffect, useState } from 'react';
 
 import Button from '@/components/buttons/Button';
 import Layout from '@/components/layout/Layout';
@@ -26,15 +25,10 @@ import {
 
 export default function HomePage() {
   const { setCurrentAccount } = useSubstrate();
-  const { accounts, currentAccount } = useSubstrateState();
+  const { accounts, currentAccount, chainProps, keyring } = useSubstrateState();
   const { contract } = useContract();
   const [results, setResults] = useState<unknown[]>([]);
   const [_message, setMessage] = useState<AbiMessage>();
-
-  useEffect((): void => {
-    if (!accounts || accounts.length === 0) return;
-    setCurrentAccount(accounts[0]);
-  }, [accounts, setCurrentAccount]);
 
   const queryMessage = async (message: string) => {
     if (!contract.abi.messages.find((e) => e.method === message))
@@ -98,9 +92,14 @@ export default function HomePage() {
 
     const { web3FromAddress } = await import('@polkadot/extension-dapp');
 
-    const injector = await web3FromAddress(currentAccount!.address);
+    const injector = chainProps!.systemChainType.isDevelopment
+      ? undefined
+      : await web3FromAddress(currentAccount!.address);
+    const account = chainProps!.systemChainType.isDevelopment
+      ? keyring!.getPair(currentAccount!.address)
+      : currentAccount.address;
 
-    const gasLimit = 3947587584;
+    const gasLimit = 0;
     // a limit to how much Balance to be used to pay for the storage created by the contract call
     // if null is passed, unlimited balance can be used
     const storageDepositLimit = null;
@@ -113,9 +112,9 @@ export default function HomePage() {
       });
 
       await value.signAndSend(
-        currentAccount!.address,
+        account,
         {
-          signer: injector.signer,
+          signer: injector?.signer || undefined,
         },
         async (result) => {
           if (result.isInBlock) {
