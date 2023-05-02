@@ -1,5 +1,4 @@
-import { AbiMessage } from '@polkadot/api-contract/types';
-import React, { useState } from 'react';
+import React from 'react';
 
 import Button from '@/components/buttons/Button';
 import Layout from '@/components/layout/Layout';
@@ -25,122 +24,16 @@ import {
 
 export default function HomePage() {
   const { setCurrentAccount } = useSubstrate();
-  const { accounts, currentAccount, chainProps, keyring } = useSubstrateState();
-  const { contract } = useContract();
-  const [results, setResults] = useState<unknown[]>([]);
-  const [_message, setMessage] = useState<AbiMessage>();
+  const { accounts, currentAccount } = useSubstrateState();
+  const { contract, callMessage, queryMessage } = useContract();
 
-  const queryMessage = async (message: string) => {
-    if (!contract.abi.messages.find((e) => e.method === message))
-      return alert('no such message');
-
-    if (!currentAccount) {
-      return alert('select current account');
-    }
-
-    const gasLimit = 0;
-    // a limit to how much Balance to be used to pay for the storage created by the contract call
-    // if null is passed, unlimited balance can be used
-    const storageDepositLimit = null;
-
+  const call = async (message: string) => {
     try {
-      const { gasRequired, result, output, ...everything } =
-        await contract.query[message](currentAccount.address, {
-          gasLimit,
-          storageDepositLimit,
-        });
-
-      // The actual result from RPC as `ContractExecResult`
-      console.log(result.toHuman());
-
-      // the gas consumed for contract execution
-      console.log(gasRequired.toHuman());
-
-      console.log('isOk ', result.isOk);
-      console.log('isErr ', result.isErr);
-
-      console.log('everything ', everything);
-
-      const dispatchError =
-        result.isErr && result.asErr.isModule
-          ? contract.registry.findMetaError(result.asErr.asModule)
-          : undefined;
-
-      console.log('dispatch erro ', dispatchError);
-
-      // check if the call was successful
-      if (result.isOk) {
-        // output the return value
-        console.log('Success', output?.toHuman());
-      } else {
-        console.error(`Error: ${result.asErr}`);
-      }
+      await callMessage(message);
+      await queryMessage(message);
     } catch (error) {
-      console.log('error ', error);
-    }
-  };
-
-  const callMessage = async (message: string) => {
-    if (!contract.abi.messages.find((e) => e.method === message))
-      return alert('no such message');
-
-    if (!currentAccount) {
-      return alert('select current account');
-    }
-
-    setMessage(contract.abi.messages.find((e) => e.method === message));
-
-    const { web3FromAddress } = await import('@polkadot/extension-dapp');
-
-    const injector = chainProps.systemChainType.isDevelopment
-      ? undefined
-      : await web3FromAddress(currentAccount.address);
-    const account = chainProps.systemChainType.isDevelopment
-      ? keyring.getPair(currentAccount.address)
-      : currentAccount.address;
-
-    const gasLimit = 0;
-    // a limit to how much Balance to be used to pay for the storage created by the contract call
-    // if null is passed, unlimited balance can be used
-    const storageDepositLimit = null;
-
-    try {
-      const value = contract.tx[message]({
-        value: undefined,
-        gasLimit,
-        storageDepositLimit,
-      });
-
-      await value.signAndSend(
-        account,
-        {
-          signer: injector?.signer || undefined,
-        },
-        async (result) => {
-          if (result.isInBlock) {
-            setResults([
-              ...results,
-              {
-                id: result.txIndex,
-                message,
-                time: Date.now(),
-                events: result.events,
-                error: result.dispatchError?.isModule
-                  ? contract?.registry.findMetaError(
-                      result.dispatchError.asModule
-                    )
-                  : undefined,
-              },
-            ]);
-
-            alert(result.dispatchInfo);
-            await queryMessage(message);
-          }
-        }
-      );
-    } catch (error: unknown) {
       const err = error as Error;
-      console.log('error ', error);
+      console.log(error);
       alert(err.message);
     }
   };
@@ -257,7 +150,7 @@ export default function HomePage() {
                     <td className='px-6 py-4'>
                       <Button
                         disabled={!currentAccount}
-                        onClick={() => callMessage(message.method)}
+                        onClick={() => call(message.method)}
                       >
                         Call
                       </Button>

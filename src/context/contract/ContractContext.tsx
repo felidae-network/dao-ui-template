@@ -3,11 +3,11 @@ import { createContext } from 'react';
 
 export interface ContractContextType {
   contract: ContractPromise;
+  callMessage: (message: string) => Promise<void>;
+  queryMessage: (message: string) => Promise<void>;
 }
 
-const ContractContextValues: ContractContextType = {
-  contract: {} as ContractPromise,
-};
+const ContractContextValues = {} as ContractContextType;
 
 export const ContractContext = createContext<ContractContextType>(
   ContractContextValues
