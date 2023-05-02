@@ -1,5 +1,5 @@
 import { AbiMessage } from '@polkadot/api-contract/types';
-import * as React from 'react';
+import React, { useState } from 'react';
 
 import Button from '@/components/buttons/Button';
 import Layout from '@/components/layout/Layout';
@@ -92,11 +92,11 @@ export default function HomePage() {
 
     const { web3FromAddress } = await import('@polkadot/extension-dapp');
 
-    const injector = chainProps!.systemChainType.isDevelopment
+    const injector = chainProps.systemChainType.isDevelopment
       ? undefined
-      : await web3FromAddress(currentAccount!.address);
-    const account = chainProps!.systemChainType.isDevelopment
-      ? keyring!.getPair(currentAccount!.address)
+      : await web3FromAddress(currentAccount.address);
+    const account = chainProps.systemChainType.isDevelopment
+      ? keyring.getPair(currentAccount.address)
       : currentAccount.address;
 
     const gasLimit = 0;

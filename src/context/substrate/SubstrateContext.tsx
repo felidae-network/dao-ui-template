@@ -1,40 +1,21 @@
 import { ApiPromise } from '@polkadot/api';
-import jsonrpc from '@polkadot/types/interfaces/jsonrpc';
 import { keyring as Keyring } from '@polkadot/ui-keyring';
 import { KeyringAddress } from '@polkadot/ui-keyring/types';
 import { createContext } from 'react';
 
-import { CUSTOM_RPC_METHODS, PROVIDER_SOCKET } from '@/config';
 import { ApiChainProps } from '@/helpers/api/types';
-
-const connectedSocket = PROVIDER_SOCKET;
-
-export const initialState: SubstrateState = {
-  // These are the states
-  socket: connectedSocket,
-  jsonrpc: { ...jsonrpc, CUSTOM_RPC_METHODS },
-  keyring: null,
-  keyringState: null,
-  api: null,
-  apiError: null,
-  apiState: null,
-  currentAccount: null,
-  accounts: [],
-  chainProps: null,
-};
-
 export interface SubstrateState {
   [key: string]: unknown;
   socket: string;
   jsonrpc: unknown;
-  keyring: typeof Keyring | null;
-  keyringState: string | null;
-  api: ApiPromise | null;
-  apiError: string | null;
-  apiState: string | null;
-  accounts: KeyringAddress[] | null;
-  currentAccount: KeyringAddress | null;
-  chainProps: ApiChainProps | null;
+  keyring: typeof Keyring;
+  keyringState: string;
+  api: ApiPromise;
+  apiError: string;
+  apiState: string;
+  accounts: KeyringAddress[];
+  currentAccount: KeyringAddress;
+  chainProps: ApiChainProps;
 }
 
 export interface SubstrateContextType {
@@ -42,10 +23,8 @@ export interface SubstrateContextType {
   setCurrentAccount: (account: KeyringAddress) => void;
 }
 
-const SubstrateContextValues: SubstrateContextType = {
-  state: initialState,
-  setCurrentAccount: () => null,
-};
+const SubstrateContextValues: SubstrateContextType =
+  {} as unknown as SubstrateContextType;
 
 export const SubstrateContext = createContext<SubstrateContextType>(
   SubstrateContextValues

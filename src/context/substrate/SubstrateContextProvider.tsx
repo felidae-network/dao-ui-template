@@ -7,7 +7,6 @@ import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useReducer } from 'react';
 
 import {
-  initialState,
   SubstrateContext,
   SubstrateState,
 } from '@/context/substrate/SubstrateContext';
@@ -49,7 +48,7 @@ const reducer = (
         keyringState: 'READY',
       };
     case 'KEYRING_ERROR':
-      return { ...state, keyring: null, keyringState: 'ERROR' };
+      return { ...state, keyringState: 'ERROR' };
     case 'SET_CURRENT_ACCOUNT':
       return { ...state, currentAccount: action.payload!.currentAccount };
     default:
@@ -129,7 +128,7 @@ const loadAccounts = (
 
       // Logics to check if the connecting chain is a dev chain, coming from polkadot-js Apps
       // ref: https://github.com/polkadot-js/apps/blob/15b8004b2791eced0dde425d5dc7231a5f86c682/packages/react-api/src/Api.tsx?_pjax=div%5Bitemtype%3D%22http%3A%2F%2Fschema.org%2FSoftwareSourceCode%22%5D%20%3E%20main#L101-L110
-      const chainProps = await getChainProperties(api!);
+      const chainProps = await getChainProperties(api);
       const isDevelopment = isTestChain(chainProps.systemChain);
 
       Keyring.loadAll({ isDevelopment }, accounts);
@@ -159,16 +158,10 @@ interface SubstrateContextProviderProps {
 }
 
 const SubstrateContextProvider = (props: SubstrateContextProviderProps) => {
-  const neededPropNames = ['socket'];
-  neededPropNames.forEach((key) => {
-    initialState[key] =
-      typeof props[key] === 'undefined' ? initialState[key] : props[key];
-  });
-
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, {} as SubstrateState);
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && state.apiState === null)
+    if (typeof window !== 'undefined' && state.apiState === undefined)
       connect(state, dispatch);
   }, [state]);
 
