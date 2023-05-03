@@ -4,6 +4,9 @@ import '@/styles/globals.css';
 // !STARTERCONF This is for demo purposes, remove @/styles/colors.css import immediately
 import '@/styles/colors.css';
 
+import Header from '@/components/header/Header';
+import { PrivateRoute } from '@/components/route/PrivateRoute';
+
 import { ContractContextProvider } from '@/context/contract/ContractContextProvider';
 import { SubstrateContextProvider } from '@/context/substrate/SubstrateContextProvider';
 
@@ -16,7 +19,10 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <SubstrateContextProvider>
       <ContractContextProvider>
-        <Component {...pageProps} />
+        <Header />
+        <PrivateRoute>
+          <Component {...pageProps} />
+        </PrivateRoute>
       </ContractContextProvider>
     </SubstrateContextProvider>
   );

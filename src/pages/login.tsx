@@ -1,3 +1,5 @@
+import { KeyringAddress } from '@polkadot/ui-keyring/types';
+import { useRouter } from 'next/router';
 import React from 'react';
 
 import Button from '@/components/buttons/Button';
@@ -22,8 +24,14 @@ import {
 // to customize the default configuration.
 
 export default function HomePage() {
+  const router = useRouter();
   const { setCurrentAccount } = useSubstrate();
   const { accounts, currentAccount } = useSubstrateState();
+
+  const login = (account: KeyringAddress) => {
+    setCurrentAccount(account);
+    router.push('/');
+  };
 
   return (
     <Layout>
@@ -32,7 +40,9 @@ export default function HomePage() {
 
       <main>
         <div className='relative overflow-x-auto'>
-          <table className='w-full max-w-[1000px] text-left text-sm text-gray-500 dark:text-gray-400'>
+          <h1 className='my-5 text-center'>Log In</h1>
+          <h3 className='text-center'>select account</h3>
+          <table className='m-auto mt-5 w-full max-w-[1000px] text-left text-sm text-gray-500 dark:text-gray-400'>
             <thead className='bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400'>
               <tr>
                 <th scope='col' className='px-6 py-3'>
@@ -43,9 +53,6 @@ export default function HomePage() {
                 </th>
                 <th scope='col' className='px-6 py-3'>
                   created at
-                </th>
-                <th scope='col' className='px-6 py-3'>
-                  active
                 </th>
                 <th scope='col' className='px-6 py-3'>
                   action
@@ -68,20 +75,14 @@ export default function HomePage() {
                     <td className='px-6 py-4'>{account.address}</td>
                     <td className='px-6 py-4'>{account.meta.whenCreated}</td>
                     <td className='px-6 py-4'>
-                      {currentAccount &&
-                      account.address === currentAccount.address
-                        ? 'Yes'
-                        : 'No'}
-                    </td>
-                    <td className='px-6 py-4'>
                       <Button
                         disabled={Boolean(
                           currentAccount &&
                             account.address === currentAccount.address
                         )}
-                        onClick={() => setCurrentAccount(account)}
+                        onClick={() => login(account)}
                       >
-                        Set account
+                        Log in
                       </Button>
                     </td>
                   </tr>
