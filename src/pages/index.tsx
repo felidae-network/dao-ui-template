@@ -4,10 +4,8 @@ import Button from '@/components/buttons/Button';
 import Layout from '@/components/layout/Layout';
 import Seo from '@/components/Seo';
 
-import {
-  useSubstrate,
-  useSubstrateState,
-} from '@/context/substrate/SubstrateContextProvider';
+import { useContract } from '@/context/contract/ContractContextProvider';
+import { useSubstrateState } from '@/context/substrate/SubstrateContextProvider';
 
 /**
  * SVGR Support
@@ -22,8 +20,19 @@ import {
 // to customize the default configuration.
 
 export default function HomePage() {
-  const { setCurrentAccount } = useSubstrate();
-  const { accounts, currentAccount } = useSubstrateState();
+  const { currentAccount } = useSubstrateState();
+  const { contract, callMessage, queryMessage } = useContract();
+
+  const call = async (message: string) => {
+    try {
+      await callMessage(message);
+      await queryMessage(message);
+    } catch (error) {
+      const err = error as Error;
+      console.log(error);
+      alert(err.message);
+    }
+  };
 
   return (
     <Layout>
@@ -31,21 +40,20 @@ export default function HomePage() {
       <Seo />
 
       <main>
+        <h1 className='my-4 text-center'>Dashboard</h1>
+
         <div className='relative overflow-x-auto'>
-          <table className='w-full max-w-[1000px] text-left text-sm text-gray-500 dark:text-gray-400'>
+          <table className='mx-auto w-full max-w-[1000px] text-left text-sm text-gray-500 dark:text-gray-400'>
             <thead className='bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400'>
               <tr>
                 <th scope='col' className='px-6 py-3'>
-                  Account name
+                  Method name
                 </th>
                 <th scope='col' className='px-6 py-3'>
-                  address
+                  description
                 </th>
                 <th scope='col' className='px-6 py-3'>
-                  created at
-                </th>
-                <th scope='col' className='px-6 py-3'>
-                  active
+                  args
                 </th>
                 <th scope='col' className='px-6 py-3'>
                   action
@@ -53,35 +61,35 @@ export default function HomePage() {
               </tr>
             </thead>
             <tbody>
-              {accounts &&
-                accounts.map((account) => (
+              {contract &&
+                contract.abi &&
+                contract.abi.messages.map((message) => (
                   <tr
-                    key={account.address}
+                    key={message.method}
                     className='border-b bg-white dark:border-gray-700 dark:bg-gray-800'
                   >
                     <th
                       scope='row'
                       className='whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white'
                     >
-                      {account.meta.name}
+                      {message.method}()
                     </th>
-                    <td className='px-6 py-4'>{account.address}</td>
-                    <td className='px-6 py-4'>{account.meta.whenCreated}</td>
-                    <td className='px-6 py-4'>
-                      {currentAccount &&
-                      account.address === currentAccount.address
-                        ? 'Yes'
-                        : 'No'}
-                    </td>
+                    <td className='px-6 py-4'>{message.docs}</td>
+                    <th scope='row' className='px-6 py-4'>
+                      {message.args.map((arg) => (
+                        <>
+                          <p>
+                            {arg.name}: <span>{arg.type.displayName}</span>
+                          </p>
+                        </>
+                      ))}
+                    </th>
                     <td className='px-6 py-4'>
                       <Button
-                        disabled={Boolean(
-                          currentAccount &&
-                            account.address === currentAccount.address
-                        )}
-                        onClick={() => setCurrentAccount(account)}
+                        disabled={!currentAccount}
+                        onClick={() => call(message.method)}
                       >
-                        Set account
+                        Call
                       </Button>
                     </td>
                   </tr>

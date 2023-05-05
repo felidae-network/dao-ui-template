@@ -6,13 +6,19 @@ import { isTestChain } from '@polkadot/util';
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useReducer } from 'react';
 
+import { getFromLocalStorage } from '@/lib/helper';
+
 import {
   SubstrateContext,
   SubstrateState,
 } from '@/context/substrate/SubstrateContext';
 import { getChainProperties } from '@/helpers/api/apiChainProperties';
 
-import { APP_NAME, PROVIDER_SOCKET } from '../../config';
+import {
+  APP_NAME,
+  LOCAL_STORAGE_ADDRESS_KEY,
+  PROVIDER_SOCKET,
+} from '../../config';
 
 // const registry = new TypeRegistry();
 
@@ -45,6 +51,9 @@ const reducer = (
         keyring: action.payload!.keyring,
         accounts: action.payload!.accounts,
         chainProps: action.payload!.chainProps,
+        ...(action.payload!.currentAccount
+          ? { currentAccount: action.payload!.currentAccount }
+          : {}),
         keyringState: 'READY',
       };
     case 'KEYRING_ERROR':
@@ -133,6 +142,25 @@ const loadAccounts = (
 
       Keyring.loadAll({ isDevelopment }, accounts);
 
+      const allLoadedAccounts = Keyring.getAccounts();
+
+      const address = getFromLocalStorage(LOCAL_STORAGE_ADDRESS_KEY);
+
+      const previousAccount = address
+        ? allLoadedAccounts.find((account) => account.address === address)
+        : null;
+
+      console.log({
+        type: 'SET_KEYRING',
+        payload: {
+          ...state,
+          keyring: Keyring,
+          accounts: allLoadedAccounts,
+          ...(previousAccount ? { currentAccount: previousAccount } : {}),
+          chainProps,
+        },
+      });
+
       // addDevAccounts(Keyring);
       dispatch({
         type: 'SET_KEYRING',
@@ -140,6 +168,7 @@ const loadAccounts = (
           ...state,
           keyring: Keyring,
           accounts: Keyring.getAccounts(),
+          ...(previousAccount ? { currentAccount: previousAccount } : {}),
           chainProps,
         },
       });

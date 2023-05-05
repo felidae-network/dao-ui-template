@@ -1,17 +1,27 @@
+/* eslint-disable @next/next/no-img-element */
 import { Disclosure, Menu, Transition } from '@headlessui/react';
-import Image from 'next/image';
+import { KeyringAddress } from '@polkadot/ui-keyring/types';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { Fragment } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
 import { RxHamburgerMenu } from 'react-icons/rx';
 
-import { useSubstrateState } from '@/context/substrate/SubstrateContextProvider';
+import { removeFromLocalStorage } from '@/lib/helper';
+
+import Button from '@/components/buttons/Button';
+
+import { LOCAL_STORAGE_ADDRESS_KEY } from '@/config';
+import {
+  useSubstrate,
+  useSubstrateState,
+} from '@/context/substrate/SubstrateContextProvider';
 
 const navigation = [
-  { name: 'Dashboard', href: '#', current: true },
-  { name: 'Team', href: '#', current: false },
-  { name: 'Projects', href: '#', current: false },
-  { name: 'Calendar', href: '#', current: false },
+  { name: 'Dashboard', href: '/', current: true },
+  { name: 'Members', href: '/members', current: false },
+  { name: 'Projects', href: '/projects', current: false },
+  { name: 'Tickets', href: '/tickets', current: false },
 ];
 
 function classNames(...classes: string[]) {
@@ -19,7 +29,15 @@ function classNames(...classes: string[]) {
 }
 
 export default function Header() {
+  const { setCurrentAccount } = useSubstrate();
   const { currentAccount } = useSubstrateState();
+  const router = useRouter();
+
+  const logout = () => {
+    setCurrentAccount(null as unknown as KeyringAddress);
+    removeFromLocalStorage(LOCAL_STORAGE_ADDRESS_KEY);
+  };
+
   return (
     <Disclosure as='nav' className='bg-gray-800'>
       {({ open }) => (
@@ -45,12 +63,12 @@ export default function Header() {
               </div>
               <div className='flex flex-1 items-center justify-center sm:items-stretch sm:justify-start'>
                 <div className='flex flex-shrink-0 items-center'>
-                  <Image
+                  <img
                     className='block h-8 w-auto lg:hidden'
                     src='https://tailwindui.com/Image/logos/mark.svg?color=indigo&shade=500'
                     alt='Your Company'
                   />
-                  <Image
+                  <img
                     className='hidden h-8 w-auto lg:block'
                     src='https://tailwindui.com/Image/logos/mark.svg?color=indigo&shade=500'
                     alt='Your Company'
@@ -63,7 +81,7 @@ export default function Header() {
                         key={item.name}
                         href={item.href}
                         className={classNames(
-                          item.current
+                          router.asPath === item.href
                             ? 'bg-gray-900 text-white'
                             : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                           'rounded-md px-3 py-2 text-sm font-medium'
@@ -84,7 +102,7 @@ export default function Header() {
                     <div>
                       <Menu.Button className='flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800'>
                         <span className='sr-only'>Open user menu</span>
-                        <Image
+                        <img
                           className='h-8 w-8 rounded-full'
                           src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
                           alt=''
@@ -103,7 +121,7 @@ export default function Header() {
                       <Menu.Items className='absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
                         <Menu.Item>
                           {({ active }) => (
-                            <a
+                            <Link
                               href='#'
                               className={classNames(
                                 active ? 'bg-gray-100' : '',
@@ -111,12 +129,12 @@ export default function Header() {
                               )}
                             >
                               Your Profile
-                            </a>
+                            </Link>
                           )}
                         </Menu.Item>
                         <Menu.Item>
                           {({ active }) => (
-                            <a
+                            <Link
                               href='#'
                               className={classNames(
                                 active ? 'bg-gray-100' : '',
@@ -124,20 +142,21 @@ export default function Header() {
                               )}
                             >
                               Settings
-                            </a>
+                            </Link>
                           )}
                         </Menu.Item>
                         <Menu.Item>
                           {({ active }) => (
-                            <a
-                              href='#'
+                            <Button
+                              variant='ghost'
+                              onClick={logout}
                               className={classNames(
                                 active ? 'bg-gray-100' : '',
                                 'block px-4 py-2 text-sm text-gray-700'
                               )}
                             >
                               Sign out
-                            </a>
+                            </Button>
                           )}
                         </Menu.Item>
                       </Menu.Items>

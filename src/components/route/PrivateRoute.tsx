@@ -9,15 +9,17 @@ interface PrivateRouteProps {
 
 export const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
   const router = useRouter();
-  const { currentAccount } = useSubstrateState();
+  const { currentAccount, keyringState } = useSubstrateState();
 
   useEffect(() => {
-    console.log('router ', router);
-
-    if (!currentAccount && router.asPath !== '/login') {
+    if (
+      keyringState === 'READY' &&
+      !currentAccount &&
+      router.asPath !== '/login'
+    ) {
       router.push('/login');
     }
-  }, [router, currentAccount]);
+  }, [router, currentAccount, keyringState]);
 
   return children;
 };
