@@ -16,6 +16,7 @@ const ContractContextProvider = (props: ContractContextProviderProps) => {
   const [contract, setContract] = useState<ContractPromise>(
     {} as ContractPromise
   );
+
   useEffect(() => {
     if (contractMetadata && api) {
       try {
