@@ -1,10 +1,22 @@
 import { ContractPromise } from '@polkadot/api-contract';
 import { createContext } from 'react';
 
+import {
+  AbiMessage,
+  ContractExecResult,
+  ContractOptions,
+  ISubmittableResult,
+  QueryMessageProps,
+} from '@/types';
+
 export interface ContractContextType {
   contract: ContractPromise;
-  callMessage: (message: string) => Promise<void>;
-  queryMessage: (message: string) => Promise<void>;
+  callMessage: (
+    message: AbiMessage,
+    contractOptions: ContractOptions,
+    cb: (result: ISubmittableResult) => unknown
+  ) => Promise<void>;
+  queryMessage: (...args: QueryMessageProps[]) => Promise<ContractExecResult>;
 }
 
 const ContractContextValues = {} as ContractContextType;

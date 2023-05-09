@@ -4,6 +4,7 @@ import '@/styles/globals.css';
 // !STARTERCONF This is for demo purposes, remove @/styles/colors.css import immediately
 import '@/styles/colors.css';
 
+import { AwaitApis } from '@/components/AwaitApi';
 import Header from '@/components/header/Header';
 import { PrivateRoute } from '@/components/route/PrivateRoute';
 
@@ -18,12 +19,14 @@ import { SubstrateContextProvider } from '@/context/substrate/SubstrateContextPr
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <SubstrateContextProvider>
-      <ContractContextProvider>
-        <Header />
-        <PrivateRoute>
-          <Component {...pageProps} />
-        </PrivateRoute>
-      </ContractContextProvider>
+      <AwaitApis>
+        <ContractContextProvider>
+          <Header />
+          <PrivateRoute>
+            <Component {...pageProps} />
+          </PrivateRoute>
+        </ContractContextProvider>
+      </AwaitApis>
     </SubstrateContextProvider>
   );
 }

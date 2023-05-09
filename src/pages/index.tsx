@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { useQuery } from '@/hooks/useQuery';
+
 import Button from '@/components/buttons/Button';
 import Layout from '@/components/layout/Layout';
 import Seo from '@/components/Seo';
@@ -21,18 +23,18 @@ import { useSubstrateState } from '@/context/substrate/SubstrateContextProvider'
 
 export default function HomePage() {
   const { currentAccount } = useSubstrateState();
-  const { contract, callMessage, queryMessage } = useContract();
+  const { contract } = useContract();
+  const { query, error, loading, outcome, result } = useQuery();
 
-  const call = async (message: string) => {
-    try {
-      await callMessage(message);
-      await queryMessage(message);
-    } catch (error) {
-      const err = error as Error;
-      console.log(error);
-      alert(err.message);
-    }
-  };
+  if (error) {
+    console.log('Error ', error);
+  }
+
+  console.log('outcome ', outcome);
+
+  console.log('rresult ', result);
+
+  // console.log('loading ', loading);
 
   return (
     <Layout>
@@ -86,8 +88,9 @@ export default function HomePage() {
                     </th>
                     <td className='px-6 py-4'>
                       <Button
+                        isLoading={loading}
                         disabled={!currentAccount}
-                        onClick={() => call(message.method)}
+                        onClick={() => query(message)}
                       >
                         Call
                       </Button>

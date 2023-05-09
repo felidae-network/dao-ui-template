@@ -1,4 +1,5 @@
 import { ApiPromise, WsProvider } from '@polkadot/api';
+import { WeightV2 } from '@polkadot/types/interfaces';
 // import { TypeRegistry } from '@polkadot/types/create';
 import { keyring as Keyring } from '@polkadot/ui-keyring';
 import { KeyringAddress } from '@polkadot/ui-keyring/types';
@@ -83,6 +84,8 @@ const connect = async (
 
   await _api.isReady;
 
+  _api.registry.createType<WeightV2>('Weight').proofSize;
+
   dispatch({ type: 'CONNECT', payload: { ...state, api: _api } });
   dispatch({ type: 'CONNECT_SUCCESS' });
 
@@ -161,7 +164,6 @@ const loadAccounts = (
         },
       });
 
-      // addDevAccounts(Keyring);
       dispatch({
         type: 'SET_KEYRING',
         payload: {

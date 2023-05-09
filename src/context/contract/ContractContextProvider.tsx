@@ -6,6 +6,14 @@ import { useSubstrateState } from '@/context/substrate/SubstrateContextProvider'
 
 import contractMetadata from '../../../felidaeDAO.contract.json';
 
+import {
+  AbiMessage,
+  ContractExecResult,
+  ContractOptions,
+  ISubmittableResult,
+  QueryMessageProps,
+} from '@/types';
+
 interface ContractContextProviderProps {
   children: React.ReactNode | null;
   [key: string]: unknown;
@@ -30,14 +38,11 @@ const ContractContextProvider = (props: ContractContextProviderProps) => {
     }
   }, [api]);
 
-  const callMessage = async (message: string) => {
-    if (!contract.abi.messages.find((e) => e.method === message))
-      return alert('no such message');
-
-    if (!currentAccount) {
-      return alert('select current account');
-    }
-
+  const callMessage = async (
+    message: AbiMessage,
+    contractOptions: ContractOptions,
+    cb: (result: ISubmittableResult) => unknown
+  ) => {
     const { web3FromAddress } = await import('@polkadot/extension-dapp');
 
     const injector = chainProps.systemChainType.isDevelopment
@@ -47,75 +52,25 @@ const ContractContextProvider = (props: ContractContextProviderProps) => {
       ? keyring.getPair(currentAccount.address)
       : currentAccount.address;
 
-    const gasLimit = 0;
-    // a limit to how much Balance to be used to pay for the storage created by the contract call
-    // if null is passed, unlimited balance can be used
-    const storageDepositLimit = null;
+    const value = contract.tx[message.method](contractOptions);
 
-    try {
-      const value = contract.tx[message]({
-        value: undefined,
-        gasLimit,
-        storageDepositLimit,
-      });
-
-      await value.signAndSend(
-        account,
-        {
-          signer: injector?.signer || undefined,
-        },
-        async (result) => {
-          if (result.isInBlock) {
-            alert(result.dispatchInfo);
-          }
-        }
-      );
-    } catch (error: unknown) {
-      const err = error as Error;
-      console.log('error ', error);
-      alert(err.message);
-    }
+    await value.signAndSend(
+      account,
+      {
+        signer: injector?.signer || undefined,
+      },
+      async (result) => {
+        await cb(result);
+      }
+    );
   };
 
-  const queryMessage = async (message: string) => {
-    if (!contract.abi.messages.find((e) => e.method === message))
-      return alert('no such message');
+  const queryMessage = async (args: QueryMessageProps) => {
+    const outcome = (await api.call.contractsApi.call(
+      ...Object.keys(args).map((key) => args[key as keyof QueryMessageProps])
+    )) as ContractExecResult;
 
-    if (!currentAccount) {
-      return alert('select current account');
-    }
-
-    const gasLimit = 0;
-    // a limit to how much Balance to be used to pay for the storage created by the contract call
-    // if null is passed, unlimited balance can be used
-    const storageDepositLimit = null;
-
-    try {
-      const { result, output } = await contract.query[message](
-        currentAccount.address,
-        {
-          gasLimit,
-          storageDepositLimit,
-        }
-      );
-
-      const dispatchError =
-        result.isErr && result.asErr.isModule
-          ? contract.registry.findMetaError(result.asErr.asModule)
-          : undefined;
-
-      console.log('dispatch erro ', dispatchError);
-
-      // check if the call was successful
-      if (result.isOk) {
-        // output the return value
-        console.log('Success', output?.toHuman());
-      } else {
-        console.error(`Error: ${result.asErr}`);
-      }
-    } catch (error) {
-      console.log('error ', error);
-    }
+    return outcome;
   };
 
   return (
