@@ -24,17 +24,29 @@ import { useSubstrateState } from '@/context/substrate/SubstrateContextProvider'
 export default function HomePage() {
   const { currentAccount } = useSubstrateState();
   const { contract } = useContract();
-  const { query, error, loading, outcome, result } = useQuery();
+  const { query, error, loading, outcome, message } = useQuery();
 
   if (error) {
     console.log('Error ', error);
   }
 
-  console.log('outcome ', outcome);
+  if (Object.keys(outcome).length && message) {
+    console.log('outcome ', outcome);
 
-  console.log('rresult ', result);
+    const dispatchError =
+      outcome.result.isErr && outcome.result.asErr.isModule
+        ? contract.registry.findMetaError(outcome.result.asErr.asModule)
+        : undefined;
 
-  // console.log('loading ', loading);
+    // const { decodedOutput, isError } = getDecodedOutput(
+    //   outcome,
+    //   message!,
+    //   contract.abi.registry
+    // );
+
+    console.log('hellooo ', outcome.toHuman().Error);
+    console.log('dispatch error ', dispatchError);
+  }
 
   return (
     <Layout>

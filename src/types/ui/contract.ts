@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { DecodedEvent } from '@polkadot/api-contract/types';
+import { keyring } from '@polkadot/ui-keyring';
 import BN from 'bn.js';
 
 import type {
@@ -44,3 +45,6 @@ export interface QueryMessageProps {
   storageDepositLimit: Balance | null;
   value: unknown;
 }
+
+export type Flatten<Type> = Type extends Array<infer Item> ? Item : Type;
+export type Account = Flatten<Awaited<ReturnType<typeof keyring.getAccounts>>>;

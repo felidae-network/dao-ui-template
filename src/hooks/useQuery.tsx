@@ -20,7 +20,7 @@ import {
   getStorageDepositLimit,
 } from '@/helpers/callOptions';
 
-export const useQuery = () => {
+export function useQuery() {
   const { currentAccount, api } = useSubstrateState();
   const { callMessage, queryMessage, contract } = useContract();
 
@@ -34,6 +34,7 @@ export const useQuery = () => {
   const storageDepositLimit = useStorageDepositLimit(currentAccount?.address);
   const refTime = useWeight(outcome.gasRequired?.refTime.toBn());
   const proofSize = useWeight(outcome.gasRequired?.proofSize.toBn());
+  const isCustom = refTime.mode === 'custom' || proofSize.mode === 'custom';
 
   const params: QueryMessageProps = useMemo(() => {
     return {
@@ -43,7 +44,7 @@ export const useQuery = () => {
         ? api.registry.createType<Balance>('Balance', 1)
         : api.registry.createType<Balance>('Balance', BN_ZERO),
       gasLimit: getGasLimit(
-        false,
+        isCustom,
         refTime.limit,
         proofSize.limit,
         api.registry
@@ -63,9 +64,12 @@ export const useQuery = () => {
     refTime.limit,
     storageDepositLimit.value,
     api.registry,
+    isCustom,
   ]);
 
   const dryRun = useCallback(async () => {
+    console.log('paraam s ', params);
+
     const o = await queryMessage(params);
     setOutcome(o);
     return o;
@@ -80,7 +84,7 @@ export const useQuery = () => {
 
       const options: ContractOptions = {
         gasLimit:
-          getGasLimit(false, refTime.limit, proofSize.limit, api.registry) ??
+          getGasLimit(isCustom, refTime.limit, proofSize.limit, api.registry) ??
           gasRequired,
         storageDepositLimit: getStorageDepositLimit(
           false,
@@ -100,6 +104,7 @@ export const useQuery = () => {
       params.balance,
       proofSize.limit,
       refTime.limit,
+      isCustom,
     ]
   );
 
@@ -129,4 +134,4 @@ export const useQuery = () => {
     setMessage,
     query,
   };
-};
+}
