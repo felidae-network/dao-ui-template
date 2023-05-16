@@ -57,6 +57,7 @@ function decodeReturnValue(
 
 function checkRevertFlag(flags: ContractReturnFlags): boolean {
   const decodedFlags = flags.toHuman();
+
   return decodedFlags.includes('Revert');
 }
 

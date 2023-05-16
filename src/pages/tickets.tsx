@@ -1,4 +1,7 @@
+import { AbiMessage } from '@polkadot/api-contract/types';
 import React from 'react';
+
+import { useQuery } from '@/hooks/useQuery';
 
 import Button from '@/components/buttons/Button';
 import Layout from '@/components/layout/Layout';
@@ -6,6 +9,7 @@ import Seo from '@/components/Seo';
 
 import { useContract } from '@/context/contract/ContractContextProvider';
 import { useSubstrateState } from '@/context/substrate/SubstrateContextProvider';
+import { getDecodedOutput } from '@/helpers/api/output';
 
 /**
  * SVGR Support
@@ -21,17 +25,23 @@ import { useSubstrateState } from '@/context/substrate/SubstrateContextProvider'
 
 export default function TicketsPage() {
   const { currentAccount } = useSubstrateState();
-  const { contract, callMessage, queryMessage } = useContract();
+  const { contract } = useContract();
+  const { query, outcome, loading } = useQuery();
 
-  const call = async (message: string) => {
-    try {
-      await callMessage(message);
-      await queryMessage(message);
-    } catch (error) {
-      const err = error as Error;
-      console.log(error);
-      alert(err.message);
-    }
+  const call = async (message: AbiMessage) => {
+    await query(message);
+
+    const { decodedOutput } = getDecodedOutput(
+      outcome,
+      message,
+      contract.abi.registry
+    );
+
+    console.log('outcome ', outcome);
+
+    console.log('decoded output ', decodedOutput);
+
+    alert(decodedOutput);
   };
 
   return (
@@ -86,8 +96,9 @@ export default function TicketsPage() {
                     </th>
                     <td className='px-6 py-4'>
                       <Button
+                        isLoading={loading}
                         disabled={!currentAccount}
-                        onClick={() => call(message.method)}
+                        onClick={() => call(message)}
                       >
                         Call
                       </Button>

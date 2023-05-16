@@ -38,7 +38,7 @@ export function useQuery() {
 
   const params: QueryMessageProps = useMemo(() => {
     return {
-      currentAccountAddress: currentAccount.address,
+      currentAccountAddress: currentAccount?.address,
       contractAddress: contract.address,
       balance: message?.isPayable
         ? api.registry.createType<Balance>('Balance', 1)
@@ -68,8 +68,6 @@ export function useQuery() {
   ]);
 
   const dryRun = useCallback(async () => {
-    console.log('paraam s ', params);
-
     const o = await queryMessage(params);
     setOutcome(o);
     return o;

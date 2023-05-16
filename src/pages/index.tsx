@@ -1,3 +1,4 @@
+import { AbiMessage } from '@polkadot/api-contract/types';
 import React from 'react';
 
 import { useQuery } from '@/hooks/useQuery';
@@ -8,6 +9,7 @@ import Seo from '@/components/Seo';
 
 import { useContract } from '@/context/contract/ContractContextProvider';
 import { useSubstrateState } from '@/context/substrate/SubstrateContextProvider';
+import { getDecodedOutput } from '@/helpers/api/output';
 
 /**
  * SVGR Support
@@ -24,29 +26,23 @@ import { useSubstrateState } from '@/context/substrate/SubstrateContextProvider'
 export default function HomePage() {
   const { currentAccount } = useSubstrateState();
   const { contract } = useContract();
-  const { query, error, loading, outcome, message } = useQuery();
+  const { query, outcome, loading } = useQuery();
 
-  if (error) {
-    console.log('Error ', error);
-  }
+  const call = async (message: AbiMessage) => {
+    await query(message);
 
-  if (Object.keys(outcome).length && message) {
+    const { decodedOutput } = getDecodedOutput(
+      outcome,
+      message,
+      contract.abi.registry
+    );
+
     console.log('outcome ', outcome);
 
-    const dispatchError =
-      outcome.result.isErr && outcome.result.asErr.isModule
-        ? contract.registry.findMetaError(outcome.result.asErr.asModule)
-        : undefined;
+    console.log('decoded output ', decodedOutput);
 
-    // const { decodedOutput, isError } = getDecodedOutput(
-    //   outcome,
-    //   message!,
-    //   contract.abi.registry
-    // );
-
-    console.log('hellooo ', outcome.toHuman().Error);
-    console.log('dispatch error ', dispatchError);
-  }
+    alert(decodedOutput);
+  };
 
   return (
     <Layout>
@@ -102,7 +98,7 @@ export default function HomePage() {
                       <Button
                         isLoading={loading}
                         disabled={!currentAccount}
-                        onClick={() => query(message)}
+                        onClick={() => call(message)}
                       >
                         Call
                       </Button>

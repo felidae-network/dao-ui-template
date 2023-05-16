@@ -28,7 +28,7 @@ const ContractContextProvider = (props: ContractContextProviderProps) => {
   useEffect(() => {
     if (contractMetadata && api) {
       try {
-        const address = '5GybzbsFfJGRGfjTRGbs1BPu9E5cvUXxrqWFGaadUnJ3i3mo';
+        const address = '5DE9sWP5LiaTGYUD4MUvbhT3t2gXmpUsA4pv6MxZnWCR5TfX';
         const contract = new ContractPromise(api, contractMetadata, address);
 
         setContract(contract);
