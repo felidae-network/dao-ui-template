@@ -1,5 +1,4 @@
-import { AbiMessage } from '@polkadot/api-contract/types';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { useQuery } from '@/hooks/useQuery';
 
@@ -26,23 +25,23 @@ import { getDecodedOutput } from '@/helpers/api/output';
 export default function TicketsPage() {
   const { currentAccount } = useSubstrateState();
   const { contract } = useContract();
-  const { query, outcome, loading } = useQuery();
+  const { query, outcome, loading, message } = useQuery();
 
-  const call = async (message: AbiMessage) => {
-    await query(message);
+  useEffect(() => {
+    if (!loading && message && outcome) {
+      const { decodedOutput } = getDecodedOutput(
+        outcome,
+        message,
+        contract.abi.registry
+      );
 
-    const { decodedOutput } = getDecodedOutput(
-      outcome,
-      message,
-      contract.abi.registry
-    );
+      console.log('outcome ', outcome);
 
-    console.log('outcome ', outcome);
+      console.log('decoded output ', decodedOutput);
 
-    console.log('decoded output ', decodedOutput);
-
-    alert(decodedOutput);
-  };
+      alert(decodedOutput);
+    }
+  }, [loading, outcome, message, contract.abi.registry]);
 
   return (
     <Layout>
@@ -98,7 +97,7 @@ export default function TicketsPage() {
                       <Button
                         isLoading={loading}
                         disabled={!currentAccount}
-                        onClick={() => call(message)}
+                        onClick={() => query(message)}
                       >
                         Call
                       </Button>
