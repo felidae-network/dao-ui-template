@@ -41,7 +41,7 @@ export default function ProjectsPage() {
 
       alert(decodedOutput);
     }
-  }, [loading, outcome, message, contract.abi.registry]);
+  }, [loading, outcome, message, contract]);
 
   return (
     <Layout>

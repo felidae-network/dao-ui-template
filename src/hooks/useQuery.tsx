@@ -57,7 +57,7 @@ export function useQuery() {
       value: '',
     };
   }, [
-    currentAccount,
+    currentAccount?.address,
     contract,
     message?.isPayable,
     proofSize.limit,
