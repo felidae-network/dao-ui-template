@@ -1,10 +1,10 @@
 import { ContractPromise } from '@polkadot/api-contract';
 import React, { useContext, useEffect, useState } from 'react';
 
+import { CONTRACT_ADDRESS } from '@/config';
 import { ContractContext } from '@/context/contract/ContractContext';
 import { useSubstrateState } from '@/context/substrate/SubstrateContextProvider';
-
-import contractMetadata from '../../../felidaeDAO.contract.json';
+import { getContractMatadata } from '@/helpers/getContractMetadata';
 
 import {
   AbiMessage,
@@ -26,16 +26,19 @@ const ContractContextProvider = (props: ContractContextProviderProps) => {
   );
 
   useEffect(() => {
-    if (contractMetadata && api) {
-      try {
-        const address = '5DE9sWP5LiaTGYUD4MUvbhT3t2gXmpUsA4pv6MxZnWCR5TfX';
-        const contract = new ContractPromise(api, contractMetadata, address);
+    (async () => {
+      if (api) {
+        try {
+          const contractMetadata = await getContractMatadata();
+          const address = CONTRACT_ADDRESS as string;
+          const contract = new ContractPromise(api, contractMetadata, address);
 
-        setContract(contract);
-      } catch (error: unknown) {
-        alert(error);
+          setContract(contract);
+        } catch (error: unknown) {
+          alert(error);
+        }
       }
-    }
+    })();
   }, [api]);
 
   const callMessage = async (

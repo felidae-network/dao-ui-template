@@ -25,6 +25,7 @@
     "@polkadot/ui-keyring": "^3.0.2",
     "@polkadot/ui-shared": "^3.0.2",
     "@types/busboy": "^1.5.0",
+    "axios": "^1.4.0",
     "busboy": "^1.6.0",
     "clsx": "^1.2.1",
     "formik": "^2.2.9",
