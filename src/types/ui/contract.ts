@@ -7,7 +7,6 @@ import BN from 'bn.js';
 
 import type {
   AbiMessage,
-  AccountId,
   Balance,
   ContractPromise,
   EventRecord,
@@ -39,7 +38,7 @@ export type UIStorageDeposit = {
 
 export interface QueryMessageProps {
   currentAccountAddress: string;
-  contractAddress: AccountId;
+  contractAddress: string;
   balance: Balance;
   gasLimit: WeightV2 | null;
   storageDepositLimit: Balance | null;

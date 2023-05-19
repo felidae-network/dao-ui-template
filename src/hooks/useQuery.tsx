@@ -9,6 +9,7 @@ import type {
   QueryMessageProps,
 } from 'src/types';
 
+import { useArgValues } from '@/hooks/useArgValues';
 import { useStorageDepositLimit } from '@/hooks/useStorageDepositLimit';
 import { useWeight } from '@/hooks/useWeight';
 
@@ -29,6 +30,10 @@ export function useQuery() {
     {} as ContractExecResult
   );
   const [result, setResult] = useState<ISubmittableResult>();
+  const [_argValues, _setArgValues, inputData] = useArgValues(
+    message,
+    api?.registry
+  );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<unknown>();
   const storageDepositLimit = useStorageDepositLimit(currentAccount?.address);
@@ -38,8 +43,8 @@ export function useQuery() {
 
   const params: QueryMessageProps = useMemo(() => {
     return {
-      currentAccountAddress: currentAccount?.address,
-      contractAddress: contract.address,
+      currentAccountAddress: currentAccount.address,
+      contractAddress: contract.address?.toString(),
       balance: message?.isPayable
         ? api.registry.createType<Balance>('Balance', 1)
         : api.registry.createType<Balance>('Balance', BN_ZERO),
@@ -54,17 +59,18 @@ export function useQuery() {
         storageDepositLimit.value,
         api.registry
       ),
-      value: '',
+      value: inputData ?? '',
     };
   }, [
-    currentAccount?.address,
+    currentAccount,
     contract,
-    message?.isPayable,
     proofSize.limit,
     refTime.limit,
     storageDepositLimit.value,
     api.registry,
     isCustom,
+    inputData,
+    message,
   ]);
 
   const dryRun = useCallback(async () => {
