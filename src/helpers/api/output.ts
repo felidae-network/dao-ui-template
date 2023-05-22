@@ -94,18 +94,25 @@ export function getDecodedOutput(
 ): {
   decodedOutput: string;
   isError: boolean;
+  value: AnyJson;
 } {
   let decodedOutput = '';
   let isError = true;
+  let o: AnyJson;
+
   if (result.isOk) {
     isError = checkRevertFlag(result.asOk.flags);
     const r = decodeReturnValue(returnType, result.asOk.data, registry);
-    const o = extractOutcome(r);
+    o = extractOutcome(r);
+
+    console.log('decodeReturnValue ', r);
+    console.log('extractOutcome ', o);
 
     decodedOutput = isError ? getErrorText(o) : getOkText(o, r) || '<empty>';
   }
   return {
     decodedOutput,
     isError,
+    value: o,
   };
 }

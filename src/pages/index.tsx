@@ -1,14 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
-import { useQuery } from '@/hooks/useQuery';
+import { IGetDaoInfo, useGetDaoInfo } from '@/hooks/messages/useGetDaoInfo';
 
-import Button from '@/components/buttons/Button';
 import Layout from '@/components/layout/Layout';
 import Seo from '@/components/Seo';
-
-import { useContract } from '@/context/contract/ContractContextProvider';
-import { useSubstrateState } from '@/context/substrate/SubstrateContextProvider';
-import { getDecodedOutput } from '@/helpers/api/output';
+import Skeleton from '@/components/Skeleton';
 
 /**
  * SVGR Support
@@ -23,25 +19,7 @@ import { getDecodedOutput } from '@/helpers/api/output';
 // to customize the default configuration.
 
 export default function HomePage() {
-  const { currentAccount } = useSubstrateState();
-  const { contract } = useContract();
-  const { query, outcome, loading, message } = useQuery();
-
-  useEffect(() => {
-    if (!loading && message && outcome) {
-      const { decodedOutput } = getDecodedOutput(
-        outcome,
-        message,
-        contract.abi.registry
-      );
-
-      console.log('outcome ', outcome);
-
-      console.log('decoded output ', decodedOutput);
-
-      alert(decodedOutput);
-    }
-  }, [loading, outcome, message, contract]);
+  const { loading, decodedOutput } = useGetDaoInfo();
 
   return (
     <Layout>
@@ -51,62 +29,70 @@ export default function HomePage() {
       <main>
         <h1 className='my-4 text-center'>Dashboard</h1>
 
-        <div className='relative overflow-x-auto'>
-          <table className='mx-auto w-full max-w-[1000px] text-left text-sm text-gray-500 dark:text-gray-400'>
-            <thead className='bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400'>
-              <tr>
-                <th scope='col' className='px-6 py-3'>
-                  Method name
-                </th>
-                <th scope='col' className='px-6 py-3'>
-                  description
-                </th>
-                <th scope='col' className='px-6 py-3'>
-                  args
-                </th>
-                <th scope='col' className='px-6 py-3'>
-                  action
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {contract &&
-                contract.abi &&
-                contract.abi.messages.map((message) => (
-                  <tr
-                    key={message.method}
-                    className='border-b bg-white dark:border-gray-700 dark:bg-gray-800'
-                  >
-                    <th
-                      scope='row'
-                      className='whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white'
-                    >
-                      {message.method}()
-                    </th>
-                    <td className='px-6 py-4'>{message.docs}</td>
-                    <th scope='row' className='px-6 py-4'>
-                      {message.args.map((arg) => (
-                        <>
-                          <p>
-                            {arg.name}: <span>{arg.type.displayName}</span>
-                          </p>
-                        </>
-                      ))}
-                    </th>
-                    <td className='px-6 py-4'>
-                      <Button
-                        isLoading={loading}
-                        disabled={!currentAccount}
-                        onClick={() => query(message)}
-                      >
-                        Call
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-        </div>
+        {loading ? (
+          <Skeleton />
+        ) : (
+          <>
+            {!decodedOutput || !decodedOutput.value ? (
+              'no data'
+            ) : (
+              <div className='mx-auto my-5 w-full max-w-[1000px]'>
+                <div className='px-4 sm:px-0'>
+                  <h3 className='text-base font-semibold leading-7 text-gray-900'>
+                    DAO Information
+                  </h3>
+                  <p className='mt-1 max-w-2xl text-sm leading-6 text-gray-500'>
+                    DAO details and info.
+                  </p>
+                </div>
+                <div className='mt-6 border-t border-gray-100'>
+                  <dl className='divide-y divide-gray-100'>
+                    <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
+                      <dt className='text-sm font-medium leading-6 text-gray-900'>
+                        Dao name
+                      </dt>
+                      <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
+                        {
+                          (decodedOutput.value as unknown as IGetDaoInfo)
+                            .daoName
+                        }
+                      </dd>
+                    </div>
+                    <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
+                      <dt className='text-sm font-medium leading-6 text-gray-900'>
+                        Description
+                      </dt>
+                      <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
+                        {
+                          (decodedOutput.value as unknown as IGetDaoInfo)
+                            .description
+                        }
+                      </dd>
+                    </div>
+                    <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
+                      <dt className='text-sm font-medium leading-6 text-gray-900'>
+                        Profile
+                      </dt>
+                      <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
+                        {(decodedOutput.value as unknown as IGetDaoInfo)
+                          .profile || 'N/A'}
+                      </dd>
+                    </div>
+                    <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
+                      <dt className='text-sm font-medium leading-6 text-gray-900'>
+                        Website
+                      </dt>
+                      <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
+                        {(decodedOutput.value as unknown as IGetDaoInfo)
+                          .website || 'N/A'}
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
+              </div>
+            )}
+          </>
+        )}
       </main>
     </Layout>
   );

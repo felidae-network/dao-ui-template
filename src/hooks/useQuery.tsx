@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { BN_ZERO } from 'src/helpers/bn';
 import type {
   AbiMessage,
@@ -15,13 +15,14 @@ import { useWeight } from '@/hooks/useWeight';
 
 import { useContract } from '@/context/contract/ContractContextProvider';
 import { useSubstrateState } from '@/context/substrate/SubstrateContextProvider';
+import { getDecodedOutput } from '@/helpers/api/output';
 import {
   decodeStorageDeposit,
   getGasLimit,
   getStorageDepositLimit,
 } from '@/helpers/callOptions';
 
-export function useQuery() {
+export function useQuery(argMessage?: AbiMessage) {
   const { currentAccount, api } = useSubstrateState();
   const { callMessage, queryMessage, contract } = useContract();
 
@@ -40,6 +41,12 @@ export function useQuery() {
   const refTime = useWeight(outcome.gasRequired?.refTime.toBn());
   const proofSize = useWeight(outcome.gasRequired?.proofSize.toBn());
   const isCustom = refTime.mode === 'custom' || proofSize.mode === 'custom';
+
+  const decodedOutput = useMemo(() => {
+    if (message && Object.keys(outcome).length && contract?.abi?.registry) {
+      return getDecodedOutput(outcome, message, contract.abi.registry);
+    }
+  }, [message, outcome, contract]);
 
   const params: QueryMessageProps = useMemo(() => {
     return {
@@ -112,19 +119,34 @@ export function useQuery() {
     ]
   );
 
-  const query = async (message: AbiMessage) => {
-    setMessage(message);
-    setLoading(true);
+  const query = useCallback(
+    async (message: AbiMessage) => {
+      setMessage(message);
+      setLoading(true);
 
-    try {
-      const o = await dryRun();
-      await call(message, o);
-      setLoading(false);
-    } catch (error) {
-      setError(error);
-      setLoading(false);
+      try {
+        const o = await dryRun();
+        await call(message, o);
+        setLoading(false);
+      } catch (error) {
+        setError(error);
+        setLoading(false);
+      }
+    },
+    [call, dryRun]
+  );
+
+  useEffect(() => {
+    if (argMessage && contract.abi) {
+      setMessage(argMessage);
     }
-  };
+  }, [argMessage, contract.abi]);
+
+  useEffect(() => {
+    if (message) {
+      query(message);
+    }
+  }, [message, query]);
 
   return {
     outcome,
@@ -137,5 +159,6 @@ export function useQuery() {
     message,
     setMessage,
     query,
+    decodedOutput,
   };
 }

@@ -17,6 +17,7 @@ export interface ContractContextType {
     cb: (result: ISubmittableResult) => unknown
   ) => Promise<void>;
   queryMessage: (...args: QueryMessageProps[]) => Promise<ContractExecResult>;
+  contractLoading: boolean;
 }
 
 const ContractContextValues = {} as ContractContextType;

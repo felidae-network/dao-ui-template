@@ -6,12 +6,14 @@ import { isKeyringLoaded } from 'src/helpers/util';
 
 import Skeleton from '@/components/Skeleton';
 
+import { useContract } from '@/context/contract/ContractContextProvider';
 import { useSubstrateState } from '@/context/substrate/SubstrateContextProvider';
 
 export function AwaitApis({
   children,
 }: HTMLAttributes<HTMLDivElement>): React.ReactElement {
   const { accounts, chainProps, apiState } = useSubstrateState();
+  const { contractLoading } = useContract();
   const [web3Injected, setWeb3Injected] = useState(false);
 
   useEffect(() => {
@@ -40,6 +42,12 @@ export function AwaitApis({
   }
 
   return (
-    <>{apiState !== 'READY' || !isKeyringLoaded() ? <Skeleton /> : children}</>
+    <>
+      {apiState !== 'READY' || contractLoading || !isKeyringLoaded() ? (
+        <Skeleton />
+      ) : (
+        children
+      )}
+    </>
   );
 }

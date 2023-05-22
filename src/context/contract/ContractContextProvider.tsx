@@ -24,6 +24,7 @@ const ContractContextProvider = (props: ContractContextProviderProps) => {
   const [contract, setContract] = useState<ContractPromise>(
     {} as ContractPromise
   );
+  const [contractLoading, setContractLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
@@ -34,7 +35,9 @@ const ContractContextProvider = (props: ContractContextProviderProps) => {
           const contract = new ContractPromise(api, contractMetadata, address);
 
           setContract(contract);
+          setContractLoading(false);
         } catch (error: unknown) {
+          setContractLoading(false);
           alert(error);
         }
       }
@@ -77,7 +80,9 @@ const ContractContextProvider = (props: ContractContextProviderProps) => {
   };
 
   return (
-    <ContractContext.Provider value={{ contract, callMessage, queryMessage }}>
+    <ContractContext.Provider
+      value={{ contract, callMessage, queryMessage, contractLoading }}
+    >
       {props.children}
     </ContractContext.Provider>
   );
