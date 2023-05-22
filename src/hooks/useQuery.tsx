@@ -146,7 +146,8 @@ export function useQuery(argMessage?: AbiMessage) {
     if (message) {
       query(message);
     }
-  }, [message, query]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [message]);
 
   return {
     outcome,

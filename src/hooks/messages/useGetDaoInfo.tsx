@@ -13,7 +13,7 @@ export interface IGetDaoInfo {
 export const useGetDaoInfo = () => {
   const { contract } = useContract();
 
-  const messageInfo = contract.abi.findMessage('getDaoInfo');
+  const messageInfo = contract?.abi?.findMessage('getDaoInfo');
 
   return useQuery(messageInfo);
 };
