@@ -22,7 +22,15 @@ import {
   getStorageDepositLimit,
 } from '@/helpers/callOptions';
 
-export function useQuery(argMessage?: AbiMessage) {
+type QueryOptions = {
+  mutate: boolean;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function useQuery<T extends Record<string, any>>(
+  argMessage?: AbiMessage,
+  queryOptions: QueryOptions = { mutate: false }
+) {
   const { currentAccount, api } = useSubstrateState();
   const { callMessage, queryMessage, contract } = useContract();
 
@@ -31,7 +39,7 @@ export function useQuery(argMessage?: AbiMessage) {
     {} as ContractExecResult
   );
   const [result, setResult] = useState<ISubmittableResult>();
-  const [_argValues, _setArgValues, inputData] = useArgValues(
+  const [argValues, setArgValues, inputData] = useArgValues<T>(
     message,
     api?.registry
   );
@@ -143,11 +151,11 @@ export function useQuery(argMessage?: AbiMessage) {
   }, [argMessage, contract.abi]);
 
   useEffect(() => {
-    if (message) {
+    if (message && !queryOptions.mutate) {
       query(message);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [message]);
+  }, [message, queryOptions.mutate]);
 
   return {
     outcome,
@@ -161,5 +169,8 @@ export function useQuery(argMessage?: AbiMessage) {
     setMessage,
     query,
     decodedOutput,
+    argValues,
+    setArgValues,
+    inputData,
   };
 }

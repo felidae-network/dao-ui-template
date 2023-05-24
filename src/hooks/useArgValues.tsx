@@ -9,28 +9,31 @@ import { getInitValue } from '@/helpers/initValue';
 
 import { AbiMessage, AbiParam, Account, Registry, SetState } from '@/types';
 
-type ArgValues = Record<string, unknown>;
-
-function fromArgs(
+function fromArgs<T extends Record<string, unknown>>(
   registry: Registry,
   accounts: Account[],
   args: AbiParam[]
-): ArgValues {
-  const result: ArgValues = {};
+) {
+  const result = {} as T;
 
   args?.forEach(({ name, type }) => {
-    result[name] = getInitValue(registry, accounts, type);
+    result[name as keyof T] = getInitValue(
+      registry,
+      accounts,
+      type
+    ) as T[keyof T];
   });
 
   return result;
 }
 
-export function useArgValues(
+//eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function useArgValues<T extends Record<string, unknown>>(
   message: AbiMessage | undefined,
   registry: Registry
-): [ArgValues, SetState<ArgValues>, Uint8Array | undefined] {
+): [T | object, SetState<T>, Uint8Array | undefined] {
   const { accounts } = useSubstrateState();
-  const [value, setValue] = useState<ArgValues>(
+  const [value, setValue] = useState<T | object>(
     accounts && message ? fromArgs(registry, accounts, message.args) : {}
   );
   const argsRef = useRef(message?.args ?? []);
@@ -38,7 +41,9 @@ export function useArgValues(
   const inputData = useMemo(() => {
     let data: Uint8Array | undefined;
     try {
-      data = message?.toU8a(transformUserInput(registry, message.args, value));
+      data = message?.toU8a(
+        transformUserInput(registry, message.args, value as T)
+      );
     } catch (e) {
       console.error(e);
     }
