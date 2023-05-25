@@ -1,21 +1,19 @@
-import { InferType, object, string, ValidationError } from 'yup';
+import { useState } from 'react';
+import { ValidationError } from 'yup';
 
 import { useQuery } from '@/hooks/useQuery';
 
 import { useContract } from '@/context/contract/ContractContextProvider';
+import { addMemberInputSchema } from '@/helpers/schemas';
+import { validateSchema } from '@/helpers/validateSchema';
 
 import { CONTRACT_MESSAGES } from '@/types/enums';
-
-const addMemberInputSchema = object({
-  daoAddress: string().required(),
-  memberAddress: string().required(),
-  name: string().required(),
-});
-
-export type ADdMemberInput = InferType<typeof addMemberInputSchema>;
+import { ADdMemberInput } from '@/types/schemaTypes';
 
 export const useAddMember = () => {
   const { contract } = useContract();
+  const [validationErrors, setValidationErrors] =
+    useState<ValidationError | null>(null);
 
   const messageInfo = contract?.abi?.findMessage(CONTRACT_MESSAGES.ADD_MEMBER);
 
@@ -23,18 +21,22 @@ export const useAddMember = () => {
 
   const mutate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      await addMemberInputSchema.validate(queryInfo.argValues);
-    } catch (error: unknown) {
-      const err = error as ValidationError;
-      alert(err.message);
-      return error;
-    }
+    const validationError = await validateSchema(
+      addMemberInputSchema,
+      queryInfo.argValues
+    );
 
-    console.log('pec pec');
+    if (validationError) {
+      return setValidationErrors(validationError);
+    }
 
     queryInfo.query(messageInfo);
   };
 
-  return { ...queryInfo, mutate, schema: addMemberInputSchema };
+  return {
+    ...queryInfo,
+    mutate,
+    schema: addMemberInputSchema,
+    validationErrors,
+  };
 };
