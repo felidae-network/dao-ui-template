@@ -64,13 +64,13 @@ export function getGasLimit(
     : null;
 }
 
-export function transformUserInput(
+export function transformUserInput<T>(
   registry: Registry,
   messageArgs: AbiParam[],
-  values?: Record<string, unknown>
+  values?: T
 ): unknown[] {
   return messageArgs.map(({ name, type: { type } }) => {
-    const value = values ? values[name] : null;
+    const value = values ? values[name as keyof T] : null;
 
     if (type === 'Balance') {
       return registry.createType('Balance', value);

@@ -9,7 +9,7 @@ import { getInitValue } from '@/helpers/initValue';
 
 import { AbiMessage, AbiParam, Account, Registry, SetState } from '@/types';
 
-function fromArgs<T extends Record<string, unknown>>(
+function fromArgs<T>(
   registry: Registry,
   accounts: Account[],
   args: AbiParam[]
@@ -28,13 +28,13 @@ function fromArgs<T extends Record<string, unknown>>(
 }
 
 //eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function useArgValues<T extends Record<string, unknown>>(
+export function useArgValues<T>(
   message: AbiMessage | undefined,
   registry: Registry
-): [T | object, SetState<T>, Uint8Array | undefined] {
+): [T, SetState<T>, Uint8Array | undefined] {
   const { accounts } = useSubstrateState();
-  const [value, setValue] = useState<T | object>(
-    accounts && message ? fromArgs(registry, accounts, message.args) : {}
+  const [value, setValue] = useState<T>(
+    accounts && message ? fromArgs(registry, accounts, message.args) : ({} as T)
   );
   const argsRef = useRef(message?.args ?? []);
 

@@ -27,7 +27,7 @@ type QueryOptions = {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function useQuery<T extends Record<string, any>>(
+export function useQuery<T>(
   argMessage?: AbiMessage,
   queryOptions: QueryOptions = { mutate: false }
 ) {

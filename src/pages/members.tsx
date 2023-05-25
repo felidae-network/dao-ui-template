@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 
+import { useAddMember } from '@/hooks/messages';
 import { useQuery } from '@/hooks/useQuery';
 
 import Button from '@/components/buttons/Button';
@@ -27,6 +28,8 @@ export default function MembersPage() {
   const { contract } = useContract();
   const { query, outcome, loading, message } = useQuery();
 
+  const { mutate, loading: addMemberLoading } = useAddMember();
+
   useEffect(() => {
     if (!loading && message && outcome) {
       const { decodedOutput } = getDecodedOutput(
@@ -42,6 +45,7 @@ export default function MembersPage() {
       alert(decodedOutput);
     }
   }, [loading, outcome, message, contract]);
+
   return (
     <Layout>
       {/* <Seo templateTitle='Home' /> */}
@@ -49,6 +53,12 @@ export default function MembersPage() {
 
       <main>
         <h1 className='my-4 text-center'>Members</h1>
+
+        <form onSubmit={mutate}>
+          <Button isLoading={addMemberLoading} type='submit'>
+            Add member
+          </Button>
+        </form>
 
         <div className='relative overflow-x-auto'>
           <table className='mx-auto w-full max-w-[1000px] text-left text-sm text-gray-500 dark:text-gray-400'>
