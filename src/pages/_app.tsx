@@ -5,7 +5,6 @@ import '@/styles/globals.css';
 import '@/styles/colors.css';
 
 import { AwaitApis } from '@/components/AwaitApi';
-import Header from '@/components/header/Header';
 import { PrivateRoute } from '@/components/route/PrivateRoute';
 
 import { ContractContextProvider } from '@/context/contract/ContractContextProvider';
@@ -21,7 +20,6 @@ function MyApp({ Component, pageProps }: AppProps) {
     <SubstrateContextProvider>
       <AwaitApis>
         <ContractContextProvider>
-          <Header />
           <PrivateRoute>
             <Component {...pageProps} />
           </PrivateRoute>

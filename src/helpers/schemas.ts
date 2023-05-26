@@ -10,7 +10,7 @@ import { TaskStatusEnum } from '@/types/enums/taskStatus.enum';
 export const addMemberInputSchema = object({
   daoAddress: string().required(),
   memberAddress: string().required(),
-  name: string().required(),
+  name: string().optional(),
 });
 
 export const addDaoTokenInputSchema = object({

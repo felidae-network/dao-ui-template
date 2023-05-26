@@ -58,7 +58,7 @@ export function useQuery<T>(
 
   const params: QueryMessageProps = useMemo(() => {
     return {
-      currentAccountAddress: currentAccount.address,
+      currentAccountAddress: currentAccount?.address,
       contractAddress: contract.address?.toString(),
       balance: message?.isPayable
         ? api.registry.createType<Balance>('Balance', 1)
