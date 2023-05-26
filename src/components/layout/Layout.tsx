@@ -10,16 +10,16 @@ import Header from '@/components/layout/Header';
 const navigation = [
   { name: 'Dashboard', href: '/', current: true, icon: <MdOutlineDashboard /> },
   {
-    name: 'Members',
-    href: '/members',
-    current: false,
-    icon: <AiOutlineUsergroupDelete />,
-  },
-  {
     name: 'Projects',
     href: '/projects',
     current: false,
     icon: <AiFillProject />,
+  },
+  {
+    name: 'Members',
+    href: '/members',
+    current: false,
+    icon: <AiOutlineUsergroupDelete />,
   },
   { name: 'Tickets', href: '/tickets', current: false, icon: <FaTasks /> },
 ];
@@ -30,7 +30,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <input id='drawer' type='checkbox' className='drawer-toggle' />
       <div className='drawer-content'>
         <Header />
-        {children}
+        <div className='container m-auto'>{children}</div>
       </div>
       <div className='drawer-side'>
         <label htmlFor='drawer' className='drawer-overlay'></label>

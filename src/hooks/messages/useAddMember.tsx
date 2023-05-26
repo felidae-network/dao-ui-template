@@ -19,8 +19,7 @@ export const useAddMember = () => {
 
   const queryInfo = useQuery<ADdMemberInput>(messageInfo, { mutate: true });
 
-  const mutate = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const mutate = async () => {
     const validationError = await validateSchema(
       addMemberInputSchema,
       queryInfo.argValues

@@ -21,8 +21,7 @@ export const useCreateProject = () => {
 
   const queryInfo = useQuery<CreateProjectInput>(messageInfo, { mutate: true });
 
-  const mutate = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const mutate = async () => {
     const validationError = await validateSchema(
       createProjectInputSchema,
       queryInfo.argValues
@@ -32,7 +31,7 @@ export const useCreateProject = () => {
       return setValidationErrors(validationError);
     }
 
-    queryInfo.query(messageInfo);
+    await queryInfo.query(messageInfo);
   };
 
   return {
