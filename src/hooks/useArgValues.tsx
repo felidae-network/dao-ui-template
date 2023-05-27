@@ -30,11 +30,16 @@ function fromArgs<T>(
 //eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function useArgValues<T>(
   message: AbiMessage | undefined,
-  registry: Registry
+  registry: Registry,
+  initialArgValues?: T
 ): [T, SetState<T>, Uint8Array | undefined] {
   const { accounts } = useSubstrateState();
   const [value, setValue] = useState<T>(
-    accounts && message ? fromArgs(registry, accounts, message.args) : ({} as T)
+    accounts && message
+      ? initialArgValues
+        ? initialArgValues
+        : fromArgs(registry, accounts, message.args)
+      : ({} as T)
   );
   const argsRef = useRef(message?.args ?? []);
 

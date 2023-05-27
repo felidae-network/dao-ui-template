@@ -22,14 +22,15 @@ import {
   getStorageDepositLimit,
 } from '@/helpers/callOptions';
 
-type QueryOptions = {
-  mutate: boolean;
+type QueryOptions<T> = {
+  mutate?: boolean;
+  initialArgValues?: T;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function useQuery<T>(
   argMessage?: AbiMessage,
-  queryOptions: QueryOptions = { mutate: false }
+  queryOptions: QueryOptions<T> = { mutate: false }
 ) {
   const { currentAccount, api } = useSubstrateState();
   const { callMessage, queryMessage, contract } = useContract();
@@ -114,16 +115,19 @@ export function useQuery<T>(
         value: message?.isPayable ? params.balance : undefined,
       };
 
-      await callMessage(message!, options, (res) => setResult(res));
+      await callMessage<T>(message!, options, argValues, (res) =>
+        setResult(res)
+      );
     },
     [
       storageDepositLimit,
       callMessage,
       api.registry,
-      params.balance,
+      params,
       proofSize.limit,
       refTime.limit,
       isCustom,
+      argValues,
     ]
   );
 

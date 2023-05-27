@@ -4,6 +4,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { CONTRACT_ADDRESS } from '@/config';
 import { ContractContext } from '@/context/contract/ContractContext';
 import { useSubstrateState } from '@/context/substrate/SubstrateContextProvider';
+import { transformUserInput } from '@/helpers/callOptions';
 import { getContractMatadata } from '@/helpers/getContractMetadata';
 
 import {
@@ -44,9 +45,10 @@ const ContractContextProvider = (props: ContractContextProviderProps) => {
     })();
   }, [api]);
 
-  const callMessage = async (
+  const callMessage = async <T,>(
     message: AbiMessage,
     contractOptions: ContractOptions,
+    argValues: T,
     cb: (result: ISubmittableResult) => unknown
   ) => {
     const { web3FromAddress } = await import('@polkadot/extension-dapp');
@@ -58,7 +60,12 @@ const ContractContextProvider = (props: ContractContextProviderProps) => {
       ? keyring.getPair(currentAccount.address)
       : currentAccount.address;
 
-    const value = contract.tx[message.method](contractOptions);
+    console.log('heeej bree ', contractOptions);
+
+    const value = contract.tx[message.method](
+      contractOptions,
+      ...transformUserInput(contract.registry, message.args, argValues)
+    );
 
     await value.signAndSend(
       account,
@@ -66,6 +73,8 @@ const ContractContextProvider = (props: ContractContextProviderProps) => {
         signer: injector?.signer || undefined,
       },
       async (result) => {
+        console.log('heeeee ', result);
+
         await cb(result);
       }
     );

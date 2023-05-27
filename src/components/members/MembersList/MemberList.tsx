@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button, Modal, Table } from 'react-daisyui';
 import { AiOutlinePlus } from 'react-icons/ai';
 
-import { useGetMemberList } from '@/hooks/messages';
+import { IGetMembersList, useGetMemberList } from '@/hooks/messages';
 
 import { CreateMember } from '@/components/members';
 import Skeleton from '@/components/Skeleton';
@@ -36,8 +36,8 @@ export const MemberList: React.FC<MemberListProps> = () => {
         <Table.Head>
           <span />
           <span>Name</span>
-          <span>Job</span>
-          <span>Favorite Color</span>
+          <span>Status</span>
+          <span>Created At</span>
         </Table.Head>
 
         <Table.Body>
@@ -45,28 +45,20 @@ export const MemberList: React.FC<MemberListProps> = () => {
             <Skeleton />
           ) : (
             <>
-              {decodedOutput && decodedOutput.value ? (
+              {decodedOutput &&
+              decodedOutput.value &&
+              (decodedOutput.value as unknown as IGetMembersList).length ? (
                 <>
-                  <Table.Row>
-                    <span>1</span>
-                    <span>Cy Ganderton</span>
-                    <span>Quality Control Specialist</span>
-                    <span>Blue</span>
-                  </Table.Row>
-
-                  <Table.Row>
-                    <span>2</span>
-                    <span>Hart Hagerty</span>
-                    <span>Desktop Support Technician</span>
-                    <span>Purple</span>
-                  </Table.Row>
-
-                  <Table.Row>
-                    <span>3</span>
-                    <span>Brice Swyre</span>
-                    <span>Tax Accountant</span>
-                    <span>Red</span>
-                  </Table.Row>
+                  {(decodedOutput.value as unknown as IGetMembersList).map(
+                    (member, index) => (
+                      <Table.Row key={member.memberId}>
+                        <span>{index + 1}</span>
+                        <span>{member.name}</span>
+                        <span>{member.memberStatus}</span>
+                        <span>{new Date(member.startTime).toDateString()}</span>
+                      </Table.Row>
+                    )
+                  )}
                 </>
               ) : (
                 'no data'

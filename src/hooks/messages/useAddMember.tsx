@@ -29,7 +29,7 @@ export const useAddMember = () => {
       return setValidationErrors(validationError);
     }
 
-    queryInfo.query(messageInfo);
+    await queryInfo.query(messageInfo);
   };
 
   return {

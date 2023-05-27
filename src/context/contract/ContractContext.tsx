@@ -11,9 +11,10 @@ import {
 
 export interface ContractContextType {
   contract: ContractPromise;
-  callMessage: (
+  callMessage: <T>(
     message: AbiMessage,
     contractOptions: ContractOptions,
+    argValues: T,
     cb: (result: ISubmittableResult) => unknown
   ) => Promise<void>;
   queryMessage: (...args: QueryMessageProps[]) => Promise<ContractExecResult>;

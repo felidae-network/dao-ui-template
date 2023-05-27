@@ -46,6 +46,7 @@ export const ProjectList: React.FC<ProjectListProps> = () => {
           ) : (
             <>
               {decodedOutput &&
+              decodedOutput.value &&
               (decodedOutput.value as unknown as IGetProjectList).length ? (
                 <>
                   {(decodedOutput.value as unknown as IGetProjectList).map(
