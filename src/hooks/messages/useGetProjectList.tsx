@@ -13,6 +13,7 @@ export interface IGetProject {
   startTime: string;
   endTime: null;
   taskList: [unknown];
+  description: string;
   sprint: {
     projectId: string;
     startDate: string;

@@ -22,6 +22,8 @@ const navigation = [
     icon: <AiOutlineUsergroupDelete />,
   },
   { name: 'Tickets', href: '/tickets', current: false, icon: <FaTasks /> },
+  { name: 'Sprint', href: '/sprint', current: false, icon: <FaTasks /> },
+  { name: 'Token', href: '/token', current: false, icon: <FaTasks /> },
 ];
 
 export default function Layout({ children }: { children: React.ReactNode }) {

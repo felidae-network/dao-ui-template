@@ -2,18 +2,22 @@ import { useState } from 'react';
 import { Button, Modal, Table } from 'react-daisyui';
 import { AiOutlinePlus } from 'react-icons/ai';
 
-import { IGetProjectList, useGetProjectList } from '@/hooks/messages';
+import {
+  IGetTicketList,
+  useGetTicketList,
+} from '@/hooks/messages/useGetTicketList';
 
-import { CreateProject } from '@/components/projects/CreateProject';
-import { UpdateProjectStatus } from '@/components/projects/ProjectStatus';
 import Skeleton from '@/components/Skeleton';
-interface ProjectListProps {
+import { CreateTicket } from '@/components/tickets/CreateTicket';
+import { UpdateTicketStatus } from '@/components/tickets/TicketStatus';
+interface TicketListProps {
   children?: React.ReactNode;
 }
 
-export const ProjectList: React.FC<ProjectListProps> = () => {
-  const { decodedOutput, loading } = useGetProjectList();
+export const TicketList: React.FC<TicketListProps> = () => {
+  const { decodedOutput, loading } = useGetTicketList();
   const [visible, setVisible] = useState<boolean>(false);
+  console.log('are bgh', decodedOutput);
   const toggleVisible = () => {
     setVisible(!visible);
   };
@@ -21,13 +25,13 @@ export const ProjectList: React.FC<ProjectListProps> = () => {
   return (
     <div>
       <Modal open={visible} onClickBackdrop={toggleVisible}>
-        <CreateProject toggleVisible={toggleVisible} />
+        <CreateTicket toggleVisible={toggleVisible} />
       </Modal>
       <Modal open={visible} onClickBackdrop={toggleVisible}>
-        <UpdateProjectStatus toggleVisible={toggleVisible} />
+        <UpdateTicketStatus toggleVisible={toggleVisible} />
       </Modal>
       <div className='mb-3 flex items-center justify-between'>
-        <h3>Your Projects</h3>
+        <h3>Your Tickets</h3>
         <Button onClick={toggleVisible} startIcon={<AiOutlinePlus />}>
           Add New
         </Button>
@@ -39,8 +43,8 @@ export const ProjectList: React.FC<ProjectListProps> = () => {
           <span>Name</span>
           <span>Status</span>
           <span>Created At</span>
-          <span>ProjectId</span>
-          <span>Description</span>
+          <span>Ticket Id</span>
+          <span>Ticket Type</span>
         </Table.Head>
 
         <Table.Body>
@@ -50,26 +54,25 @@ export const ProjectList: React.FC<ProjectListProps> = () => {
             <>
               {decodedOutput &&
               decodedOutput.value &&
-              (decodedOutput.value as unknown as IGetProjectList).length ? (
+              (decodedOutput.value as unknown as IGetTicketList).length ? (
                 <>
-                  {(decodedOutput.value as unknown as IGetProjectList).map(
-                    (project, index) => (
-                      <Table.Row key={project.projectId}>
+                  {(decodedOutput.value as unknown as IGetTicketList).map(
+                    (ticket, index) => (
+                      <Table.Row key={ticket.ticketId}>
                         <span>{index + 1}</span>
-                        <span>{project.name}</span>
+                        <span>{ticket.name}</span>
                         <span>
+                          {' '}
                           <Button
                             onClick={toggleVisible}
                             startIcon={<AiOutlinePlus />}
                           >
-                            {project.projectStatus}
+                            {ticket.ticketStatus}
                           </Button>
                         </span>
-                        <span>
-                          {new Date(project.startTime).toDateString()}
-                        </span>
-                        <span>{project.projectId}</span>
-                        <span>{project.description}</span>
+                        <span>{new Date(ticket.startTime).toDateString()}</span>
+                        <span>{ticket.ticketId}</span>
+                        <span>{ticket.taskType}</span>
                       </Table.Row>
                     )
                   )}

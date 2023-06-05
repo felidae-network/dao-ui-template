@@ -1,44 +1,45 @@
 import { Dispatch, FormEvent, SetStateAction } from 'react';
 import { Button, Input, Modal, Select } from 'react-daisyui';
 
-import { useCreateProject } from '@/hooks/messages';
+import { useUpdateProjectStatus } from '@/hooks/messages';
 
 import { useSubstrateState } from '@/context/substrate/SubstrateContextProvider';
 
-interface CreateProjectProps {
+import { ProjectStatusEnum } from '@/types/enums';
+interface UpdateProjectStatusProps {
   children?: React.ReactNode;
   toggleVisible: Dispatch<SetStateAction<boolean>>;
 }
 
-export const CreateProject: React.FC<CreateProjectProps> = ({
+export const UpdateProjectStatus: React.FC<UpdateProjectStatusProps> = ({
   toggleVisible,
 }) => {
   const { accounts } = useSubstrateState();
   const { loading, mutate, argValues, setArgValues, decodedOutput } =
-    useCreateProject();
+    useUpdateProjectStatus();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await mutate();
+    await mutate(e);
     alert(decodedOutput?.decodedOutput);
     toggleVisible(false);
   };
 
   return (
     <>
-      <Modal.Header className='font-bold'>Create Project</Modal.Header>
+      <Modal.Header className='font-bold'>Update Project Status</Modal.Header>
       <form onSubmit={handleSubmit}>
         <Modal.Body>
           <label className='label'>
-            <span className='label-text'>Project Name</span>
+            <span className='label-text'>Project Id</span>
           </label>
           <Input
             name='name'
             className='w-full'
             placeholder='name'
-            value={argValues.name}
+            value={argValues.projectId}
             onChange={(e) =>
-              setArgValues({ ...argValues, name: e.target.value })
+              setArgValues({ ...argValues, projectId: e.target.value })
             }
           />
           <label className='label'>
@@ -48,7 +49,7 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
             placeholder='Account Address'
             className='w-full'
             onChange={(event) =>
-              setArgValues({ ...argValues, assignedTo: event.target.value })
+              setArgValues({ ...argValues, daoAddress: event.target.value })
             }
           >
             {accounts &&
@@ -62,20 +63,22 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
           <label className='label'>
             <span className='label-text'>Project Description</span>
           </label>
-          <Input
-            name='name'
+          <Select
+            placeholder='Status'
             className='w-full'
-            placeholder='Project Description'
-            value={argValues.projectDescription}
-            onChange={(e) =>
-              setArgValues({ ...argValues, projectDescription: e.target.value })
+            onChange={(event) =>
+              setArgValues({ ...argValues, status: event.target.value })
             }
-          />
+          >
+            {Object.values(ProjectStatusEnum).map((ticketType) => (
+              <option key={ticketType}>{ticketType}</option>
+            ))}
+          </Select>
         </Modal.Body>
 
         <Modal.Actions>
           <Button loading={loading} type='submit'>
-            Add Project!
+            Update Project Status
           </Button>
         </Modal.Actions>
       </form>

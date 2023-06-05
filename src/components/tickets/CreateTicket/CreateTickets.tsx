@@ -1,36 +1,38 @@
 import { Dispatch, FormEvent, SetStateAction } from 'react';
 import { Button, Input, Modal, Select } from 'react-daisyui';
 
-import { useCreateProject } from '@/hooks/messages';
+import { useCreateTicket } from '@/hooks/messages';
 
 import { useSubstrateState } from '@/context/substrate/SubstrateContextProvider';
 
-interface CreateProjectProps {
+import { TicketTypeEnum } from '@/types/enums/ticketType.enum';
+
+interface CreateTicketProps {
   children?: React.ReactNode;
   toggleVisible: Dispatch<SetStateAction<boolean>>;
 }
 
-export const CreateProject: React.FC<CreateProjectProps> = ({
+export const CreateTicket: React.FC<CreateTicketProps> = ({
   toggleVisible,
 }) => {
   const { accounts } = useSubstrateState();
   const { loading, mutate, argValues, setArgValues, decodedOutput } =
-    useCreateProject();
+    useCreateTicket();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await mutate();
+    await mutate(e);
     alert(decodedOutput?.decodedOutput);
     toggleVisible(false);
   };
 
   return (
     <>
-      <Modal.Header className='font-bold'>Create Project</Modal.Header>
+      <Modal.Header className='font-bold'>Create Ticket</Modal.Header>
       <form onSubmit={handleSubmit}>
         <Modal.Body>
           <label className='label'>
-            <span className='label-text'>Project Name</span>
+            <span className='label-text'>Ticket Name</span>
           </label>
           <Input
             name='name'
@@ -41,6 +43,22 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
               setArgValues({ ...argValues, name: e.target.value })
             }
           />
+          <label className='label'>
+            <span className='label-text'>ticketType</span>
+          </label>
+
+          <Select
+            placeholder='Account Address'
+            className='w-full'
+            onChange={(event) =>
+              setArgValues({ ...argValues, ticketType: event.target.value })
+            }
+          >
+            {Object.values(TicketTypeEnum).map((ticketType) => (
+              <option key={ticketType}>{ticketType}</option>
+            ))}
+          </Select>
+
           <label className='label'>
             <span className='label-text'>Choose member account</span>
           </label>
@@ -60,22 +78,22 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
           </Select>
 
           <label className='label'>
-            <span className='label-text'>Project Description</span>
+            <span className='label-text'>ProjectId</span>
           </label>
           <Input
             name='name'
             className='w-full'
-            placeholder='Project Description'
-            value={argValues.projectDescription}
+            placeholder='ProjectId'
+            value={argValues.projectId}
             onChange={(e) =>
-              setArgValues({ ...argValues, projectDescription: e.target.value })
+              setArgValues({ ...argValues, projectId: e.target.value })
             }
           />
         </Modal.Body>
 
         <Modal.Actions>
           <Button loading={loading} type='submit'>
-            Add Project!
+            Add Ticket!
           </Button>
         </Modal.Actions>
       </form>

@@ -1,54 +1,55 @@
 import { Dispatch, FormEvent, SetStateAction } from 'react';
 import { Button, Input, Modal, Select } from 'react-daisyui';
 
-import { useCreateProject } from '@/hooks/messages';
+import { useUpdateTaskStatus } from '@/hooks/messages';
 
 import { useSubstrateState } from '@/context/substrate/SubstrateContextProvider';
 
-interface CreateProjectProps {
+import { TaskStatusEnum } from '@/types/enums/taskStatus.enum';
+interface UpdateTicketStatusProps {
   children?: React.ReactNode;
   toggleVisible: Dispatch<SetStateAction<boolean>>;
 }
 
-export const CreateProject: React.FC<CreateProjectProps> = ({
+export const UpdateTicketStatus: React.FC<UpdateTicketStatusProps> = ({
   toggleVisible,
 }) => {
   const { accounts } = useSubstrateState();
   const { loading, mutate, argValues, setArgValues, decodedOutput } =
-    useCreateProject();
+    useUpdateTaskStatus();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await mutate();
+    await mutate(e);
     alert(decodedOutput?.decodedOutput);
     toggleVisible(false);
   };
 
   return (
     <>
-      <Modal.Header className='font-bold'>Create Project</Modal.Header>
+      <Modal.Header className='font-bold'>Update Ticket Status</Modal.Header>
       <form onSubmit={handleSubmit}>
         <Modal.Body>
           <label className='label'>
-            <span className='label-text'>Project Name</span>
+            <span className='label-text'>Ticket Id</span>
           </label>
           <Input
             name='name'
             className='w-full'
             placeholder='name'
-            value={argValues.name}
+            value={argValues.ticketId}
             onChange={(e) =>
-              setArgValues({ ...argValues, name: e.target.value })
+              setArgValues({ ...argValues, ticketId: e.target.value })
             }
           />
           <label className='label'>
-            <span className='label-text'>Choose member account</span>
+            <span className='label-text'>dao address</span>
           </label>
           <Select
-            placeholder='Account Address'
+            placeholder='dao Address'
             className='w-full'
             onChange={(event) =>
-              setArgValues({ ...argValues, assignedTo: event.target.value })
+              setArgValues({ ...argValues, daoAddress: event.target.value })
             }
           >
             {accounts &&
@@ -60,22 +61,24 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
           </Select>
 
           <label className='label'>
-            <span className='label-text'>Project Description</span>
+            <span className='label-text'> Status</span>
           </label>
-          <Input
-            name='name'
+          <Select
+            placeholder='Status'
             className='w-full'
-            placeholder='Project Description'
-            value={argValues.projectDescription}
-            onChange={(e) =>
-              setArgValues({ ...argValues, projectDescription: e.target.value })
+            onChange={(event) =>
+              setArgValues({ ...argValues, ticketStatus: event.target.value })
             }
-          />
+          >
+            {Object.values(TaskStatusEnum).map((ticketType) => (
+              <option key={ticketType}>{ticketType}</option>
+            ))}
+          </Select>
         </Modal.Body>
 
         <Modal.Actions>
           <Button loading={loading} type='submit'>
-            Add Project!
+            Update Ticket Status
           </Button>
         </Modal.Actions>
       </form>
