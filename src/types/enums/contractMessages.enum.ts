@@ -39,4 +39,6 @@ export enum CONTRACT_MESSAGES {
   CALCULATE_EFFICIENCY = 'calculateEfficiency',
   CHECK_CONTRACT_BALANCE = 'checkContractBalance',
   SET_CODE = 'setCode',
+  CREATE_SPRINT = 'updateSprint',
+  GET_DAO_ID = 'getDaoId',
 }

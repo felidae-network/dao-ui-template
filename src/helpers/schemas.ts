@@ -1,6 +1,6 @@
-import { mixed, object, string } from 'yup';
+import { mixed, number, object, string } from 'yup';
 
-import { MemberRoleEnum, TokenTypeEnum } from '@/types/enums';
+import { MemberRoleEnum } from '@/types/enums';
 
 export const addMemberInputSchema = object({
   daoAddress: string().required(),
@@ -10,9 +10,7 @@ export const addMemberInputSchema = object({
 
 export const addDaoTokenInputSchema = object({
   daoAddress: string().required(),
-  tokenType: mixed<TokenTypeEnum>()
-    .oneOf(Object.values(TokenTypeEnum) as TokenTypeEnum[])
-    .required(),
+  tokenType: string().required(),
   tokenAddress: string().required(),
 });
 
@@ -39,7 +37,7 @@ export const addDaoAsMemberInputSchema = object({
 });
 
 export const getMemberInfoInputSchema = object({
-  memberAddress: string().required(),
+  memberId: number().required(),
 });
 
 export const setDaoAdminInputSchema = object({
@@ -124,4 +122,10 @@ export const getStakeForAccountInputSchema = object({
 
 export const setCodeInputSchema = object({
   code: string().required(),
+});
+
+export const createSprintInputSchema = object({
+  projectId: string().required(),
+  startDate: string().required(),
+  endDate: string().required(),
 });

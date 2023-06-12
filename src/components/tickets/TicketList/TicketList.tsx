@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { useState } from 'react';
 import { Button, Modal, Table } from 'react-daisyui';
 import { AiOutlinePlus } from 'react-icons/ai';
@@ -10,6 +11,7 @@ import {
 import Skeleton from '@/components/Skeleton';
 import { CreateTicket } from '@/components/tickets/CreateTicket';
 import { UpdateTicketStatus } from '@/components/tickets/TicketStatus';
+
 interface TicketListProps {
   children?: React.ReactNode;
 }
@@ -60,7 +62,19 @@ export const TicketList: React.FC<TicketListProps> = () => {
                     (ticket, index) => (
                       <Table.Row key={ticket.ticketId}>
                         <span>{index + 1}</span>
-                        <span>{ticket.name}</span>
+                        <span>
+                          <Link href={`/ticket/${ticket.ticketId}`}>
+                            <Button
+                              variant='primary'
+                              className='transform rounded-md bg-gradient-to-r from-black via-gray-500 to-white px-4 py-2 text-white shadow-md transition duration-300 ease-in-out hover:scale-105 hover:from-white hover:via-gray-500 hover:to-black hover:text-white'
+                              onClick={() => {
+                                console.log('logged');
+                              }}
+                            >
+                              {ticket.name}
+                            </Button>
+                          </Link>
+                        </span>
                         <span>
                           {' '}
                           <Button
@@ -70,7 +84,9 @@ export const TicketList: React.FC<TicketListProps> = () => {
                             {ticket.ticketStatus}
                           </Button>
                         </span>
-                        <span>{new Date(ticket.startTime).toDateString()}</span>
+                        <span>
+                          {new Date(parseInt(ticket.startTime)).toDateString()}
+                        </span>
                         <span>{ticket.ticketId}</span>
                         <span>{ticket.taskType}</span>
                       </Table.Row>

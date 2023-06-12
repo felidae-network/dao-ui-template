@@ -2,17 +2,19 @@ import { useState } from 'react';
 import { Button, Modal, Table } from 'react-daisyui';
 import { AiOutlinePlus } from 'react-icons/ai';
 
-import { IGetProjectList, useGetProjectList } from '@/hooks/messages';
+import {
+  IGetTokenList,
+  useGetTokenList,
+} from '@/hooks/messages/useGetTokenList';
 
-import { CreateProject } from '@/components/projects/CreateProject';
-import { UpdateProjectStatus } from '@/components/projects/ProjectStatus';
 import Skeleton from '@/components/Skeleton';
-interface ProjectListProps {
+import { AddToken } from '@/components/tokens/AddToken';
+interface TokenListProps {
   children?: React.ReactNode;
 }
 
-export const ProjectList: React.FC<ProjectListProps> = () => {
-  const { decodedOutput, loading } = useGetProjectList();
+export const TokenList: React.FC<TokenListProps> = () => {
+  const { decodedOutput, loading } = useGetTokenList();
   const [visible, setVisible] = useState<boolean>(false);
   const toggleVisible = () => {
     setVisible(!visible);
@@ -21,13 +23,13 @@ export const ProjectList: React.FC<ProjectListProps> = () => {
   return (
     <div>
       <Modal open={visible} onClickBackdrop={toggleVisible}>
-        <CreateProject toggleVisible={toggleVisible} />
+        <AddToken toggleVisible={toggleVisible} />
       </Modal>
-      <Modal open={visible} onClickBackdrop={toggleVisible}>
+      {/* <Modal open={visible} onClickBackdrop={toggleVisible}>
         <UpdateProjectStatus toggleVisible={toggleVisible} />
-      </Modal>
+      </Modal> */}
       <div className='mb-3 flex items-center justify-between'>
-        <h3>Your Projects</h3>
+        <h3>Token List</h3>
         <Button onClick={toggleVisible} startIcon={<AiOutlinePlus />}>
           Add New
         </Button>
@@ -36,12 +38,8 @@ export const ProjectList: React.FC<ProjectListProps> = () => {
       <Table zebra={true} className='w-full'>
         <Table.Head>
           <span />
-          <span>Name</span>
-          <span>Status</span>
-          <span>Created At</span>
-          <span>ProjectId</span>
-          <span>Description</span>
-          <span>Sprint</span>
+          <span>token type</span>
+          <span>token Address</span>
         </Table.Head>
 
         <Table.Body>
@@ -51,14 +49,14 @@ export const ProjectList: React.FC<ProjectListProps> = () => {
             <>
               {decodedOutput &&
               decodedOutput.value &&
-              (decodedOutput.value as unknown as IGetProjectList).length ? (
+              (decodedOutput.value as unknown as IGetTokenList).length ? (
                 <>
-                  {(decodedOutput.value as unknown as IGetProjectList).map(
-                    (project, index) => (
-                      <Table.Row key={project.projectId}>
+                  {(decodedOutput.value as unknown as IGetTokenList).map(
+                    (token, index) => (
+                      <Table.Row key={token.tokenType}>
                         <span>{index + 1}</span>
-                        <span>{project.name}</span>
-                        <span>
+                        <span>{token.tokenType}</span>
+                        {/* <span>
                           <Button
                             onClick={toggleVisible}
                             startIcon={<AiOutlinePlus />}
@@ -68,9 +66,9 @@ export const ProjectList: React.FC<ProjectListProps> = () => {
                         </span>
                         <span>
                           {new Date(project.startTime).toDateString()}
-                        </span>
-                        <span>{project.projectId}</span>
-                        <span>{project.description}</span>
+                        </span> */}
+                        {/* <span>{project.projectId}</span> */}
+                        <span>{token.tokenAddress}</span>
                       </Table.Row>
                     )
                   )}

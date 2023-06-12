@@ -4,27 +4,26 @@ import { ValidationError } from 'yup';
 import { useQuery } from '@/hooks/useQuery';
 
 import { useContract } from '@/context/contract/ContractContextProvider';
-import { getMemberInfoInputSchema } from '@/helpers/schemas';
+import { createSprintInputSchema } from '@/helpers/schemas';
 import { validateSchema } from '@/helpers/validateSchema';
 
 import { CONTRACT_MESSAGES } from '@/types/enums';
-import { GetMemberInfoInput } from '@/types/schemaTypes';
+import { CreateSprintInput } from '@/types/schemaTypes';
 
-export const useGetMemberInfo = () => {
+export const UseCreateSprint = () => {
   const { contract } = useContract();
   const [validationErrors, setValidationErrors] =
     useState<ValidationError | null>(null);
 
   const messageInfo = contract?.abi?.findMessage(
-    CONTRACT_MESSAGES.GET_MEMBER_INFO
+    CONTRACT_MESSAGES.CREATE_SPRINT
   );
 
-  const queryInfo = useQuery<GetMemberInfoInput>(messageInfo, { mutate: true });
+  const queryInfo = useQuery<CreateSprintInput>(messageInfo, { mutate: true });
 
   const mutate = async () => {
-    // e.preventDefault();
     const validationError = await validateSchema(
-      getMemberInfoInputSchema,
+      createSprintInputSchema,
       queryInfo.argValues
     );
 
@@ -38,7 +37,7 @@ export const useGetMemberInfo = () => {
   return {
     ...queryInfo,
     mutate,
-    schema: getMemberInfoInputSchema,
+    schema: createSprintInputSchema,
     validationErrors,
   };
 };

@@ -1,14 +1,3 @@
-import React from 'react';
-
-import { useGetAdmin } from '@/hooks/messages';
-import { useGetMemberList } from '@/hooks/messages';
-import { useGetContractBalance } from '@/hooks/messages';
-import { useGetDaoId } from '@/hooks/messages/useGetDaoId';
-import { IGetDaoInfo, useGetDaoInfo } from '@/hooks/messages/useGetDaoInfo';
-
-import Layout from '@/components/layout/Layout';
-import Seo from '@/components/Seo';
-import Skeleton from '@/components/Skeleton';
 /**
  * SVGR Support
  * Caveat: No React Props Type.
@@ -16,56 +5,52 @@ import Skeleton from '@/components/Skeleton';
  * You can override the next-env if the type is important to you
  * @see https://stackoverflow.com/questions/68103844/how-to-override-next-js-svg-module-declaration
  */
-
 // !STARTERCONF -> Select !STARTERCONF and CMD + SHIFT + F
 // Before you begin editing, follow all comments with `STARTERCONF`,
 // to customize the default configuration.
+import { useRouter } from 'next/router';
+import React from 'react';
+import { useEffect } from 'react';
 
-export default function HomePage() {
-  const { loading, decodedOutput } = useGetDaoInfo();
-  const { loading: getDaoIdLoading, decodedOutput: getDaoIdOutput } =
-    useGetDaoId();
-  console.log('loading', getDaoIdOutput);
-  const { loading: getAdminLoading, decodedOutput: getAdminDecodedOutput } =
-    useGetAdmin();
-  const { loading: getMemberLoading, decodedOutput: getMemberDecodedOutput } =
-    useGetMemberList();
-  const { loading: getBalanceLoading, decodedOutput: getBalanceOutput } =
-    useGetContractBalance();
+import { IGetMember, useGetMemberInfo } from '@/hooks/messages';
+
+import Layout from '@/components/layout/Layout';
+import Seo from '@/components/Seo';
+import Skeleton from '@/components/Skeleton';
+
+export default function MemberInfoPage() {
+  const { loading, setArgValues, decodedOutput } = useGetMemberInfo();
+  const router = useRouter();
+  console.log('router', router);
+  useEffect(() => {
+    if (router.isReady) {
+      setArgValues({ memberId: router.query.id![1] as unknown as number });
+    }
+  }, [router, setArgValues]);
+  console.log('balance', decodedOutput?.value);
+
   return (
     <Layout>
       {/* <Seo templateTitle='Home' /> */}
       <Seo />
 
       <main>
-        <h1 className='my-4 text-center'>Dashboard</h1>
+        <h1 className='my-4 text-center'>Membner Info</h1>
 
-        {loading ||
-        getAdminLoading ||
-        getMemberLoading ||
-        getBalanceLoading ||
-        getDaoIdLoading ? (
+        {loading ? (
           <Skeleton />
         ) : (
           <>
-            {!decodedOutput ||
-            !decodedOutput.value ||
-            !getAdminDecodedOutput ||
-            !getAdminDecodedOutput.value ||
-            !getMemberDecodedOutput ||
-            !getBalanceOutput ||
-            !getBalanceOutput.value ||
-            !getDaoIdOutput ||
-            !getDaoIdOutput.value ? (
+            {!decodedOutput || !decodedOutput.value ? (
               'no data'
             ) : (
               <div className='mx-auto my-5 w-full max-w-[1000px]'>
                 <div className='px-4 sm:px-0'>
                   <h3 className='text-base font-semibold leading-7 text-gray-900'>
-                    DAO Information
+                    Member Information
                   </h3>
                   <p className='mt-1 max-w-2xl text-sm leading-6 text-gray-500'>
-                    DAO details and info.
+                    Member info.
                   </p>
                 </div>
                 <div className='mt-6 border-t border-gray-100'>
@@ -76,8 +61,8 @@ export default function HomePage() {
                       </dt>
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
                         {
-                          (decodedOutput.value as unknown as IGetDaoInfo)
-                            .daoName
+                          (decodedOutput.value as unknown as IGetMember)
+                            .memberId
                         }
                       </dd>
                     </div>
@@ -87,8 +72,8 @@ export default function HomePage() {
                       </dt>
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
                         {
-                          (decodedOutput.value as unknown as IGetDaoInfo)
-                            .description
+                          (decodedOutput.value as unknown as IGetMember)
+                            .memberId
                         }
                       </dd>
                     </div>
@@ -97,8 +82,7 @@ export default function HomePage() {
                         Profile
                       </dt>
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        {(decodedOutput.value as unknown as IGetDaoInfo)
-                          .profile || 'N/A'}
+                        (decodedOutput.value as unknown as IGetMember) .memberId
                       </dd>
                     </div>
                     <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
@@ -106,8 +90,7 @@ export default function HomePage() {
                         Website
                       </dt>
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        {(decodedOutput.value as unknown as IGetDaoInfo)
-                          .website || 'N/A'}
+                        (decodedOutput.value as unknown as IGetMember) .memberId
                       </dd>
                     </div>
                     <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
@@ -115,8 +98,7 @@ export default function HomePage() {
                         Admin
                       </dt>
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        {(getAdminDecodedOutput.value as unknown as string) ||
-                          'N/A'}
+                        (decodedOutput.value as unknown as IGetMember) .memberId
                       </dd>
                     </div>
                     <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
@@ -124,8 +106,7 @@ export default function HomePage() {
                         Members Count
                       </dt>
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        {(getMemberDecodedOutput.value as unknown as string)
-                          .length || 'N/A'}
+                        (decodedOutput.value as unknown as IGetMember) .memberId
                       </dd>
                     </div>
                     <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
@@ -133,15 +114,7 @@ export default function HomePage() {
                         Contracts Balance
                       </dt>
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        {(getBalanceOutput.value as unknown as string) || 'N/A'}
-                      </dd>
-                    </div>
-                    <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
-                      <dt className='text-sm font-medium leading-6 text-gray-900'>
-                        DaoId
-                      </dt>
-                      <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        {(getDaoIdOutput.value as unknown as string) || 'N/A'}
+                        (decodedOutput.value as unknown as IGetMember) .memberId
                       </dd>
                     </div>
                   </dl>

@@ -3,7 +3,9 @@ import * as React from 'react';
 import { Menu } from 'react-daisyui';
 import { AiFillProject, AiOutlineUsergroupDelete } from 'react-icons/ai';
 import { FaTasks } from 'react-icons/fa';
+import { HiOutlineSupport } from 'react-icons/hi';
 import { MdOutlineDashboard } from 'react-icons/md';
+import { TiTag } from 'react-icons/ti';
 
 import Header from '@/components/layout/Header';
 
@@ -22,8 +24,8 @@ const navigation = [
     icon: <AiOutlineUsergroupDelete />,
   },
   { name: 'Tickets', href: '/tickets', current: false, icon: <FaTasks /> },
-  { name: 'Sprint', href: '/sprint', current: false, icon: <FaTasks /> },
-  { name: 'Token', href: '/token', current: false, icon: <FaTasks /> },
+  { name: 'Sprint', href: '/sprint', current: false, icon: <TiTag /> },
+  { name: 'Token', href: '/token', current: false, icon: <HiOutlineSupport /> },
 ];
 
 export default function Layout({ children }: { children: React.ReactNode }) {

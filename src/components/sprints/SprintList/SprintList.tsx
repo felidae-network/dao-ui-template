@@ -7,11 +7,11 @@ import { IGetProjectList, useGetProjectList } from '@/hooks/messages';
 import { CreateProject } from '@/components/projects/CreateProject';
 import { UpdateProjectStatus } from '@/components/projects/ProjectStatus';
 import Skeleton from '@/components/Skeleton';
-interface ProjectListProps {
+interface SprintListProps {
   children?: React.ReactNode;
 }
 
-export const ProjectList: React.FC<ProjectListProps> = () => {
+export const SprintList: React.FC<SprintListProps> = () => {
   const { decodedOutput, loading } = useGetProjectList();
   const [visible, setVisible] = useState<boolean>(false);
   const toggleVisible = () => {
