@@ -1,6 +1,7 @@
+import { useRouter } from 'next/router';
 import React from 'react';
 
-import { IGetMember, useGetMemberInfo } from '@/hooks/messages';
+import { IGetMember, useGetTaskInfo } from '@/hooks/messages';
 
 import Layout from '@/components/layout/Layout';
 import Seo from '@/components/Seo';
@@ -18,7 +19,9 @@ import Skeleton from '@/components/Skeleton';
 // to customize the default configuration.
 
 export default function TicketInfoPage() {
-  const { loading, decodedOutput } = useGetMemberInfo();
+  const router = useRouter();
+  const ticketId = router.query.ticketId as string;
+  const { loading, decodedOutput } = useGetTaskInfo({ ticketId });
 
   console.log('balance', decodedOutput?.value);
   return (

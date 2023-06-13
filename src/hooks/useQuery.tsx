@@ -25,6 +25,7 @@ import {
 type QueryOptions<T> = {
   mutate?: boolean;
   initialArgValues?: T;
+  skip?: boolean;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -159,11 +160,13 @@ export function useQuery<DecodedValueType = unknown, ArgValueType = unknown>(
   }, [argMessage, contract.abi]);
 
   useEffect(() => {
-    if (message && !queryOptions.mutate) {
+    if (queryOptions.skip) return;
+
+    if (message && !queryOptions.mutate && !decodedOutput) {
       query(message);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [message, queryOptions.mutate]);
+  }, [message, queryOptions.mutate, queryOptions.skip]);
 
   return {
     outcome,

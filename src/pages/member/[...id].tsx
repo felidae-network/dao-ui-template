@@ -10,24 +10,22 @@
 // to customize the default configuration.
 import { useRouter } from 'next/router';
 import React from 'react';
-import { useEffect } from 'react';
 
-import { IGetMember, useGetMemberInfo } from '@/hooks/messages';
+import { useGetMemberInfo } from '@/hooks/messages';
 
 import Layout from '@/components/layout/Layout';
 import Seo from '@/components/Seo';
 import Skeleton from '@/components/Skeleton';
 
 export default function MemberInfoPage() {
-  const { loading, setArgValues, decodedOutput } = useGetMemberInfo();
   const router = useRouter();
-  console.log('router', router);
-  useEffect(() => {
-    if (router.isReady) {
-      setArgValues({ memberId: router.query.id![1] as unknown as number });
-    }
-  }, [router, setArgValues]);
-  console.log('balance', decodedOutput?.value);
+  const memberId = router.query.id![1] as unknown as number;
+
+  const { loading, decodedOutput } = useGetMemberInfo({
+    memberId,
+  });
+
+  console.log('decoded ', decodedOutput);
 
   return (
     <Layout>
@@ -57,64 +55,34 @@ export default function MemberInfoPage() {
                   <dl className='divide-y divide-gray-100'>
                     <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
                       <dt className='text-sm font-medium leading-6 text-gray-900'>
-                        Dao name
+                        Name
                       </dt>
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        {
-                          (decodedOutput.value as unknown as IGetMember)
-                            .memberId
-                        }
+                        {decodedOutput.value.Ok.name}
                       </dd>
                     </div>
                     <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
                       <dt className='text-sm font-medium leading-6 text-gray-900'>
-                        Description
+                        Role
                       </dt>
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        {
-                          (decodedOutput.value as unknown as IGetMember)
-                            .memberId
-                        }
+                        {decodedOutput.value.Ok.memberRole}
                       </dd>
                     </div>
                     <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
                       <dt className='text-sm font-medium leading-6 text-gray-900'>
-                        Profile
+                        Efficiency
                       </dt>
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        (decodedOutput.value as unknown as IGetMember) .memberId
+                        {decodedOutput.value.Ok.memberEfficiency}
                       </dd>
                     </div>
                     <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
                       <dt className='text-sm font-medium leading-6 text-gray-900'>
-                        Website
+                        Status
                       </dt>
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        (decodedOutput.value as unknown as IGetMember) .memberId
-                      </dd>
-                    </div>
-                    <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
-                      <dt className='text-sm font-medium leading-6 text-gray-900'>
-                        Admin
-                      </dt>
-                      <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        (decodedOutput.value as unknown as IGetMember) .memberId
-                      </dd>
-                    </div>
-                    <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
-                      <dt className='text-sm font-medium leading-6 text-gray-900'>
-                        Members Count
-                      </dt>
-                      <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        (decodedOutput.value as unknown as IGetMember) .memberId
-                      </dd>
-                    </div>
-                    <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
-                      <dt className='text-sm font-medium leading-6 text-gray-900'>
-                        Contracts Balance
-                      </dt>
-                      <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        (decodedOutput.value as unknown as IGetMember) .memberId
+                        {decodedOutput.value.Ok.memberStatus}
                       </dd>
                     </div>
                   </dl>
