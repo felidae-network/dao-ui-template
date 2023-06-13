@@ -19,7 +19,9 @@ export const useGetMemberInfo = () => {
     CONTRACT_MESSAGES.GET_MEMBER_INFO
   );
 
-  const queryInfo = useQuery<GetMemberInfoInput>(messageInfo, { mutate: true });
+  const queryInfo = useQuery<unknown, GetMemberInfoInput>(messageInfo, {
+    mutate: true,
+  });
 
   const mutate = async () => {
     // e.preventDefault();

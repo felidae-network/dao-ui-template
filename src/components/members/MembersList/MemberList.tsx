@@ -71,8 +71,6 @@ export const MemberList: React.FC<MemberListProps> = () => {
                             href={`/member/${getDaoIdDecodedOutput.value}/${member.memberId}`}
                           >
                             <Button
-                              variant='primary'
-                              className='transform rounded-md bg-gradient-to-r from-black via-gray-500 to-white px-4 py-2 text-white shadow-md transition duration-300 ease-in-out hover:scale-105 hover:from-white hover:via-gray-500 hover:to-black hover:text-white'
                               onClick={() => {
                                 console.log('logged');
                               }}

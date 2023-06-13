@@ -87,28 +87,26 @@ function getOkText(outcome: AnyJson, returnValue: AnyJson) {
     : outcome?.toString() ?? '()';
 }
 
-export function getDecodedOutput(
+export function getDecodedOutput<T>(
   { result }: Pick<ContractExecResult, 'result' | 'debugMessage'>,
   { returnType }: AbiMessage,
   registry: Registry
-): {
-  decodedOutput: string;
-  isError: boolean;
-  value: AnyJson;
-} {
+) {
   let decodedOutput = '';
   let isError = true;
-  let o: AnyJson;
+  let o: T = null as T;
 
   if (result.isOk) {
     isError = checkRevertFlag(result.asOk.flags);
     const r = decodeReturnValue(returnType, result.asOk.data, registry);
-    o = extractOutcome(r);
+    o = extractOutcome(r) as T;
 
     console.log('decodeReturnValue ', r);
     console.log('extractOutcome ', o);
 
-    decodedOutput = isError ? getErrorText(o) : getOkText(o, r) || '<empty>';
+    decodedOutput = isError
+      ? getErrorText(o as AnyJson)
+      : getOkText(o as AnyJson, r) || '<empty>';
   }
   return {
     decodedOutput,

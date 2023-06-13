@@ -25,13 +25,28 @@ export default function HomePage() {
   const { loading, decodedOutput } = useGetDaoInfo();
   const { loading: getDaoIdLoading, decodedOutput: getDaoIdOutput } =
     useGetDaoId();
-  console.log('loading', getDaoIdOutput);
   const { loading: getAdminLoading, decodedOutput: getAdminDecodedOutput } =
     useGetAdmin();
   const { loading: getMemberLoading, decodedOutput: getMemberDecodedOutput } =
     useGetMemberList();
   const { loading: getBalanceLoading, decodedOutput: getBalanceOutput } =
     useGetContractBalance();
+
+  const isLoading = () =>
+    loading ||
+    getAdminLoading ||
+    getMemberLoading ||
+    getBalanceLoading ||
+    getDaoIdLoading;
+
+  const _isDecodedError = () => {
+    decodedOutput?.isError ||
+      getDaoIdOutput?.isError ||
+      getAdminDecodedOutput?.isError ||
+      getMemberDecodedOutput?.isError ||
+      getBalanceOutput?.isError;
+  };
+
   return (
     <Layout>
       {/* <Seo templateTitle='Home' /> */}
@@ -40,11 +55,7 @@ export default function HomePage() {
       <main>
         <h1 className='my-4 text-center'>Dashboard</h1>
 
-        {loading ||
-        getAdminLoading ||
-        getMemberLoading ||
-        getBalanceLoading ||
-        getDaoIdLoading ? (
+        {isLoading() ? (
           <Skeleton />
         ) : (
           <>
@@ -53,6 +64,7 @@ export default function HomePage() {
             !getAdminDecodedOutput ||
             !getAdminDecodedOutput.value ||
             !getMemberDecodedOutput ||
+            !getMemberDecodedOutput.value ||
             !getBalanceOutput ||
             !getBalanceOutput.value ||
             !getDaoIdOutput ||
