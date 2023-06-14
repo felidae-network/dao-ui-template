@@ -8,6 +8,7 @@ export * from './useCheckContractBalance';
 export * from './useCloseProject';
 export * from './useCloseTicket';
 export * from './useCreateProject';
+export * from './useCreateSprint';
 export * from './useCreateTicket';
 export * from './useDeleteMember';
 export * from './useGetAdmin';

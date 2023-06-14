@@ -58,6 +58,19 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
                 </option>
               ))}
           </Select>
+
+          <label className='label'>
+            <span className='label-text'>Project Description</span>
+          </label>
+          <Input
+            name='name'
+            className='w-full'
+            placeholder='Project Description'
+            value={argValues.projectDescription}
+            onChange={(e) =>
+              setArgValues({ ...argValues, projectDescription: e.target.value })
+            }
+          />
         </Modal.Body>
 
         <Modal.Actions>

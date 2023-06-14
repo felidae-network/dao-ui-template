@@ -22,7 +22,7 @@ export enum CONTRACT_MESSAGES {
   GET_PROJECT_LIST = 'getProjectList',
   CREATE_TICKET = 'createTicket',
   CREATE_REVIEW = 'createReview',
-  UPDATE_TAKS_STATUS = 'updateTaskStatus',
+  UPDATE_TAKS_STATUS = 'updateTicketStatus',
   GET_TASK_INFO = 'getTaskInfo',
   CLOSE_TASK = 'closeTask',
   GET_TICKET_LIST = 'getTicketList',
@@ -39,4 +39,6 @@ export enum CONTRACT_MESSAGES {
   CALCULATE_EFFICIENCY = 'calculateEfficiency',
   CHECK_CONTRACT_BALANCE = 'checkContractBalance',
   SET_CODE = 'setCode',
+  CREATE_SPRINT = 'updateSprint',
+  GET_DAO_ID = 'getDaoId',
 }

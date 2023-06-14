@@ -1,7 +1,7 @@
 export enum ProjectStatusEnum {
-  Active,
-  Inactive,
-  Completed,
-  Incompelte,
-  None,
+  Active = 'Active',
+  Inactive = 'Inactive',
+  Completed = 'Completed',
+  Incompelte = 'Incompleted',
+  None = 'None',
 }

@@ -1,11 +1,14 @@
 import React from 'react';
 
+import { useGetAdmin } from '@/hooks/messages';
+import { useGetMemberList } from '@/hooks/messages';
+import { useGetContractBalance } from '@/hooks/messages';
+import { useGetDaoId } from '@/hooks/messages/useGetDaoId';
 import { IGetDaoInfo, useGetDaoInfo } from '@/hooks/messages/useGetDaoInfo';
 
 import Layout from '@/components/layout/Layout';
 import Seo from '@/components/Seo';
 import Skeleton from '@/components/Skeleton';
-
 /**
  * SVGR Support
  * Caveat: No React Props Type.
@@ -20,6 +23,29 @@ import Skeleton from '@/components/Skeleton';
 
 export default function HomePage() {
   const { loading, decodedOutput } = useGetDaoInfo();
+  const { loading: getDaoIdLoading, decodedOutput: getDaoIdOutput } =
+    useGetDaoId();
+  const { loading: getAdminLoading, decodedOutput: getAdminDecodedOutput } =
+    useGetAdmin();
+  const { loading: getMemberLoading, decodedOutput: getMemberDecodedOutput } =
+    useGetMemberList();
+  const { loading: getBalanceLoading, decodedOutput: getBalanceOutput } =
+    useGetContractBalance();
+
+  const isLoading = () =>
+    loading ||
+    getAdminLoading ||
+    getMemberLoading ||
+    getBalanceLoading ||
+    getDaoIdLoading;
+
+  const _isDecodedError = () => {
+    decodedOutput?.isError ||
+      getDaoIdOutput?.isError ||
+      getAdminDecodedOutput?.isError ||
+      getMemberDecodedOutput?.isError ||
+      getBalanceOutput?.isError;
+  };
 
   return (
     <Layout>
@@ -29,11 +55,20 @@ export default function HomePage() {
       <main>
         <h1 className='my-4 text-center'>Dashboard</h1>
 
-        {loading ? (
+        {isLoading() ? (
           <Skeleton />
         ) : (
           <>
-            {!decodedOutput || !decodedOutput.value ? (
+            {!decodedOutput ||
+            !decodedOutput.value ||
+            !getAdminDecodedOutput ||
+            !getAdminDecodedOutput.value ||
+            !getMemberDecodedOutput ||
+            !getMemberDecodedOutput.value ||
+            !getBalanceOutput ||
+            !getBalanceOutput.value ||
+            !getDaoIdOutput ||
+            !getDaoIdOutput.value ? (
               'no data'
             ) : (
               <div className='mx-auto my-5 w-full max-w-[1000px]'>
@@ -85,6 +120,40 @@ export default function HomePage() {
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
                         {(decodedOutput.value as unknown as IGetDaoInfo)
                           .website || 'N/A'}
+                      </dd>
+                    </div>
+                    <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
+                      <dt className='text-sm font-medium leading-6 text-gray-900'>
+                        Admin
+                      </dt>
+                      <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
+                        {(getAdminDecodedOutput.value as unknown as string) ||
+                          'N/A'}
+                      </dd>
+                    </div>
+                    <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
+                      <dt className='text-sm font-medium leading-6 text-gray-900'>
+                        Members Count
+                      </dt>
+                      <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
+                        {(getMemberDecodedOutput.value as unknown as string)
+                          .length || 'N/A'}
+                      </dd>
+                    </div>
+                    <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
+                      <dt className='text-sm font-medium leading-6 text-gray-900'>
+                        Contracts Balance
+                      </dt>
+                      <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
+                        {(getBalanceOutput.value as unknown as string) || 'N/A'}
+                      </dd>
+                    </div>
+                    <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
+                      <dt className='text-sm font-medium leading-6 text-gray-900'>
+                        DaoId
+                      </dt>
+                      <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
+                        {(getDaoIdOutput.value as unknown as string) || 'N/A'}
                       </dd>
                     </div>
                   </dl>

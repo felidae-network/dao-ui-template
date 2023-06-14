@@ -25,12 +25,13 @@ import {
 type QueryOptions<T> = {
   mutate?: boolean;
   initialArgValues?: T;
+  skip?: boolean;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function useQuery<T>(
+export function useQuery<DecodedValueType = unknown, ArgValueType = unknown>(
   argMessage?: AbiMessage,
-  queryOptions: QueryOptions<T> = { mutate: false }
+  queryOptions: QueryOptions<ArgValueType> = { mutate: false }
 ) {
   const { currentAccount, api } = useSubstrateState();
   const { callMessage, queryMessage, contract } = useContract();
@@ -40,7 +41,7 @@ export function useQuery<T>(
     {} as ContractExecResult
   );
   const [result, setResult] = useState<ISubmittableResult>();
-  const [argValues, setArgValues, inputData] = useArgValues<T>(
+  const [argValues, setArgValues, inputData] = useArgValues<ArgValueType>(
     message,
     api?.registry
   );
@@ -53,7 +54,11 @@ export function useQuery<T>(
 
   const decodedOutput = useMemo(() => {
     if (message && Object.keys(outcome).length && contract?.abi?.registry) {
-      return getDecodedOutput(outcome, message, contract.abi.registry);
+      return getDecodedOutput<DecodedValueType>(
+        outcome,
+        message,
+        contract.abi.registry
+      );
     }
   }, [message, outcome, contract]);
 
@@ -115,7 +120,7 @@ export function useQuery<T>(
         value: message?.isPayable ? params.balance : undefined,
       };
 
-      await callMessage<T>(message!, options, argValues, (res) =>
+      await callMessage<ArgValueType>(message!, options, argValues, (res) =>
         setResult(res)
       );
     },
@@ -155,11 +160,13 @@ export function useQuery<T>(
   }, [argMessage, contract.abi]);
 
   useEffect(() => {
-    if (message && !queryOptions.mutate) {
+    if (queryOptions.skip) return;
+
+    if (message && !queryOptions.mutate && !decodedOutput) {
       query(message);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [message, queryOptions.mutate]);
+  }, [message, queryOptions.mutate, queryOptions.skip]);
 
   return {
     outcome,

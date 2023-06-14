@@ -1,11 +1,6 @@
-import { mixed, object, string } from 'yup';
+import { mixed, number, object, string } from 'yup';
 
-import {
-  MemberRoleEnum,
-  ProjectStatusEnum,
-  TokenTypeEnum,
-} from '@/types/enums';
-import { TaskStatusEnum } from '@/types/enums/taskStatus.enum';
+import { MemberRoleEnum } from '@/types/enums';
 
 export const addMemberInputSchema = object({
   daoAddress: string().required(),
@@ -15,9 +10,7 @@ export const addMemberInputSchema = object({
 
 export const addDaoTokenInputSchema = object({
   daoAddress: string().required(),
-  tokenType: mixed<TokenTypeEnum>()
-    .oneOf(Object.values(TokenTypeEnum) as TokenTypeEnum[])
-    .required(),
+  tokenType: string().required(),
   tokenAddress: string().required(),
 });
 
@@ -44,7 +37,7 @@ export const addDaoAsMemberInputSchema = object({
 });
 
 export const getMemberInfoInputSchema = object({
-  memberAddress: string().required(),
+  memberId: number().required(),
 });
 
 export const setDaoAdminInputSchema = object({
@@ -71,6 +64,7 @@ export const createProjectInputSchema = object({
   daoAddress: string().required(),
   assignedTo: string().required(),
   name: string().required(),
+  projectDescription: string().required(),
 });
 
 export const getProjectInputSchema = object({
@@ -80,9 +74,7 @@ export const getProjectInputSchema = object({
 export const updateProjectStatusInputSchema = object({
   projectId: string().required(),
   daoAddress: string().required(),
-  status: mixed<ProjectStatusEnum>()
-    .oneOf(Object.values(ProjectStatusEnum) as ProjectStatusEnum[])
-    .required(),
+  status: string().required(),
 });
 
 export const closeProjectInputSchema = object({
@@ -91,8 +83,9 @@ export const closeProjectInputSchema = object({
 });
 
 export const createTicketInputSchema = object({
-  projectId: string().required(),
+  ticketId: string().required(),
   name: string().required(),
+  projectId: string().required(),
   assignedTo: string().required(),
   ticketType: string().required(),
 });
@@ -100,9 +93,7 @@ export const createTicketInputSchema = object({
 export const updateTaskStatusInputSchema = object({
   daoAddress: string().required(),
   ticketId: string().required(),
-  ticketStatus: mixed<TaskStatusEnum>()
-    .oneOf(Object.values(TaskStatusEnum) as TaskStatusEnum[])
-    .required(),
+  ticketStatus: string().required(),
 });
 
 export const getTaskInfoInputSchema = object({
@@ -131,4 +122,10 @@ export const getStakeForAccountInputSchema = object({
 
 export const setCodeInputSchema = object({
   code: string().required(),
+});
+
+export const createSprintInputSchema = object({
+  projectId: string().required(),
+  startDate: string().required(),
+  endDate: string().required(),
 });

@@ -19,5 +19,5 @@ export const useGetDaoInfo = () => {
     CONTRACT_MESSAGES.GET_DAO_INFO
   );
 
-  return useQuery(messageInfo);
+  return useQuery<IGetDaoInfo, null>(messageInfo);
 };

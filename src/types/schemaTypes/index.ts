@@ -8,6 +8,7 @@ import {
   closeProjectInputSchema,
   closeTaskInputSchema,
   createProjectInputSchema,
+  createSprintInputSchema,
   createTicketInputSchema,
   deleteMemberInputSchema,
   getMemberInfoInputSchema,
@@ -59,3 +60,4 @@ export type GetStakeForAccountInput = InferType<
   typeof getStakeForAccountInputSchema
 >;
 export type SetCodeInput = InferType<typeof setCodeInputSchema>;
+export type CreateSprintInput = InferType<typeof createSprintInputSchema>;

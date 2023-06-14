@@ -1,8 +1,11 @@
+// import {Routes, Route, useNavigate,Link} from 'react-router-dom';
+import Link from 'next/link';
 import { useState } from 'react';
 import { Button, Modal, Table } from 'react-daisyui';
 import { AiOutlinePlus } from 'react-icons/ai';
 
 import { IGetMembersList, useGetMemberList } from '@/hooks/messages';
+import { useGetDaoId } from '@/hooks/messages/useGetDaoId';
 
 import { CreateMember } from '@/components/members';
 import Skeleton from '@/components/Skeleton';
@@ -13,11 +16,19 @@ interface MemberListProps {
 
 export const MemberList: React.FC<MemberListProps> = () => {
   const { decodedOutput, loading } = useGetMemberList();
-  const [visible, setVisible] = useState<boolean>(false);
+  const { decodedOutput: getDaoIdDecodedOutput, loading: getDaoIdLoading } =
+    useGetDaoId();
 
+  const [visible, setVisible] = useState<boolean>(false);
   const toggleVisible = () => {
     setVisible(!visible);
   };
+  // const navigate = useNavigate();
+
+  // This function navigates to the Home route.
+  // const navigateHome = () => {
+  //   navigate('/');
+  // };
 
   return (
     <div>
@@ -41,11 +52,13 @@ export const MemberList: React.FC<MemberListProps> = () => {
         </Table.Head>
 
         <Table.Body>
-          {loading ? (
+          {loading || getDaoIdLoading ? (
             <Skeleton />
           ) : (
             <>
               {decodedOutput &&
+              getDaoIdDecodedOutput &&
+              getDaoIdDecodedOutput.value &&
               decodedOutput.value &&
               (decodedOutput.value as unknown as IGetMembersList).length ? (
                 <>
@@ -53,9 +66,23 @@ export const MemberList: React.FC<MemberListProps> = () => {
                     (member, index) => (
                       <Table.Row key={member.memberId}>
                         <span>{index + 1}</span>
-                        <span>{member.name}</span>
+                        <span>
+                          <Link
+                            href={`/member/${getDaoIdDecodedOutput.value}/${member.memberId}`}
+                          >
+                            <Button
+                              onClick={() => {
+                                console.log('logged');
+                              }}
+                            >
+                              {member.name}
+                            </Button>
+                          </Link>
+                        </span>
                         <span>{member.memberStatus}</span>
-                        <span>{new Date(member.startTime).toDateString()}</span>
+                        <span>
+                          {new Date(parseInt(member.startTime)).toDateString()}
+                        </span>
                       </Table.Row>
                     )
                   )}
