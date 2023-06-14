@@ -8,7 +8,7 @@ import {
   useGetTicketList,
 } from '@/hooks/messages/useGetTicketList';
 
-import Skeleton from '@/components/Skeleton';
+import { LoadingSpinner } from '@/components/loading';
 import { CreateTicket } from '@/components/tickets/CreateTicket';
 import { UpdateTicketStatus } from '@/components/tickets/TicketStatus';
 
@@ -51,7 +51,9 @@ export const TicketList: React.FC<TicketListProps> = () => {
 
         <Table.Body>
           {loading ? (
-            <Skeleton />
+            <div className='flex items-center justify-center'>
+              <LoadingSpinner />
+            </div>
           ) : (
             <>
               {decodedOutput &&

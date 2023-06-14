@@ -7,7 +7,7 @@ import {
   useGetTokenList,
 } from '@/hooks/messages/useGetTokenList';
 
-import Skeleton from '@/components/Skeleton';
+import { LoadingSpinner } from '@/components/loading';
 import { AddToken } from '@/components/tokens/AddToken';
 interface TokenListProps {
   children?: React.ReactNode;
@@ -44,7 +44,9 @@ export const TokenList: React.FC<TokenListProps> = () => {
 
         <Table.Body>
           {loading ? (
-            <Skeleton />
+            <div className='flex items-center justify-center'>
+              <LoadingSpinner />
+            </div>
           ) : (
             <>
               {decodedOutput &&

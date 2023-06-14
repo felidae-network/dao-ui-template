@@ -4,9 +4,9 @@ import { AiOutlinePlus } from 'react-icons/ai';
 
 import { IGetProjectList, useGetProjectList } from '@/hooks/messages';
 
+import { LoadingSpinner } from '@/components/loading';
 import { CreateProject } from '@/components/projects/CreateProject';
 import { UpdateProjectStatus } from '@/components/projects/ProjectStatus';
-import Skeleton from '@/components/Skeleton';
 interface ProjectListProps {
   children?: React.ReactNode;
 }
@@ -46,7 +46,9 @@ export const ProjectList: React.FC<ProjectListProps> = () => {
 
         <Table.Body>
           {loading ? (
-            <Skeleton />
+            <div className='flex items-center justify-center'>
+              <LoadingSpinner />
+            </div>
           ) : (
             <>
               {decodedOutput &&

@@ -7,8 +7,8 @@ import { useGetDaoId } from '@/hooks/messages/useGetDaoId';
 import { IGetDaoInfo, useGetDaoInfo } from '@/hooks/messages/useGetDaoInfo';
 
 import Layout from '@/components/layout/Layout';
+import { LoadingSpinner } from '@/components/loading/Loading';
 import Seo from '@/components/Seo';
-import Skeleton from '@/components/Skeleton';
 /**
  * SVGR Support
  * Caveat: No React Props Type.
@@ -54,9 +54,10 @@ export default function HomePage() {
 
       <main>
         <h1 className='my-4 text-center'>Dashboard</h1>
-
         {isLoading() ? (
-          <Skeleton />
+          <div className='flex items-center justify-center'>
+            <LoadingSpinner />
+          </div>
         ) : (
           <>
             {!decodedOutput ||

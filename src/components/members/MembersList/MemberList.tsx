@@ -7,8 +7,8 @@ import { AiOutlinePlus } from 'react-icons/ai';
 import { IGetMembersList, useGetMemberList } from '@/hooks/messages';
 import { useGetDaoId } from '@/hooks/messages/useGetDaoId';
 
+import { LoadingSpinner } from '@/components/loading/Loading';
 import { CreateMember } from '@/components/members';
-import Skeleton from '@/components/Skeleton';
 
 interface MemberListProps {
   children?: React.ReactNode;
@@ -53,7 +53,9 @@ export const MemberList: React.FC<MemberListProps> = () => {
 
         <Table.Body>
           {loading || getDaoIdLoading ? (
-            <Skeleton />
+            <div className='flex items-center justify-center'>
+              <LoadingSpinner />
+            </div>
           ) : (
             <>
               {decodedOutput &&

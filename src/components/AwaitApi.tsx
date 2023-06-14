@@ -2,9 +2,10 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { HTMLAttributes, useEffect, useState } from 'react';
+import { Kbd } from 'react-daisyui';
 import { isKeyringLoaded } from 'src/helpers/util';
 
-import Skeleton from '@/components/Skeleton';
+import { LoadingSpinner } from '@/components/loading/Loading';
 
 import { useContract } from '@/context/contract/ContractContextProvider';
 import { useSubstrateState } from '@/context/substrate/SubstrateContextProvider';
@@ -44,7 +45,22 @@ export function AwaitApis({
   return (
     <>
       {apiState !== 'READY' || contractLoading || !isKeyringLoaded() ? (
-        <Skeleton />
+        <div className='flex h-screen w-screen items-center justify-center'>
+          <div className='flex flex-col items-center rounded-lg bg-gray-700 p-8 shadow-md'>
+            <div className='mb-10'>
+              <Kbd className='text-3xl' size='lg'>
+                D
+              </Kbd>
+              <Kbd className='mx-5 text-3xl' size='lg'>
+                A
+              </Kbd>
+              <Kbd className='text-3xl' size='lg'>
+                O
+              </Kbd>
+            </div>
+            <LoadingSpinner size='md' />
+          </div>
+        </div>
       ) : (
         children
       )}
