@@ -153,17 +153,6 @@ const loadAccounts = (
         ? allLoadedAccounts.find((account) => account.address === address)
         : null;
 
-      console.log({
-        type: 'SET_KEYRING',
-        payload: {
-          ...state,
-          keyring: Keyring,
-          accounts: allLoadedAccounts,
-          ...(previousAccount ? { currentAccount: previousAccount } : {}),
-          chainProps,
-        },
-      });
-
       dispatch({
         type: 'SET_KEYRING',
         payload: {

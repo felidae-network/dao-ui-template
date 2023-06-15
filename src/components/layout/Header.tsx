@@ -8,6 +8,8 @@ import { RxHamburgerMenu } from 'react-icons/rx';
 
 import { removeFromLocalStorage } from '@/lib/helper';
 
+import ThemeSwitch from '@/components/ThemeSwitch/ThemeSwitch';
+
 import { LOCAL_STORAGE_ADDRESS_KEY } from '@/config';
 import {
   useSubstrate,
@@ -37,8 +39,14 @@ export default function Header() {
         <>
           {currentAccount ? (
             <div className='flex items-center'>
+              <ThemeSwitch />
               <Dropdown horizontal='left' vertical='bottom'>
-                <Button tabIndex={0} color='ghost' shape='circle'>
+                <Button
+                  className='mx-2'
+                  tabIndex={0}
+                  color='ghost'
+                  shape='circle'
+                >
                   <AiOutlineWallet className='text-2xl' />
                 </Button>
                 <Dropdown.Menu
