@@ -155,7 +155,7 @@ export function useQuery<DecodedValueType = unknown, ArgValueType = unknown>(
         setLoading(false);
       }
     },
-    [call, dryRun, contract.abi.registry]
+    [call, dryRun, contract.abi]
   );
 
   useEffect(() => {
