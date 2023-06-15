@@ -19,7 +19,6 @@ interface TicketListProps {
 export const TicketList: React.FC<TicketListProps> = () => {
   const { decodedOutput, loading } = useGetTicketList();
   const [visible, setVisible] = useState<boolean>(false);
-  console.log('are bgh', decodedOutput);
   const toggleVisible = () => {
     setVisible(!visible);
   };
@@ -67,7 +66,6 @@ export const TicketList: React.FC<TicketListProps> = () => {
                         <span>
                           <Link href={`/ticket/${ticket.ticketId}`}>
                             <Button
-                              variant='primary'
                               className='transform rounded-md bg-gradient-to-r from-black via-gray-500 to-white px-4 py-2 text-white shadow-md transition duration-300 ease-in-out hover:scale-105 hover:from-white hover:via-gray-500 hover:to-black hover:text-white'
                               onClick={() => {
                                 console.log('logged');

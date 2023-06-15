@@ -19,12 +19,11 @@ export const useUpdateProjectStatus = () => {
     CONTRACT_MESSAGES.UPDATE_PROJECT_STATUS
   );
 
-  const queryInfo = useQuery<UpdateProjectStatusInput>(messageInfo, {
+  const queryInfo = useQuery<unknown, UpdateProjectStatusInput>(messageInfo, {
     mutate: true,
   });
 
-  const mutate = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const mutate = async () => {
     const validationError = await validateSchema(
       updateProjectStatusInputSchema,
       queryInfo.argValues
@@ -34,9 +33,8 @@ export const useUpdateProjectStatus = () => {
       return setValidationErrors(validationError);
     }
 
-    queryInfo.query(messageInfo);
+    return await queryInfo.query(messageInfo);
   };
-
   return {
     ...queryInfo,
     mutate,

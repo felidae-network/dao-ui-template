@@ -1,67 +1,50 @@
-import { Dispatch, FormEvent, SetStateAction } from 'react';
-import { Button, Input, Modal, Select } from 'react-daisyui';
+import { Dispatch, FormEvent, SetStateAction, useEffect } from 'react';
+import { Button, Modal, Select } from 'react-daisyui';
 
-import { useUpdateProjectStatus } from '@/hooks/messages';
-
-import { useSubstrateState } from '@/context/substrate/SubstrateContextProvider';
+import { IGetProject, useUpdateProjectStatus } from '@/hooks/messages';
 
 import { ProjectStatusEnum } from '@/types/enums';
 interface UpdateProjectStatusProps {
   children?: React.ReactNode;
   toggleVisible: Dispatch<SetStateAction<boolean>>;
+  refetchProjects: () => void;
+  project: IGetProject;
 }
 
 export const UpdateProjectStatus: React.FC<UpdateProjectStatusProps> = ({
   toggleVisible,
+  refetchProjects,
+  project,
 }) => {
-  const { accounts } = useSubstrateState();
-  const { loading, mutate, argValues, setArgValues, decodedOutput } =
-    useUpdateProjectStatus();
+  const { loading, mutate, argValues, setArgValues } = useUpdateProjectStatus();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await mutate(e);
-    alert(decodedOutput?.decodedOutput);
+    const mutateValue = await mutate();
+    if (mutateValue) {
+      alert(mutateValue.decodedOutput);
+      refetchProjects();
+    }
     toggleVisible(false);
   };
+
+  useEffect(() => {
+    setArgValues({
+      ...argValues,
+      projectId: project.projectId,
+      status: project.projectStatus as string,
+    });
+  }, [project, setArgValues, argValues]);
 
   return (
     <>
       <Modal.Header className='font-bold'>Update Project Status</Modal.Header>
       <form onSubmit={handleSubmit}>
         <Modal.Body>
-          <label className='label'>
-            <span className='label-text'>Project Id</span>
-          </label>
-          <Input
-            name='name'
-            className='w-full'
-            placeholder='name'
-            value={argValues.projectId}
-            onChange={(e) =>
-              setArgValues({ ...argValues, projectId: e.target.value })
-            }
-          />
-          <label className='label'>
-            <span className='label-text'>Choose member account</span>
-          </label>
-          <Select
-            placeholder='Account Address'
-            className='w-full'
-            onChange={(event) =>
-              setArgValues({ ...argValues, daoAddress: event.target.value })
-            }
-          >
-            {accounts &&
-              accounts.map((account) => (
-                <option key={account.address} value={account.address}>
-                  {account.meta.name}
-                </option>
-              ))}
-          </Select>
+          <h3>{project.name}</h3>
 
           <label className='label'>
-            <span className='label-text'>Project Description</span>
+            <span className='label-text'>Project Status</span>
           </label>
           <Select
             placeholder='Status'
@@ -71,7 +54,13 @@ export const UpdateProjectStatus: React.FC<UpdateProjectStatusProps> = ({
             }
           >
             {Object.values(ProjectStatusEnum).map((ticketType) => (
-              <option key={ticketType}>{ticketType}</option>
+              <option
+                selected={ticketType === project.projectStatus}
+                key={ticketType}
+                value={ticketType}
+              >
+                {ticketType}
+              </option>
             ))}
           </Select>
         </Modal.Body>

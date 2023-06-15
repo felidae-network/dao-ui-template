@@ -101,9 +101,6 @@ export function getDecodedOutput<T>(
     const r = decodeReturnValue(returnType, result.asOk.data, registry);
     o = extractOutcome(r) as T;
 
-    console.log('decodeReturnValue ', r);
-    console.log('extractOutcome ', o);
-
     decodedOutput = isError
       ? getErrorText(o as AnyJson)
       : getOkText(o as AnyJson, r) || '<empty>';

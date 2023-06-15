@@ -8,19 +8,23 @@ import { useSubstrateState } from '@/context/substrate/SubstrateContextProvider'
 interface CreateProjectProps {
   children?: React.ReactNode;
   toggleVisible: Dispatch<SetStateAction<boolean>>;
+  refetchProjects: () => void;
 }
 
 export const CreateProject: React.FC<CreateProjectProps> = ({
   toggleVisible,
+  refetchProjects,
 }) => {
   const { accounts } = useSubstrateState();
-  const { loading, mutate, argValues, setArgValues, decodedOutput } =
-    useCreateProject();
+  const { loading, mutate, argValues, setArgValues } = useCreateProject();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await mutate();
-    alert(decodedOutput?.decodedOutput);
+    const mutateValue = await mutate();
+    if (mutateValue) {
+      alert(mutateValue.decodedOutput);
+      refetchProjects();
+    }
     toggleVisible(false);
   };
 

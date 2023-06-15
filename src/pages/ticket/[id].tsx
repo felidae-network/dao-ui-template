@@ -23,7 +23,6 @@ export default function TicketInfoPage() {
   const ticketId = router.query.ticketId as string;
   const { loading, decodedOutput } = useGetTaskInfo({ ticketId });
 
-  console.log('balance', decodedOutput?.value);
   return (
     <Layout>
       {/* <Seo templateTitle='Home' /> */}

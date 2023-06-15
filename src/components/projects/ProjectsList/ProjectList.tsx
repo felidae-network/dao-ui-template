@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button, Modal, Table } from 'react-daisyui';
 import { AiOutlinePlus } from 'react-icons/ai';
 
-import { IGetProjectList, useGetProjectList } from '@/hooks/messages';
+import { IGetProject, useGetProjectList } from '@/hooks/messages';
 
 import { LoadingSpinner } from '@/components/loading';
 import { CreateProject } from '@/components/projects/CreateProject';
@@ -12,23 +12,41 @@ interface ProjectListProps {
 }
 
 export const ProjectList: React.FC<ProjectListProps> = () => {
-  const { decodedOutput, loading } = useGetProjectList();
-  const [visible, setVisible] = useState<boolean>(false);
-  const toggleVisible = () => {
-    setVisible(!visible);
-  };
+  const { decodedOutput, loading, refetch } = useGetProjectList();
+  const [createModalOpen, setCreateModalOpen] = useState<boolean>(false);
+  const [updateModalOpen, setUpdateModalOpen] = useState<boolean>(false);
+
+  const [selectedProject, setSelectedProject] = useState<IGetProject>();
 
   return (
     <div>
-      <Modal open={visible} onClickBackdrop={toggleVisible}>
-        <CreateProject toggleVisible={toggleVisible} />
+      <Modal
+        open={createModalOpen}
+        onClickBackdrop={() => setCreateModalOpen(false)}
+      >
+        <CreateProject
+          toggleVisible={() => setCreateModalOpen(!createModalOpen)}
+          refetchProjects={() => refetch()}
+        />
       </Modal>
-      <Modal open={visible} onClickBackdrop={toggleVisible}>
-        <UpdateProjectStatus toggleVisible={toggleVisible} />
-      </Modal>
+      {selectedProject && (
+        <Modal
+          open={updateModalOpen}
+          onClickBackdrop={() => setUpdateModalOpen(false)}
+        >
+          <UpdateProjectStatus
+            toggleVisible={() => setUpdateModalOpen(!updateModalOpen)}
+            refetchProjects={() => refetch()}
+            project={selectedProject!}
+          />
+        </Modal>
+      )}
       <div className='mb-3 flex items-center justify-between'>
         <h3>Your Projects</h3>
-        <Button onClick={toggleVisible} startIcon={<AiOutlinePlus />}>
+        <Button
+          onClick={() => setCreateModalOpen(true)}
+          startIcon={<AiOutlinePlus />}
+        >
           Add New
         </Button>
       </div>
@@ -41,7 +59,6 @@ export const ProjectList: React.FC<ProjectListProps> = () => {
           <span>Created At</span>
           <span>ProjectId</span>
           <span>Description</span>
-          <span>Sprint</span>
         </Table.Head>
 
         <Table.Body>
@@ -53,29 +70,28 @@ export const ProjectList: React.FC<ProjectListProps> = () => {
             <>
               {decodedOutput &&
               decodedOutput.value &&
-              (decodedOutput.value as unknown as IGetProjectList).length ? (
+              decodedOutput.value.length ? (
                 <>
-                  {(decodedOutput.value as unknown as IGetProjectList).map(
-                    (project, index) => (
-                      <Table.Row key={project.projectId}>
-                        <span>{index + 1}</span>
-                        <span>{project.name}</span>
-                        <span>
-                          <Button
-                            onClick={toggleVisible}
-                            startIcon={<AiOutlinePlus />}
-                          >
-                            {project.projectStatus}
-                          </Button>
-                        </span>
-                        <span>
-                          {new Date(project.startTime).toDateString()}
-                        </span>
-                        <span>{project.projectId}</span>
-                        <span>{project.description}</span>
-                      </Table.Row>
-                    )
-                  )}
+                  {decodedOutput.value.map((project, index) => (
+                    <Table.Row key={project.projectId}>
+                      <span>{index + 1}</span>
+                      <span>{project.name}</span>
+                      <span>
+                        <Button
+                          onClick={() => {
+                            setSelectedProject(project);
+                            setUpdateModalOpen(true);
+                          }}
+                          startIcon={<AiOutlinePlus />}
+                        >
+                          {project.projectStatus}
+                        </Button>
+                      </span>
+                      <span>{new Date(project.startTime).toDateString()}</span>
+                      <span>{project.projectId}</span>
+                      <span>{project.description}</span>
+                    </Table.Row>
+                  ))}
                 </>
               ) : (
                 'no data'

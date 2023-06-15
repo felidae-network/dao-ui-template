@@ -30,5 +30,5 @@ export const useGetProjectList = () => {
     CONTRACT_MESSAGES.GET_PROJECT_LIST
   );
 
-  return useQuery(messageInfo);
+  return useQuery<IGetProjectList>(messageInfo);
 };

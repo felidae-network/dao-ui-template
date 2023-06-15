@@ -61,8 +61,6 @@ const ContractContextProvider = (props: ContractContextProviderProps) => {
       ? keyring.getPair(currentAccount.address)
       : currentAccount.address;
 
-    console.log('heeej bree ', contractOptions);
-
     const value = contract.tx[message.method](
       contractOptions,
       ...transformUserInput(contract.registry, message.args, argValues)
@@ -74,8 +72,6 @@ const ContractContextProvider = (props: ContractContextProviderProps) => {
         signer: injector?.signer || undefined,
       },
       async (result) => {
-        console.log('heeeee ', result);
-
         await cb(result);
       }
     );

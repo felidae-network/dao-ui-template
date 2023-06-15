@@ -19,7 +19,9 @@ export const useCreateProject = () => {
     CONTRACT_MESSAGES.CREATE_PROJECT
   );
 
-  const queryInfo = useQuery<CreateProjectInput>(messageInfo, { mutate: true });
+  const queryInfo = useQuery<unknown, CreateProjectInput>(messageInfo, {
+    mutate: true,
+  });
 
   const mutate = async () => {
     const validationError = await validateSchema(
@@ -31,7 +33,7 @@ export const useCreateProject = () => {
       return setValidationErrors(validationError);
     }
 
-    await queryInfo.query(messageInfo);
+    return await queryInfo.query(messageInfo);
   };
 
   return {

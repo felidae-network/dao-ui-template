@@ -17,8 +17,6 @@ import { randomAsU8a } from './util';
 export function decodeStorageDeposit(
   storageDeposit: ContractCallOutcome['storageDeposit']
 ): UIStorageDeposit {
-  console.log('storagedeposit o kar ', storageDeposit);
-
   if (storageDeposit.isCharge) {
     return { value: storageDeposit.asCharge, type: 'charge' };
   } else if (storageDeposit.isRefund) {

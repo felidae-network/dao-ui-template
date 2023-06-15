@@ -60,6 +60,8 @@ export function useQuery<DecodedValueType = unknown, ArgValueType = unknown>(
         contract.abi.registry
       );
     }
+
+    return null; // Return null if decoding is not possible yet
   }, [message, outcome, contract]);
 
   const params: QueryMessageProps = useMemo(() => {
@@ -138,19 +140,22 @@ export function useQuery<DecodedValueType = unknown, ArgValueType = unknown>(
 
   const query = useCallback(
     async (message: AbiMessage) => {
-      setMessage(message);
-      setLoading(true);
-
       try {
+        setLoading(true);
         const o = await dryRun();
         await call(message, o);
         setLoading(false);
+        return getDecodedOutput<DecodedValueType>(
+          o,
+          message,
+          contract.abi.registry
+        );
       } catch (error) {
         setError(error);
         setLoading(false);
       }
     },
-    [call, dryRun]
+    [call, dryRun, contract.abi.registry]
   );
 
   useEffect(() => {
@@ -163,12 +168,28 @@ export function useQuery<DecodedValueType = unknown, ArgValueType = unknown>(
     if (queryOptions.skip) return;
 
     if (message && !queryOptions.mutate && !decodedOutput) {
-      query(message);
+      setLoading(true);
+      query(message)
+        .then(() => setLoading(false))
+        .catch((error) => {
+          setError(error);
+          setLoading(false);
+        });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [message, queryOptions.mutate, queryOptions.skip]);
+  }, [message, queryOptions.mutate, queryOptions.skip, decodedOutput, query]);
 
-  return {
+  const refetch = () => {
+    setLoading(true);
+    query(message!)
+      .then(() => setLoading(false))
+      .catch((error) => {
+        setError(error);
+        setLoading(false);
+      });
+  };
+
+  const returnValues = {
     outcome,
     result,
     loading,
@@ -183,5 +204,8 @@ export function useQuery<DecodedValueType = unknown, ArgValueType = unknown>(
     argValues,
     setArgValues,
     inputData,
+    refetch,
   };
+
+  return returnValues;
 }

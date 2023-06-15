@@ -25,8 +25,6 @@ export default function MemberInfoPage() {
     memberId,
   });
 
-  console.log('decoded ', decodedOutput);
-
   return (
     <Layout>
       {/* <Seo templateTitle='Home' /> */}
