@@ -1,13 +1,15 @@
 /* eslint-disable @next/next/no-img-element */
 import { KeyringAddress } from '@polkadot/ui-keyring/types';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import * as React from 'react';
-import { Button, Card, Dropdown, Navbar } from 'react-daisyui';
+import { Breadcrumbs, Button, Card, Dropdown, Navbar } from 'react-daisyui';
 import { AiOutlineWallet } from 'react-icons/ai';
 import { RxHamburgerMenu } from 'react-icons/rx';
 
 import { removeFromLocalStorage } from '@/lib/helper';
 
+import { navigation } from '@/components/layout/Layout';
 import ThemeSwitch from '@/components/ThemeSwitch/ThemeSwitch';
 
 import { LOCAL_STORAGE_ADDRESS_KEY } from '@/config';
@@ -17,6 +19,7 @@ import {
 } from '@/context/substrate/SubstrateContextProvider';
 
 export default function Header() {
+  const router = useRouter();
   const { setCurrentAccount } = useSubstrate();
   const { currentAccount } = useSubstrateState();
 
@@ -35,6 +38,13 @@ export default function Header() {
           >
             <RxHamburgerMenu className='mr-2' /> felidaeDAO
           </label>
+          <Breadcrumbs className='ml-4'>
+            <Breadcrumbs.Item>DAO</Breadcrumbs.Item>
+
+            <Breadcrumbs.Item>
+              {navigation.find((page) => page.href === router.pathname)?.name}
+            </Breadcrumbs.Item>
+          </Breadcrumbs>
         </div>
         <>
           {currentAccount ? (

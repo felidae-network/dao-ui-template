@@ -11,7 +11,7 @@ import { TiTag } from 'react-icons/ti';
 import { FooterComponent } from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
 
-const navigation = [
+export const navigation = [
   { name: 'Dashboard', href: '/', current: true, icon: <MdOutlineDashboard /> },
   {
     name: 'Projects',
@@ -36,7 +36,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <input id='drawer' type='checkbox' className='drawer-toggle' />
       <div className='drawer-content'>
         <Header />
-        <div className='container m-auto min-h-screen py-10'>{children}</div>
+        <div className='container m-auto min-h-screen p-10 shadow-2xl'>
+          {children}
+        </div>
         <FooterComponent />
       </div>
       <div className='drawer-side'>
