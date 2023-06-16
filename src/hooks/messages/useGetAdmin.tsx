@@ -9,5 +9,5 @@ export const useGetAdmin = () => {
 
   const messageInfo = contract?.abi?.findMessage(CONTRACT_MESSAGES.GET_ADMIN);
 
-  return useQuery(messageInfo);
+  return useQuery<string>(messageInfo);
 };

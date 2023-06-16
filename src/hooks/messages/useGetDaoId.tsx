@@ -9,5 +9,5 @@ export const useGetDaoId = () => {
 
   const messageInfo = contract?.abi?.findMessage(CONTRACT_MESSAGES.GET_DAO_ID);
 
-  return useQuery(messageInfo);
+  return useQuery<string>(messageInfo);
 };

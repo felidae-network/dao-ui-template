@@ -11,5 +11,5 @@ export const useGetContractBalance = () => {
     CONTRACT_MESSAGES.GET_CONTRACT_BALANCE
   );
 
-  return useQuery(messageInfo);
+  return useQuery<string>(messageInfo);
 };

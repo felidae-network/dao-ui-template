@@ -26,7 +26,7 @@ export const useGetMemberList = () => {
     CONTRACT_MESSAGES.GET_MEMBER_LIST
   );
 
-  return useQuery<GetMemberListInput>(messageInfo, {
+  return useQuery<IGetMembersList, GetMemberListInput>(messageInfo, {
     initialArgValues: { daoAddress: contract.address?.toString() },
   });
 };
