@@ -23,7 +23,7 @@ export default function SprintssPage() {
       <Seo />
 
       <main>
-        <h1 className='my-4 text-center'>Projects</h1>
+        <h1 className='text-center'>Projects</h1>
 
         <ProjectList />
       </main>

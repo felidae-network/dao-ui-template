@@ -6,6 +6,7 @@ import {
   DropResult,
   ResponderProvided,
 } from 'react-beautiful-dnd'; // Drag and drop library
+import { Divider } from 'react-daisyui';
 
 export const TicketBoard = () => {
   // Define your columns and tickets here
@@ -71,13 +72,13 @@ export const TicketBoard = () => {
       <div className='flex'>
         {columns.map((column) => (
           <div key={column.id} className='flex-1 p-4'>
-            <h2 className='mb-2 text-lg font-semibold'>{column.title}</h2>
+            <h2 className='text-lg font-semibold'>{column.title}</h2>
             <Droppable droppableId={column.id} key={column.id}>
               {(provided) => (
                 <div
                   ref={provided.innerRef}
                   {...provided.droppableProps}
-                  className='min-h-[400px] rounded bg-white p-2 shadow'
+                  className='min-h-[400px] rounded p-2 shadow-md'
                 >
                   {column.tickets.map((ticket, index) => (
                     <Draggable
@@ -90,9 +91,11 @@ export const TicketBoard = () => {
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                          className='mb-2 rounded bg-gray-100 p-2'
+                          className='mb-2 rounded p-2 shadow-md'
                         >
-                          {ticket.title}
+                          <Divider className='mt-0' />
+                          <p>{ticket.title}</p>
+                          <Divider className='mb-0' />
                         </div>
                       )}
                     </Draggable>

@@ -23,7 +23,7 @@ export default function MembersPage() {
       <Seo />
 
       <main>
-        <h1 className='my-4 text-center'>Board</h1>
+        <h1 className='text-center'>Board</h1>
 
         <TicketBoard />
       </main>

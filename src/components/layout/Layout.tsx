@@ -1,12 +1,14 @@
 import Link from 'next/link';
 import * as React from 'react';
-import { Menu } from 'react-daisyui';
+import { Divider, Menu } from 'react-daisyui';
 import { AiFillProject, AiOutlineUsergroupDelete } from 'react-icons/ai';
 import { FaTasks } from 'react-icons/fa';
 import { HiOutlineSupport } from 'react-icons/hi';
 import { MdOutlineDashboard } from 'react-icons/md';
+import { RxHamburgerMenu } from 'react-icons/rx';
 import { TiTag } from 'react-icons/ti';
 
+import { FooterComponent } from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
 
 const navigation = [
@@ -34,21 +36,33 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <input id='drawer' type='checkbox' className='drawer-toggle' />
       <div className='drawer-content'>
         <Header />
-        <div className='container m-auto'>{children}</div>
+        <div className='container m-auto min-h-screen py-10'>{children}</div>
+        <FooterComponent />
       </div>
       <div className='drawer-side'>
         <label htmlFor='drawer' className='drawer-overlay'></label>
 
-        <Menu className='bg-base-100 w-56 p-2 shadow-xl'>
-          {navigation.map((navItem) => (
-            <Menu.Item key={navItem.name}>
-              <Link href={navItem.href}>
-                {navItem.icon}
-                {navItem.name}
-              </Link>
-            </Menu.Item>
-          ))}
-        </Menu>
+        <div className='bg-base-100 w-56 p-2 shadow-xl'>
+          <div className='mt-3 flex-1'>
+            <label
+              htmlFor='drawer'
+              className='drawer-button btn btn-ghost text-xl normal-case'
+            >
+              <RxHamburgerMenu className='mr-2' /> felidaeDAO
+            </label>
+          </div>
+          <Divider />
+          <Menu className=''>
+            {navigation.map((navItem) => (
+              <Menu.Item key={navItem.name}>
+                <Link href={navItem.href}>
+                  {navItem.icon}
+                  {navItem.name}
+                </Link>
+              </Menu.Item>
+            ))}
+          </Menu>
+        </div>
       </div>
     </div>
   );

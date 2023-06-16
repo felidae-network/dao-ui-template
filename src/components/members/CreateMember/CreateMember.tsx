@@ -5,22 +5,29 @@ import { useAddMember } from '@/hooks/messages';
 
 import { useSubstrateState } from '@/context/substrate/SubstrateContextProvider';
 
+import { ADdMemberInput } from '@/types/schemaTypes';
+
 interface CreateMemberProps {
   children?: React.ReactNode;
   toggleVisible: Dispatch<SetStateAction<boolean>>;
+  refetchMembers: () => void;
 }
 
 export const CreateMember: React.FC<CreateMemberProps> = ({
   toggleVisible,
+  refetchMembers,
 }) => {
   const { accounts } = useSubstrateState();
-  const { loading, mutate, argValues, setArgValues, decodedOutput } =
-    useAddMember();
+  const { loading, mutate, argValues, setArgValues } = useAddMember();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await mutate();
-    alert(decodedOutput?.decodedOutput);
+    const mutateValue = await mutate();
+    if (mutateValue) {
+      alert(mutateValue.decodedOutput);
+      refetchMembers();
+    }
+    setArgValues({} as ADdMemberInput);
     toggleVisible(false);
   };
 

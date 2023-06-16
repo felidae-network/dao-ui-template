@@ -31,7 +31,7 @@ export default function MemberInfoPage() {
       <Seo />
 
       <main>
-        <h1 className='my-4 text-center'>Membner Info</h1>
+        <h1 className='text-center'>Membner Info</h1>
 
         {loading ? (
           <Skeleton />

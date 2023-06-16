@@ -53,7 +53,7 @@ export default function HomePage() {
       <Seo />
 
       <main>
-        <h1 className='my-4 text-center'>Dashboard</h1>
+        <h1 className='text-center'>Dashboard</h1>
         {isLoading() ? (
           <div className='flex items-center justify-center'>
             <LoadingSpinner />

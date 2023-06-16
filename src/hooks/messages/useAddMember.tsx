@@ -17,7 +17,9 @@ export const useAddMember = () => {
 
   const messageInfo = contract?.abi?.findMessage(CONTRACT_MESSAGES.ADD_MEMBER);
 
-  const queryInfo = useQuery<ADdMemberInput>(messageInfo, { mutate: true });
+  const queryInfo = useQuery<unknown, ADdMemberInput>(messageInfo, {
+    mutate: true,
+  });
 
   const mutate = async () => {
     const validationError = await validateSchema(
@@ -29,7 +31,7 @@ export const useAddMember = () => {
       return setValidationErrors(validationError);
     }
 
-    await queryInfo.query(messageInfo);
+    return await queryInfo.query(messageInfo);
   };
 
   return {

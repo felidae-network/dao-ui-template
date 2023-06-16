@@ -15,7 +15,7 @@ interface MemberListProps {
 }
 
 export const MemberList: React.FC<MemberListProps> = () => {
-  const { decodedOutput, loading } = useGetMemberList();
+  const { decodedOutput, loading, refetch } = useGetMemberList();
   const { decodedOutput: getDaoIdDecodedOutput, loading: getDaoIdLoading } =
     useGetDaoId();
 
@@ -33,7 +33,10 @@ export const MemberList: React.FC<MemberListProps> = () => {
   return (
     <div>
       <Modal open={visible} onClickBackdrop={toggleVisible}>
-        <CreateMember toggleVisible={toggleVisible} />
+        <CreateMember
+          toggleVisible={toggleVisible}
+          refetchMembers={() => refetch()}
+        />
       </Modal>
 
       <div className='mb-3 flex items-center justify-between'>
