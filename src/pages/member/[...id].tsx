@@ -21,7 +21,7 @@ import Skeleton from '@/components/Skeleton';
 export default function MemberInfoPage() {
   const { loading, setArgValues, decodedOutput } = useGetMemberInfo();
   const router = useRouter();
-  console.log('router', router);
+  console.log('router', router.query.id![1]);
   useEffect(() => {
     if (router.isReady) {
       setArgValues({ memberId: router.query.id![1] as unknown as number });
