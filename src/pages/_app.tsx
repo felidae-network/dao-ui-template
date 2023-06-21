@@ -1,4 +1,5 @@
 import { AppProps } from 'next/app';
+import { Toaster } from 'react-hot-toast';
 
 import '@/styles/globals.css';
 // !STARTERCONF This is for demo purposes, remove @/styles/colors.css import immediately
@@ -21,7 +22,10 @@ function MyApp({ Component, pageProps }: AppProps) {
       <AwaitApis>
         <ContractContextProvider>
           <PrivateRoute>
-            <Component {...pageProps} />
+            <>
+              <Toaster />
+              <Component {...pageProps} />
+            </>
           </PrivateRoute>
         </ContractContextProvider>
       </AwaitApis>
