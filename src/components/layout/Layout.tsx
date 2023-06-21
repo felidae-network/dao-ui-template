@@ -1,15 +1,22 @@
+import { KeyringAddress } from '@polkadot/ui-keyring/types';
 import Link from 'next/link';
 import * as React from 'react';
-import { Divider, Menu } from 'react-daisyui';
+import { Button, Divider, Menu } from 'react-daisyui';
 import { AiFillProject, AiOutlineUsergroupDelete } from 'react-icons/ai';
+import { BiLogOut } from 'react-icons/bi';
 import { FaTasks } from 'react-icons/fa';
 import { HiOutlineSupport } from 'react-icons/hi';
 import { MdOutlineDashboard } from 'react-icons/md';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import { TiTag } from 'react-icons/ti';
 
+import { removeFromLocalStorage } from '@/lib/helper';
+
 import { FooterComponent } from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
+
+import { LOCAL_STORAGE_ADDRESS_KEY } from '@/config';
+import { useSubstrate } from '@/context/substrate/SubstrateContextProvider';
 
 export const navigation = [
   { name: 'Dashboard', href: '/', current: true, icon: <MdOutlineDashboard /> },
@@ -31,6 +38,12 @@ export const navigation = [
 ];
 
 export default function Layout({ children }: { children: React.ReactNode }) {
+  const { setCurrentAccount } = useSubstrate();
+  const logout = () => {
+    setCurrentAccount(null as unknown as KeyringAddress);
+    removeFromLocalStorage(LOCAL_STORAGE_ADDRESS_KEY);
+  };
+
   return (
     <div className='drawer'>
       <input id='drawer' type='checkbox' className='drawer-toggle' />
@@ -44,8 +57,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <div className='drawer-side'>
         <label htmlFor='drawer' className='drawer-overlay'></label>
 
-        <div className='bg-base-100 w-56 p-2 shadow-xl'>
-          <div className='mt-3 flex-1'>
+        <div className='bg-base-100 flex w-56 flex-col justify-start p-2 shadow-xl'>
+          <div className='mt-3'>
             <label
               htmlFor='drawer'
               className='drawer-button btn btn-ghost text-xl normal-case'
@@ -54,7 +67,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </label>
           </div>
           <Divider />
-          <Menu className=''>
+          <Menu className='flex  flex-col'>
             {navigation.map((navItem) => (
               <Menu.Item key={navItem.name}>
                 <Link href={navItem.href}>
@@ -64,6 +77,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               </Menu.Item>
             ))}
           </Menu>
+          <Button
+            onClick={logout}
+            color='error'
+            startIcon={<BiLogOut />}
+            className='mb-5 mt-auto'
+          >
+            Logout
+          </Button>
         </div>
       </div>
     </div>
