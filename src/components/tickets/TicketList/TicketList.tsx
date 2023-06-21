@@ -4,6 +4,7 @@ import { Button, Modal, Table } from 'react-daisyui';
 import { AiOutlinePlus } from 'react-icons/ai';
 
 import {
+  IGetTicket,
   IGetTicketList,
   useGetTicketList,
 } from '@/hooks/messages/useGetTicketList';
@@ -17,23 +18,47 @@ interface TicketListProps {
 }
 
 export const TicketList: React.FC<TicketListProps> = () => {
-  const { decodedOutput, loading } = useGetTicketList();
-  const [visible, setVisible] = useState<boolean>(false);
-  const toggleVisible = () => {
-    setVisible(!visible);
-  };
+  const { decodedOutput, loading, refetch } = useGetTicketList();
+  const [createTicketModalVisible, setCreateTicketModalVisible] =
+    useState(false);
+  const [updateTicketModalVisible, setUpdateTicketModalVisible] =
+    useState(false);
+
+  const [selectedTicket, setSelectedTicket] = useState<IGetTicket>();
 
   return (
     <div>
-      <Modal open={visible} onClickBackdrop={toggleVisible}>
-        <CreateTicket toggleVisible={toggleVisible} />
+      <Modal
+        open={createTicketModalVisible}
+        onClickBackdrop={() => setCreateTicketModalVisible(!false)}
+      >
+        <CreateTicket
+          toggleVisible={() =>
+            setCreateTicketModalVisible(!createTicketModalVisible)
+          }
+          refetchTickets={() => refetch()}
+        />
       </Modal>
-      <Modal open={visible} onClickBackdrop={toggleVisible}>
-        <UpdateTicketStatus toggleVisible={toggleVisible} />
-      </Modal>
+      {selectedTicket && (
+        <Modal
+          open={updateTicketModalVisible}
+          onClickBackdrop={() => setUpdateTicketModalVisible(false)}
+        >
+          <UpdateTicketStatus
+            ticket={selectedTicket!}
+            toggleVisible={() =>
+              setUpdateTicketModalVisible(!updateTicketModalVisible)
+            }
+            refetchTickets={() => refetch()}
+          />
+        </Modal>
+      )}
       <div className='mb-3 flex items-center justify-between'>
         <h3>Your Tickets</h3>
-        <Button onClick={toggleVisible} startIcon={<AiOutlinePlus />}>
+        <Button
+          onClick={() => setCreateTicketModalVisible(true)}
+          startIcon={<AiOutlinePlus />}
+        >
           Add New
         </Button>
       </div>
@@ -66,7 +91,6 @@ export const TicketList: React.FC<TicketListProps> = () => {
                         <span>
                           <Link href={`/ticket/${ticket.ticketId}`}>
                             <Button
-                              className='transform rounded-md bg-gradient-to-r from-black via-gray-500 to-white px-4 py-2 text-white shadow-md transition duration-300 ease-in-out hover:scale-105 hover:from-white hover:via-gray-500 hover:to-black hover:text-white'
                               onClick={() => {
                                 console.log('logged');
                               }}
@@ -78,7 +102,10 @@ export const TicketList: React.FC<TicketListProps> = () => {
                         <span>
                           {' '}
                           <Button
-                            onClick={toggleVisible}
+                            onClick={() => {
+                              setSelectedTicket(ticket);
+                              setUpdateTicketModalVisible(true);
+                            }}
                             startIcon={<AiOutlinePlus />}
                           >
                             {ticket.ticketStatus}

@@ -83,7 +83,6 @@ export const closeProjectInputSchema = object({
 });
 
 export const createTicketInputSchema = object({
-  ticketId: string().required(),
   name: string().required(),
   projectId: string().required(),
   assignedTo: string().required(),

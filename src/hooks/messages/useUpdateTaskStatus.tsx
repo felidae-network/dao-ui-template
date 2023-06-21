@@ -10,7 +10,9 @@ import { validateSchema } from '@/helpers/validateSchema';
 import { CONTRACT_MESSAGES } from '@/types/enums';
 import { UpdateTaskStatusInput } from '@/types/schemaTypes';
 
-export const useUpdateTaskStatus = () => {
+export const useUpdateTaskStatus = (
+  initialArgValues: UpdateTaskStatusInput
+) => {
   const { contract } = useContract();
   const [validationErrors, setValidationErrors] =
     useState<ValidationError | null>(null);
@@ -19,12 +21,12 @@ export const useUpdateTaskStatus = () => {
     CONTRACT_MESSAGES.UPDATE_TAKS_STATUS
   );
 
-  const queryInfo = useQuery<UpdateTaskStatusInput>(messageInfo, {
+  const queryInfo = useQuery<unknown, UpdateTaskStatusInput>(messageInfo, {
     mutate: true,
+    initialArgValues,
   });
 
-  const mutate = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const mutate = async () => {
     const validationError = await validateSchema(
       updateTaskStatusInputSchema,
       queryInfo.argValues
@@ -34,7 +36,7 @@ export const useUpdateTaskStatus = () => {
       return setValidationErrors(validationError);
     }
 
-    queryInfo.query(messageInfo);
+    return await queryInfo.query(messageInfo);
   };
 
   return {
