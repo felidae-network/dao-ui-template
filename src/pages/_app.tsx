@@ -9,6 +9,7 @@ import { PrivateRoute } from '@/components/route/PrivateRoute';
 
 import { ContractContextProvider } from '@/context/contract/ContractContextProvider';
 import { SubstrateContextProvider } from '@/context/substrate/SubstrateContextProvider';
+import { ThemeContextProvider } from '@/context/theme/ThemeContextProvider';
 
 /**
  * !STARTERCONF info
@@ -17,15 +18,17 @@ import { SubstrateContextProvider } from '@/context/substrate/SubstrateContextPr
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <SubstrateContextProvider>
-      <AwaitApis>
-        <ContractContextProvider>
-          <PrivateRoute>
-            <Component {...pageProps} />
-          </PrivateRoute>
-        </ContractContextProvider>
-      </AwaitApis>
-    </SubstrateContextProvider>
+    <ThemeContextProvider>
+      <SubstrateContextProvider>
+        <AwaitApis>
+          <ContractContextProvider>
+            <PrivateRoute>
+              <Component {...pageProps} />
+            </PrivateRoute>
+          </ContractContextProvider>
+        </AwaitApis>
+      </SubstrateContextProvider>
+    </ThemeContextProvider>
   );
 }
 

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Button, Dropdown } from 'react-daisyui';
 import { BiBrush } from 'react-icons/bi';
 
-import { getFromLocalStorage, setToLocalStorage } from '@/lib/helper';
+import { useTheme } from '@/context/theme/ThemeContextProvider';
 
 const themes = [
   'light',
@@ -37,20 +37,7 @@ const themes = [
 ];
 
 const ThemeSwitch = () => {
-  //we store the theme in localStorage to preserve the state on next visit with an initial theme of dark.
-  const [theme, setTheme] = useState(getFromLocalStorage('theme') || 'dark');
-
-  //toggles the theme
-  const toggleTheme = (newTheme: string) => {
-    setTheme(newTheme);
-    setToLocalStorage('theme', newTheme);
-  };
-
-  //modify data-theme attribute on document.body when theme changes
-  useEffect(() => {
-    const body = document.body;
-    body.setAttribute('data-theme', theme);
-  }, [theme]);
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <Dropdown horizontal='left' vertical='bottom'>
