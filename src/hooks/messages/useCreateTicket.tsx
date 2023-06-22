@@ -10,7 +10,7 @@ import { validateSchema } from '@/helpers/validateSchema';
 import { CONTRACT_MESSAGES } from '@/types/enums';
 import { CreateTicketInput } from '@/types/schemaTypes';
 
-export const useCreateTicket = () => {
+export const useCreateTicket = (initialArgValues?: CreateTicketInput) => {
   const { contract } = useContract();
   const [validationErrors, setValidationErrors] =
     useState<ValidationError | null>(null);
@@ -19,10 +19,12 @@ export const useCreateTicket = () => {
     CONTRACT_MESSAGES.CREATE_TICKET
   );
 
-  const queryInfo = useQuery<CreateTicketInput>(messageInfo, { mutate: true });
+  const queryInfo = useQuery<unknown, CreateTicketInput>(messageInfo, {
+    mutate: true,
+    initialArgValues,
+  });
 
-  const mutate = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const mutate = async () => {
     const validationError = await validateSchema(
       createTicketInputSchema,
       queryInfo.argValues
@@ -32,7 +34,7 @@ export const useCreateTicket = () => {
       return setValidationErrors(validationError);
     }
 
-    queryInfo.query(messageInfo);
+    return await queryInfo.query(messageInfo);
   };
 
   return {

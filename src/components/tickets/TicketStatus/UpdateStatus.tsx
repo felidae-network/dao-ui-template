@@ -1,65 +1,52 @@
 import { Dispatch, FormEvent, SetStateAction } from 'react';
-import { Button, Input, Modal, Select } from 'react-daisyui';
+import { Button, Modal, Select } from 'react-daisyui';
 
 import { useUpdateTaskStatus } from '@/hooks/messages';
+import { IGetTicket } from '@/hooks/messages/useGetTicketList';
 
-import { useSubstrateState } from '@/context/substrate/SubstrateContextProvider';
+import { useContract } from '@/context/contract/ContractContextProvider';
 
 import { TaskStatusEnum } from '@/types/enums/taskStatus.enum';
+import { UpdateTaskStatusInput } from '@/types/schemaTypes';
 interface UpdateTicketStatusProps {
   children?: React.ReactNode;
+  ticket: IGetTicket;
   toggleVisible: Dispatch<SetStateAction<boolean>>;
+  refetchTickets: () => void;
 }
 
 export const UpdateTicketStatus: React.FC<UpdateTicketStatusProps> = ({
   toggleVisible,
+  ticket,
+  refetchTickets,
 }) => {
-  const { accounts } = useSubstrateState();
-  const { loading, mutate, argValues, setArgValues, decodedOutput } =
-    useUpdateTaskStatus();
+  const { contract } = useContract();
+  const { loading, mutate, argValues, setArgValues } = useUpdateTaskStatus({
+    daoAddress: contract.address.toString(),
+    ticketId: ticket.ticketId,
+    ticketStatus: ticket.ticketStatus,
+  } as UpdateTaskStatusInput);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await mutate(e);
-    alert(decodedOutput?.decodedOutput);
+
+    const mutateValue = await mutate();
+    if (mutateValue) {
+      if (mutateValue.isError) return;
+
+      alert(mutateValue.decodedOutput);
+      refetchTickets();
+    }
     toggleVisible(false);
   };
 
   return (
     <>
       <Modal.Header className='font-bold'>Update Ticket Status</Modal.Header>
+      <h3>{ticket.name}</h3>
+
       <form onSubmit={handleSubmit}>
         <Modal.Body>
-          <label className='label'>
-            <span className='label-text'>Ticket Id</span>
-          </label>
-          <Input
-            name='name'
-            className='w-full'
-            placeholder='name'
-            value={argValues.ticketId}
-            onChange={(e) =>
-              setArgValues({ ...argValues, ticketId: e.target.value })
-            }
-          />
-          <label className='label'>
-            <span className='label-text'>dao address</span>
-          </label>
-          <Select
-            placeholder='dao Address'
-            className='w-full'
-            onChange={(event) =>
-              setArgValues({ ...argValues, daoAddress: event.target.value })
-            }
-          >
-            {accounts &&
-              accounts.map((account) => (
-                <option key={account.address} value={account.address}>
-                  {account.meta.name}
-                </option>
-              ))}
-          </Select>
-
           <label className='label'>
             <span className='label-text'> Status</span>
           </label>
@@ -71,7 +58,13 @@ export const UpdateTicketStatus: React.FC<UpdateTicketStatusProps> = ({
             }
           >
             {Object.values(TaskStatusEnum).map((ticketType) => (
-              <option key={ticketType}>{ticketType}</option>
+              <option
+                value={ticketType}
+                key={ticketType}
+                selected={ticketType === ticket.ticketStatus}
+              >
+                {ticketType}
+              </option>
             ))}
           </Select>
         </Modal.Body>

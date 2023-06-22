@@ -1,7 +1,9 @@
-import { Dispatch, FormEvent, SetStateAction, useEffect } from 'react';
+import { Dispatch, FormEvent, SetStateAction } from 'react';
 import { Button, Modal, Select } from 'react-daisyui';
 
 import { IGetProject, useUpdateProjectStatus } from '@/hooks/messages';
+
+import { useContract } from '@/context/contract/ContractContextProvider';
 
 import { ProjectStatusEnum } from '@/types/enums';
 interface UpdateProjectStatusProps {
@@ -16,7 +18,12 @@ export const UpdateProjectStatus: React.FC<UpdateProjectStatusProps> = ({
   refetchProjects,
   project,
 }) => {
-  const { loading, mutate, argValues, setArgValues } = useUpdateProjectStatus();
+  const { contract } = useContract();
+  const { loading, mutate, argValues, setArgValues } = useUpdateProjectStatus({
+    daoAddress: contract.address.toString(),
+    projectId: project.projectId,
+    status: project.projectStatus as string,
+  });
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -27,14 +34,6 @@ export const UpdateProjectStatus: React.FC<UpdateProjectStatusProps> = ({
     }
     toggleVisible(false);
   };
-
-  useEffect(() => {
-    setArgValues({
-      ...argValues,
-      projectId: project.projectId,
-      status: project.projectStatus as string,
-    });
-  }, [project, setArgValues, argValues]);
 
   return (
     <>

@@ -43,7 +43,8 @@ export function useQuery<DecodedValueType = unknown, ArgValueType = unknown>(
   const [result, setResult] = useState<ISubmittableResult>();
   const [argValues, setArgValues, inputData] = useArgValues<ArgValueType>(
     message,
-    api?.registry
+    api?.registry,
+    queryOptions.initialArgValues
   );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<unknown>();

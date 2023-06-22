@@ -10,19 +10,25 @@ import { TicketTypeEnum } from '@/types/enums/ticketType.enum';
 interface CreateTicketProps {
   children?: React.ReactNode;
   toggleVisible: Dispatch<SetStateAction<boolean>>;
+  refetchTickets: () => void;
 }
 
 export const CreateTicket: React.FC<CreateTicketProps> = ({
   toggleVisible,
+  refetchTickets,
 }) => {
   const { accounts } = useSubstrateState();
-  const { loading, mutate, argValues, setArgValues, decodedOutput } =
-    useCreateTicket();
+  const { loading, mutate, argValues, setArgValues } = useCreateTicket();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await mutate(e);
-    alert(decodedOutput?.decodedOutput);
+    const mutateValue = await mutate();
+    if (mutateValue) {
+      if (mutateValue.isError) return;
+
+      alert(mutateValue.decodedOutput);
+      refetchTickets();
+    }
     toggleVisible(false);
   };
 
@@ -44,26 +50,33 @@ export const CreateTicket: React.FC<CreateTicketProps> = ({
             }
           />
           <label className='label'>
-            <span className='label-text'>ticketType</span>
+            <span className='label-text'>Ticket Type</span>
           </label>
 
           <Select
-            placeholder='Account Address'
+            placeholder='Ticket Type'
             className='w-full'
+            value={argValues.ticketType}
             onChange={(event) =>
               setArgValues({ ...argValues, ticketType: event.target.value })
             }
           >
-            {Object.values(TicketTypeEnum).map((ticketType) => (
-              <option key={ticketType}>{ticketType}</option>
+            {Object.keys(TicketTypeEnum).map((ticketType) => (
+              <option
+                selected={ticketType === TicketTypeEnum.Feature}
+                value={ticketType}
+                key={ticketType}
+              >
+                {ticketType}
+              </option>
             ))}
           </Select>
 
           <label className='label'>
-            <span className='label-text'>Choose member account</span>
+            <span className='label-text'>Assigned member</span>
           </label>
           <Select
-            placeholder='Account Address'
+            placeholder='Assigned member'
             className='w-full'
             onChange={(event) =>
               setArgValues({ ...argValues, assignedTo: event.target.value })

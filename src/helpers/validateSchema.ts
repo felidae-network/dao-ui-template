@@ -9,6 +9,8 @@ export const validateSchema = async <T extends AnyObject>(
     return false;
   } catch (error: unknown) {
     const err = error as ValidationError;
+    // TO DO:
+    // toast.error(err.message)
     alert(err.message);
     return err;
   }

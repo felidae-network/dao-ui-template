@@ -10,7 +10,9 @@ import { validateSchema } from '@/helpers/validateSchema';
 import { CONTRACT_MESSAGES } from '@/types/enums';
 import { UpdateProjectStatusInput } from '@/types/schemaTypes';
 
-export const useUpdateProjectStatus = () => {
+export const useUpdateProjectStatus = (
+  initialArgValues?: UpdateProjectStatusInput
+) => {
   const { contract } = useContract();
   const [validationErrors, setValidationErrors] =
     useState<ValidationError | null>(null);
@@ -21,6 +23,7 @@ export const useUpdateProjectStatus = () => {
 
   const queryInfo = useQuery<unknown, UpdateProjectStatusInput>(messageInfo, {
     mutate: true,
+    initialArgValues,
   });
 
   const mutate = async () => {

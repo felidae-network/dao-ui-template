@@ -24,5 +24,5 @@ export const useGetTicketList = () => {
     CONTRACT_MESSAGES.GET_TICKET_LIST
   );
 
-  return useQuery(messageInfo);
+  return useQuery<IGetTicketList>(messageInfo);
 };
