@@ -1,5 +1,6 @@
 import { Dispatch, FormEvent, SetStateAction } from 'react';
 import { Button, Input, Modal, Select } from 'react-daisyui';
+import toast from 'react-hot-toast';
 
 import { useCreateProject } from '@/hooks/messages';
 
@@ -22,7 +23,8 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
     e.preventDefault();
     const mutateValue = await mutate();
     if (mutateValue) {
-      alert(mutateValue.decodedOutput);
+      if (mutateValue.isError) return toast.error(mutateValue.decodedOutput);
+      toast.success('Project created!');
       refetchProjects();
     }
     toggleVisible(false);
