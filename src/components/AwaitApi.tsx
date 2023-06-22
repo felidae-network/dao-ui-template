@@ -46,7 +46,7 @@ export function AwaitApis({
     <>
       {apiState !== 'READY' || contractLoading || !isKeyringLoaded() ? (
         <div className='flex h-screen w-screen items-center justify-center'>
-          <div className='flex flex-col items-center rounded-lg bg-gray-700 p-8 shadow-md'>
+          <div className='flex flex-col items-center rounded-lg p-8 shadow-md'>
             <div className='mb-10'>
               <Kbd className='text-3xl' size='lg'>
                 D
