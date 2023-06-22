@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   DragDropContext,
   Draggable,
@@ -6,97 +6,117 @@ import {
   DropResult,
   ResponderProvided,
 } from 'react-beautiful-dnd'; // Drag and drop library
-import { Divider } from 'react-daisyui';
+
+import {
+  IGetTicket,
+  useGetTicketList,
+} from '@/hooks/messages/useGetTicketList';
+
+import { Ticket } from '@/components/tickets/TicketBoard/components/Ticket';
+
+import { TaskStatusEnum } from '@/types/enums/taskStatus.enum';
+
+interface BoardColumn {
+  id: string;
+  title: string;
+  tickets: IGetTicket[];
+}
+
+interface TicketStatusesObjType {
+  [key: string]: {
+    taskStatus: TaskStatusEnum;
+    columnIndex: number;
+  };
+}
+
+const allColumns: BoardColumn[] = Object.keys(TaskStatusEnum)
+  .filter((type) => isNaN(type as unknown as number))
+  .map((ticketType) => ({
+    id: ticketType,
+    title: ticketType,
+    tickets: [] as IGetTicket[],
+  }));
 
 export const TicketBoard = () => {
-  // Define your columns and tickets here
-  const columnss = [
-    {
-      id: 'column-1',
-      title: 'To Do',
-      tickets: [{ id: 'ticket-1', title: 'Ticket 1' }],
-    },
-    {
-      id: 'column-2',
-      title: 'In Progress',
-      tickets: [{ id: 'ticket-2', title: 'Ticket 2' }],
-    },
-    {
-      id: 'column-3',
-      title: 'Done',
-      tickets: [{ id: 'ticket-3', title: 'Ticket 3' }],
-    },
-  ];
-  const [columns, setColumns] = useState(columnss);
+  const { decodedOutput } = useGetTicketList();
+  const [columns, _setColumns] = useState(allColumns);
 
-  const onDragEnd = (
-    { destination, source, draggableId }: DropResult,
-    _provider: ResponderProvided
-  ) => {
-    if (!destination) {
-      return; // Item was dropped outside of any droppable area
+  const columnsWithData = useMemo(() => {
+    if (!decodedOutput) return columns;
+    const _columns = columns;
+
+    const ticketStatusesObj: TicketStatusesObjType = Object.keys(TaskStatusEnum)
+      .filter((type) => isNaN(type as unknown as number))
+      .reduce(
+        (acc, curr, index) => ({
+          ...acc,
+          [curr]: { taskStatus: curr, columnIndex: index },
+        }),
+        {}
+      );
+
+    if (decodedOutput.value && decodedOutput.value.length) {
+      decodedOutput.value.forEach((ticket) => {
+        const columnIndex =
+          ticketStatusesObj[ticket.ticketStatus as string].columnIndex;
+        _columns[columnIndex].tickets.push(ticket);
+      });
     }
 
-    setColumns((prevState) => {
-      const sourceColumnIndex = prevState.findIndex(
-        (column) => column.id === source.droppableId
-      );
-      const destinationColumnIndex = prevState.findIndex(
-        (column) => column.id === destination.droppableId
-      );
+    return _columns;
+  }, [columns, decodedOutput]);
 
-      const newColumns = [...prevState];
-
-      const ticket = newColumns[sourceColumnIndex].tickets.find(
-        (ticket) => ticket.id === draggableId
-      );
-
-      newColumns[sourceColumnIndex].tickets = newColumns[
-        sourceColumnIndex
-      ].tickets.filter((ticket) => ticket.id !== draggableId);
-
-      newColumns[destinationColumnIndex].tickets.splice(
-        destination.index,
-        0,
-        ticket!
-      );
-
-      return newColumns;
-    });
-
+  const onDragEnd = (_result: DropResult, _provider: ResponderProvided) => {
+    // if (!destination) {
+    //   return; // Item was dropped outside of any droppable area
+    // }
+    // setColumns((prevState) => {
+    //   const sourceColumnIndex = prevState.findIndex(
+    //     (column) => column.id === source.droppableId
+    //   );
+    //   const destinationColumnIndex = prevState.findIndex(
+    //     (column) => column.id === destination.droppableId
+    //   );
+    //   const newColumns = [...prevState];
+    //   const ticket = newColumns[sourceColumnIndex].tickets.find(
+    //     (ticket) => ticket.ticketId === draggableId
+    //   );
+    //   newColumns[sourceColumnIndex].tickets = newColumns[
+    //     sourceColumnIndex
+    //   ].tickets.filter((ticket) => ticket.ticketId !== draggableId);
+    //   newColumns[destinationColumnIndex].tickets.splice(
+    //     destination.index,
+    //     0,
+    //     ticket!
+    //   );
+    //   return newColumns;
+    // });
     // TODO: Update the tickets array based on the drag result
   };
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <div className='flex'>
-        {columns.map((column) => (
-          <div key={column.id} className='flex-1 p-4'>
-            <h2 className='text-lg font-semibold'>{column.title}</h2>
+      <div className='flex overflow-x-scroll'>
+        {columnsWithData.map((column) => (
+          <div key={column.id} className='min-w-[350px] flex-1 p-4'>
+            <h2 className='bg-base-300 rounded-t p-2 text-lg font-semibold'>
+              {column.title}
+            </h2>
             <Droppable droppableId={column.id} key={column.id}>
               {(provided) => (
                 <div
                   ref={provided.innerRef}
                   {...provided.droppableProps}
-                  className='min-h-[400px] rounded p-2 shadow-md'
+                  className='bg-base-200 min-h-[400px] rounded rounded-t-none p-4 shadow-md'
                 >
                   {column.tickets.map((ticket, index) => (
                     <Draggable
-                      key={ticket.id}
-                      draggableId={ticket.id}
+                      key={ticket.ticketId}
+                      draggableId={ticket.ticketId}
                       index={index}
                     >
                       {(provided) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          className='mb-2 rounded p-2 shadow-md'
-                        >
-                          <Divider className='mt-0' />
-                          <p>{ticket.title}</p>
-                          <Divider className='mb-0' />
-                        </div>
+                        <Ticket provided={provided} ticket={ticket} />
                       )}
                     </Draggable>
                   ))}
