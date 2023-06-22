@@ -1,6 +1,6 @@
-import { KeyringAddress } from '@polkadot/ui-keyring/types';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Card, Form, Hero, Select } from 'react-daisyui';
 
 import { setToLocalStorage } from '@/lib/helper';
 
@@ -29,7 +29,10 @@ import {
 export default function HomePage() {
   const router = useRouter();
   const { setCurrentAccount } = useSubstrate();
+  const { keyring } = useSubstrateState();
   const { accounts, currentAccount, keyringState } = useSubstrateState();
+
+  const [address, setAddress] = useState<string>();
 
   useEffect(() => {
     if (router.isReady && keyringState === 'READY' && currentAccount) {
@@ -37,10 +40,15 @@ export default function HomePage() {
     }
   }, [router, currentAccount, keyringState]);
 
-  const login = (account: KeyringAddress) => {
-    setCurrentAccount(account);
-    setToLocalStorage(LOCAL_STORAGE_ADDRESS_KEY, account.address);
-    router.push('/');
+  const login = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (address) {
+      const account = keyring.getAccount(address);
+      setCurrentAccount(account!);
+      setToLocalStorage(LOCAL_STORAGE_ADDRESS_KEY, account!.address);
+      router.push('/');
+    }
   };
 
   return (
@@ -49,57 +57,43 @@ export default function HomePage() {
       <Seo />
 
       <main>
-        <div className='relative overflow-x-auto'>
-          <h1 className='my-5 text-center'>Log In</h1>
-          <h3 className='text-center'>select account</h3>
-          <table className='m-auto mt-5 w-full max-w-[1000px] text-left text-sm text-gray-500 dark:text-gray-400'>
-            <thead className='bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400'>
-              <tr>
-                <th scope='col' className='px-6 py-3'>
-                  Account name
-                </th>
-                <th scope='col' className='px-6 py-3'>
-                  address
-                </th>
-                <th scope='col' className='px-6 py-3'>
-                  created at
-                </th>
-                <th scope='col' className='px-6 py-3'>
-                  action
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {accounts &&
-                accounts.map((account) => (
-                  <tr
-                    key={account.address}
-                    className='border-b bg-white dark:border-gray-700 dark:bg-gray-800'
+        <Hero className='mt-28'>
+          <Hero.Content className='flex-col items-center justify-center lg:flex-row-reverse'>
+            <div className='text-center lg:text-left'>
+              <h1 className='text-5xl font-bold'>Login now!</h1>
+              <p className='py-6'>
+                Provident cupiditate voluptatem et in. Quaerat fugiat ut
+                assumenda excepturi exercitationem quasi. In deleniti eaque aut
+                repudiandae et a id nisi.
+              </p>
+            </div>
+            <Card className='bg-base-100 w-full max-w-sm flex-shrink-0 shadow-2xl'>
+              <Card.Body>
+                <Form onSubmit={(e) => login(e)}>
+                  <label className='label'>
+                    <span className='label-text'>Choose member account</span>
+                  </label>
+                  <Select
+                    onChange={(e) => setAddress(e.target.value)}
+                    placeholder='Account Address'
+                    className='w-full'
+                    defaultValue={accounts[0].address}
                   >
-                    <th
-                      scope='row'
-                      className='whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white'
-                    >
-                      {account.meta.name}
-                    </th>
-                    <td className='px-6 py-4'>{account.address}</td>
-                    <td className='px-6 py-4'>{account.meta.whenCreated}</td>
-                    <td className='px-6 py-4'>
-                      <Button
-                        disabled={Boolean(
-                          currentAccount &&
-                            account.address === currentAccount.address
-                        )}
-                        onClick={() => login(account)}
-                      >
-                        Log in
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-        </div>
+                    {accounts &&
+                      accounts.map((account) => (
+                        <option key={account.address} value={account.address}>
+                          {account.meta.name}
+                        </option>
+                      ))}
+                  </Select>
+                  <Button type='submit' className='mt-6'>
+                    Login
+                  </Button>
+                </Form>
+              </Card.Body>
+            </Card>
+          </Hero.Content>
+        </Hero>
       </main>
     </Layout>
   );
