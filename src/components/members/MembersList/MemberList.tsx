@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Button, Modal, Table } from 'react-daisyui';
 import { AiOutlinePlus } from 'react-icons/ai';
 
-import { IGetMembersList, useGetMemberList } from '@/hooks/messages';
+import { useGetMemberList } from '@/hooks/messages';
 import { useGetDaoId } from '@/hooks/messages/useGetDaoId';
 
 import { LoadingSpinner } from '@/components/loading/Loading';
@@ -62,35 +62,34 @@ export const MemberList: React.FC<MemberListProps> = () => {
           ) : (
             <>
               {decodedOutput &&
+              decodedOutput.value.length &&
               getDaoIdDecodedOutput &&
               getDaoIdDecodedOutput.value &&
               decodedOutput.value &&
-              (decodedOutput.value as unknown as IGetMembersList).length ? (
+              decodedOutput.value.length ? (
                 <>
-                  {(decodedOutput.value as unknown as IGetMembersList).map(
-                    (member, index) => (
-                      <Table.Row key={member.memberId}>
-                        <span>{index + 1}</span>
-                        <span>
-                          <Link
-                            href={`/member/${getDaoIdDecodedOutput.value}/${member.memberId}`}
+                  {decodedOutput.value.map((member, index) => (
+                    <Table.Row key={member.memberId}>
+                      <span>{index + 1}</span>
+                      <span>
+                        <Link
+                          href={`/member/${getDaoIdDecodedOutput.value}/${member.memberId}`}
+                        >
+                          <Button
+                            onClick={() => {
+                              console.log('logged');
+                            }}
                           >
-                            <Button
-                              onClick={() => {
-                                console.log('logged');
-                              }}
-                            >
-                              {member.name}
-                            </Button>
-                          </Link>
-                        </span>
-                        <span>{member.memberStatus}</span>
-                        <span>
-                          {new Date(parseInt(member.startTime)).toDateString()}
-                        </span>
-                      </Table.Row>
-                    )
-                  )}
+                            {member.name}
+                          </Button>
+                        </Link>
+                      </span>
+                      <span>{member.memberStatus}</span>
+                      <span>
+                        {new Date(parseInt(member.startTime)).toDateString()}
+                      </span>
+                    </Table.Row>
+                  ))}
                 </>
               ) : (
                 'no data'

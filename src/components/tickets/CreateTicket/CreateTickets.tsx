@@ -23,6 +23,7 @@ export const CreateTicket: React.FC<CreateTicketProps> = ({
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const mutateValue = await mutate();
+
     if (mutateValue) {
       if (mutateValue.isError) return;
 

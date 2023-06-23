@@ -6,12 +6,15 @@ import {
   DropResult,
   ResponderProvided,
 } from 'react-beautiful-dnd'; // Drag and drop library
+import { Button, Modal } from 'react-daisyui';
+import { AiOutlinePlus } from 'react-icons/ai';
 
 import {
   IGetTicket,
   useGetTicketList,
 } from '@/hooks/messages/useGetTicketList';
 
+import { CreateTicket } from '@/components/tickets/CreateTicket';
 import { Ticket } from '@/components/tickets/TicketBoard/components/Ticket';
 
 import { TaskStatusEnum } from '@/types/enums/taskStatus.enum';
@@ -29,17 +32,23 @@ interface TicketStatusesObjType {
   };
 }
 
-const allColumns: BoardColumn[] = Object.keys(TaskStatusEnum)
-  .filter((type) => isNaN(type as unknown as number))
-  .map((ticketType) => ({
+const allColumns: BoardColumn[] = Object.values(TaskStatusEnum).map(
+  (ticketType) => ({
     id: ticketType,
     title: ticketType,
     tickets: [] as IGetTicket[],
-  }));
+  })
+);
 
 export const TicketBoard = () => {
-  const { decodedOutput } = useGetTicketList();
+  const { decodedOutput, refetch } = useGetTicketList();
   const [columns, _setColumns] = useState(allColumns);
+  const [createTicketModalVisible, setCreateTicketModalVisible] =
+    useState(false);
+
+  const [ticketModalVisible, setTicketModalVisible] = useState(false);
+
+  const [selectedTicket, _setSelectedTicket] = useState<IGetTicket>();
 
   const columnsWithData = useMemo(() => {
     if (!decodedOutput) return columns;
@@ -96,6 +105,28 @@ export const TicketBoard = () => {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
+      <Modal
+        open={createTicketModalVisible}
+        onClickBackdrop={() => setCreateTicketModalVisible(false)}
+      >
+        <CreateTicket
+          toggleVisible={() =>
+            setCreateTicketModalVisible(!createTicketModalVisible)
+          }
+          refetchTickets={() => refetch()}
+        />
+      </Modal>
+
+      {selectedTicket && (
+        <Modal
+          open={ticketModalVisible}
+          onClickBackdrop={() => setTicketModalVisible(false)}
+        >
+          {/* ticket modal */}
+          <div>{selectedTicket.name}</div>
+        </Modal>
+      )}
+
       <div className='flex overflow-x-scroll'>
         {columnsWithData.map((column) => (
           <div key={column.id} className='min-w-[350px] flex-1 p-4'>
@@ -120,6 +151,16 @@ export const TicketBoard = () => {
                       )}
                     </Draggable>
                   ))}
+                  {column.id === String(TaskStatusEnum.ToDO) && (
+                    <Button
+                      color='ghost'
+                      className='mt-auto w-full'
+                      startIcon={<AiOutlinePlus />}
+                      onClick={() => setCreateTicketModalVisible(true)}
+                    >
+                      Create
+                    </Button>
+                  )}
                   {provided.placeholder}
                 </div>
               )}
