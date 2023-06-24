@@ -15,7 +15,10 @@ import {
 } from '@/hooks/messages/useGetTicketList';
 
 import { CreateTicket } from '@/components/tickets/CreateTicket';
-import { Ticket } from '@/components/tickets/TicketBoard/components/Ticket';
+import {
+  Ticket,
+  TicketModal,
+} from '@/components/tickets/TicketBoard/components';
 
 import { TaskStatusEnum } from '@/types/enums/taskStatus.enum';
 
@@ -46,7 +49,7 @@ export const TicketBoard = () => {
   const [createTicketModalVisible, setCreateTicketModalVisible] =
     useState(false);
 
-  const [ticketModalVisible, setTicketModalVisible] = useState(false);
+  const [ticketModalVisible, setTicketModalVisible] = useState(true);
 
   const [selectedTicket, _setSelectedTicket] = useState<IGetTicket>();
 
@@ -117,15 +120,13 @@ export const TicketBoard = () => {
         />
       </Modal>
 
-      {selectedTicket && (
-        <Modal
-          open={ticketModalVisible}
-          onClickBackdrop={() => setTicketModalVisible(false)}
-        >
-          {/* ticket modal */}
-          <div>{selectedTicket.name}</div>
-        </Modal>
-      )}
+      <Modal
+        open={ticketModalVisible}
+        onClickBackdrop={() => setTicketModalVisible(false)}
+        className='w-11/12 max-w-5xl'
+      >
+        <TicketModal ticket={selectedTicket} />
+      </Modal>
 
       <div className='flex overflow-x-scroll'>
         {columnsWithData.map((column) => (
