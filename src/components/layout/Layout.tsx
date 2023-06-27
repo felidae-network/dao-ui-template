@@ -4,6 +4,7 @@ import * as React from 'react';
 import { Button, Divider, Menu } from 'react-daisyui';
 import { AiFillProject, AiOutlineUsergroupDelete } from 'react-icons/ai';
 import { BiLogOut } from 'react-icons/bi';
+import { BsClipboardData } from 'react-icons/bs';
 import { FaTasks } from 'react-icons/fa';
 import { HiOutlineSupport } from 'react-icons/hi';
 import { MdOutlineDashboard } from 'react-icons/md';
@@ -33,6 +34,7 @@ export const navigation = [
     icon: <AiOutlineUsergroupDelete />,
   },
   { name: 'Tickets', href: '/tickets', current: false, icon: <FaTasks /> },
+  { name: 'Board', href: '/board', current: false, icon: <BsClipboardData /> },
   { name: 'Sprint', href: '/sprint', current: false, icon: <TiTag /> },
   { name: 'Token', href: '/token', current: false, icon: <HiOutlineSupport /> },
 ];

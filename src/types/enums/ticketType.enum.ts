@@ -1,5 +1,5 @@
 export enum TicketTypeEnum {
-  Feature = 'feature',
+  Feature = 'Feature',
   Bug = 'Bug',
   None = 'None',
 }
