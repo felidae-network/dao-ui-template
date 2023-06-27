@@ -6,35 +6,46 @@ import { IGetTicket } from '@/hooks/messages/useGetTicketList';
 import { TaskStatusEnum } from '@/types/enums/taskStatus.enum';
 interface TicketModalProps {
   children?: React.ReactNode;
-  ticket?: IGetTicket;
+  ticket: IGetTicket;
+  closeModal: () => void;
 }
 
-export const TicketModal: React.FC<TicketModalProps> = () => {
+export const TicketModal: React.FC<TicketModalProps> = ({
+  ticket,
+  closeModal,
+}) => {
   return (
     <>
-      <Modal.Header className=''>
+      <Modal.Header>
         <div className='flex items-center justify-between font-bold'>
           <div>
             <Badge size='lg' className='mr-2' color='info'>
               D-12
             </Badge>
-            <Badge size='lg'>19-Jun to 25-Jun</Badge>
+            <Badge size='lg'>
+              {' '}
+              {new Date(parseInt(ticket.startTime)).toDateString()}
+            </Badge>
           </div>
 
-          <Button startIcon={<AiOutlineClose />} size='sm' />
+          <Button
+            onClick={closeModal}
+            startIcon={<AiOutlineClose />}
+            size='sm'
+          />
         </div>
 
         <div className='mt-5 flex items-center justify-between text-sm'>
           <h5 className='text-md flex items-center gap-2'>
             Reporter:
             <Badge color='ghost' size='lg'>
-              John Doe
+              {ticket.creator}
             </Badge>
           </h5>
           <h5 className='text-md flex items-center gap-2'>
             Reporter:
             <Badge color='ghost' size='lg'>
-              John Doe
+              {ticket.assignedTo}
             </Badge>
           </h5>
         </div>
@@ -43,7 +54,7 @@ export const TicketModal: React.FC<TicketModalProps> = () => {
       <Modal.Body>
         <div className='flex'>
           <div className='w-2/3 pr-4'>
-            <h3 className='mb-2'>Ticket title over here</h3>
+            <h3 className='mb-2'>{ticket.name}</h3>
 
             <p>
               Lorem Ipsum is simply dummy text of the printing and typesetting

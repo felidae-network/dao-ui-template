@@ -10,11 +10,17 @@ export interface TicketProps
   extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   provided: DraggableProvided;
   ticket: IGetTicket;
+  openTicketModal: () => void;
 }
 
-export const Ticket: React.FC<TicketProps> = ({ provided, ticket }) => {
+export const Ticket: React.FC<TicketProps> = ({
+  provided,
+  ticket,
+  openTicketModal,
+}) => {
   return (
     <div
+      onClick={openTicketModal}
       ref={provided.innerRef}
       {...provided.draggableProps}
       {...provided.dragHandleProps}

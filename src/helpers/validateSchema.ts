@@ -1,3 +1,4 @@
+import toast from 'react-hot-toast';
 import { AnyObject, ObjectSchema, ValidationError } from 'yup';
 
 export const validateSchema = async <T extends AnyObject>(
@@ -9,9 +10,8 @@ export const validateSchema = async <T extends AnyObject>(
     return false;
   } catch (error: unknown) {
     const err = error as ValidationError;
-    // TO DO:
-    // toast.error(err.message)
-    alert(err.message);
+
+    toast.error(err.message);
     return err;
   }
 };

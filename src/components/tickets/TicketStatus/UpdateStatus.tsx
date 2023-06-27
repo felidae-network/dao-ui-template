@@ -57,13 +57,13 @@ export const UpdateTicketStatus: React.FC<UpdateTicketStatusProps> = ({
               setArgValues({ ...argValues, ticketStatus: event.target.value })
             }
           >
-            {Object.values(TaskStatusEnum).map((ticketType) => (
+            {Object.keys(TaskStatusEnum).map((ticketType) => (
               <option
                 value={ticketType}
                 key={ticketType}
                 selected={ticketType === ticket.ticketStatus}
               >
-                {ticketType}
+                {TaskStatusEnum[ticketType as keyof typeof TaskStatusEnum]}
               </option>
             ))}
           </Select>

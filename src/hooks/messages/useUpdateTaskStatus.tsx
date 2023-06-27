@@ -11,7 +11,7 @@ import { CONTRACT_MESSAGES } from '@/types/enums';
 import { UpdateTaskStatusInput } from '@/types/schemaTypes';
 
 export const useUpdateTaskStatus = (
-  initialArgValues: UpdateTaskStatusInput
+  initialArgValues?: UpdateTaskStatusInput
 ) => {
   const { contract } = useContract();
   const [validationErrors, setValidationErrors] =

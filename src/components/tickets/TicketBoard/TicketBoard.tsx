@@ -7,8 +7,10 @@ import {
   ResponderProvided,
 } from 'react-beautiful-dnd'; // Drag and drop library
 import { Button, Modal } from 'react-daisyui';
+import { toast } from 'react-hot-toast';
 import { AiOutlinePlus } from 'react-icons/ai';
 
+import { useUpdateTaskStatus } from '@/hooks/messages';
 import {
   IGetTicket,
   useGetTicketList,
@@ -19,6 +21,8 @@ import {
   Ticket,
   TicketModal,
 } from '@/components/tickets/TicketBoard/components';
+
+import { useContract } from '@/context/contract/ContractContextProvider';
 
 import { TaskStatusEnum } from '@/types/enums/taskStatus.enum';
 
@@ -35,7 +39,7 @@ interface TicketStatusesObjType {
   };
 }
 
-const allColumns: BoardColumn[] = Object.values(TaskStatusEnum).map(
+const allColumns: BoardColumn[] = Object.keys(TaskStatusEnum).map(
   (ticketType) => ({
     id: ticketType,
     title: ticketType,
@@ -44,28 +48,44 @@ const allColumns: BoardColumn[] = Object.values(TaskStatusEnum).map(
 );
 
 export const TicketBoard = () => {
+  const { contract } = useContract();
   const { decodedOutput, refetch } = useGetTicketList();
+  const {
+    setArgValues,
+    mutate,
+    loading: _updateStatusLoading,
+  } = useUpdateTaskStatus();
   const [columns, _setColumns] = useState(allColumns);
   const [createTicketModalVisible, setCreateTicketModalVisible] =
     useState(false);
 
-  const [ticketModalVisible, setTicketModalVisible] = useState(true);
+  console.log(
+    'asdas ',
+    Object.keys(TaskStatusEnum).indexOf(
+      TaskStatusEnum.ToDO
+    ) as unknown as string
+  );
 
-  const [selectedTicket, _setSelectedTicket] = useState<IGetTicket>();
+  const [ticketModalVisible, setTicketModalVisible] = useState(false);
+
+  const [selectedTicket, setSelectedTicket] = useState<IGetTicket>();
 
   const columnsWithData = useMemo(() => {
     if (!decodedOutput) return columns;
-    const _columns = columns;
+    const _columns = columns.map((column) => ({
+      ...column,
+      tickets: [] as IGetTicket[],
+    }));
 
-    const ticketStatusesObj: TicketStatusesObjType = Object.keys(TaskStatusEnum)
-      .filter((type) => isNaN(type as unknown as number))
-      .reduce(
-        (acc, curr, index) => ({
-          ...acc,
-          [curr]: { taskStatus: curr, columnIndex: index },
-        }),
-        {}
-      );
+    const ticketStatusesObj: TicketStatusesObjType = Object.keys(
+      TaskStatusEnum
+    ).reduce(
+      (acc, curr, index) => ({
+        ...acc,
+        [curr]: { taskStatus: curr, columnIndex: index },
+      }),
+      {}
+    );
 
     if (decodedOutput.value && decodedOutput.value.length) {
       decodedOutput.value.forEach((ticket) => {
@@ -78,32 +98,29 @@ export const TicketBoard = () => {
     return _columns;
   }, [columns, decodedOutput]);
 
-  const onDragEnd = (_result: DropResult, _provider: ResponderProvided) => {
-    // if (!destination) {
-    //   return; // Item was dropped outside of any droppable area
-    // }
-    // setColumns((prevState) => {
-    //   const sourceColumnIndex = prevState.findIndex(
-    //     (column) => column.id === source.droppableId
-    //   );
-    //   const destinationColumnIndex = prevState.findIndex(
-    //     (column) => column.id === destination.droppableId
-    //   );
-    //   const newColumns = [...prevState];
-    //   const ticket = newColumns[sourceColumnIndex].tickets.find(
-    //     (ticket) => ticket.ticketId === draggableId
-    //   );
-    //   newColumns[sourceColumnIndex].tickets = newColumns[
-    //     sourceColumnIndex
-    //   ].tickets.filter((ticket) => ticket.ticketId !== draggableId);
-    //   newColumns[destinationColumnIndex].tickets.splice(
-    //     destination.index,
-    //     0,
-    //     ticket!
-    //   );
-    //   return newColumns;
-    // });
-    // TODO: Update the tickets array based on the drag result
+  const onDragEnd = async (
+    { destination, draggableId }: DropResult,
+    _provider: ResponderProvided
+  ) => {
+    if (!destination) {
+      return; // Item was dropped outside of any droppable area
+    }
+
+    setArgValues({
+      daoAddress: contract.address?.toString(),
+      ticketId: draggableId,
+      ticketStatus: destination.droppableId,
+    });
+
+    const mutateValue = await mutate();
+    console.log('mutateValue ', mutateValue);
+
+    if (mutateValue) {
+      if (mutateValue.isError) return toast.error(mutateValue.decodedOutput);
+
+      toast.success(mutateValue.decodedOutput);
+      refetch();
+    }
   };
 
   return (
@@ -120,19 +137,24 @@ export const TicketBoard = () => {
         />
       </Modal>
 
-      <Modal
-        open={ticketModalVisible}
-        onClickBackdrop={() => setTicketModalVisible(false)}
-        className='w-11/12 max-w-5xl'
-      >
-        <TicketModal ticket={selectedTicket} />
-      </Modal>
+      {selectedTicket && (
+        <Modal
+          open={ticketModalVisible}
+          onClickBackdrop={() => setTicketModalVisible(false)}
+          className='w-11/12 max-w-5xl'
+        >
+          <TicketModal
+            closeModal={() => setTicketModalVisible(false)}
+            ticket={selectedTicket}
+          />
+        </Modal>
+      )}
 
       <div className='flex overflow-x-scroll'>
         {columnsWithData.map((column) => (
           <div key={column.id} className='min-w-[350px] flex-1 p-4'>
             <h2 className='bg-base-300 rounded-t p-2 text-lg font-semibold'>
-              {column.title}
+              {TaskStatusEnum[column.title as keyof typeof TaskStatusEnum]}
             </h2>
             <Droppable droppableId={column.id} key={column.id}>
               {(provided) => (
@@ -148,11 +170,18 @@ export const TicketBoard = () => {
                       index={index}
                     >
                       {(provided) => (
-                        <Ticket provided={provided} ticket={ticket} />
+                        <Ticket
+                          openTicketModal={() => {
+                            setSelectedTicket(ticket);
+                            setTicketModalVisible(true);
+                          }}
+                          provided={provided}
+                          ticket={ticket}
+                        />
                       )}
                     </Draggable>
                   ))}
-                  {column.id === String(TaskStatusEnum.ToDO) && (
+                  {column.id === Object.keys(TaskStatusEnum)[0] && (
                     <Button
                       color='ghost'
                       className='mt-auto w-full'
