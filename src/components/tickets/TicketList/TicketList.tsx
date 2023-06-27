@@ -82,7 +82,8 @@ export const TicketList: React.FC<TicketListProps> = () => {
             <>
               {decodedOutput &&
               decodedOutput.value &&
-              (decodedOutput.value as unknown as IGetTicketList).length ? (
+              !decodedOutput.isError &&
+              decodedOutput.value.length ? (
                 <>
                   {(decodedOutput.value as unknown as IGetTicketList).map(
                     (ticket, index) => (

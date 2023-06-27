@@ -28,7 +28,9 @@ export const DaoInfo = () => {
                   <LoadingSpinner />
                 ) : (
                   <>
-                    {decodedOutput && decodedOutput.value ? (
+                    {decodedOutput &&
+                    !decodedOutput.isError &&
+                    decodedOutput.value ? (
                       <p>{decodedOutput.value.daoName}</p>
                     ) : (
                       'no'
@@ -44,7 +46,9 @@ export const DaoInfo = () => {
                   <LoadingSpinner />
                 ) : (
                   <>
-                    {decodedOutput && decodedOutput.value ? (
+                    {decodedOutput &&
+                    !decodedOutput.isError &&
+                    decodedOutput.value ? (
                       <p>{decodedOutput.value.description}</p>
                     ) : (
                       'no'
@@ -60,7 +64,9 @@ export const DaoInfo = () => {
                   <LoadingSpinner />
                 ) : (
                   <>
-                    {decodedOutput && decodedOutput.value ? (
+                    {decodedOutput &&
+                    !decodedOutput.isError &&
+                    decodedOutput.value ? (
                       <p>{decodedOutput.value.profile}</p>
                     ) : (
                       'no'
@@ -76,7 +82,9 @@ export const DaoInfo = () => {
                   <LoadingSpinner />
                 ) : (
                   <>
-                    {decodedOutput && decodedOutput.value ? (
+                    {decodedOutput &&
+                    !decodedOutput.isError &&
+                    decodedOutput.value ? (
                       <p>{decodedOutput.value.website}</p>
                     ) : (
                       'no'
@@ -92,7 +100,9 @@ export const DaoInfo = () => {
                   <LoadingSpinner />
                 ) : (
                   <>
-                    {getAdminDecodedOutput && getAdminDecodedOutput.value ? (
+                    {getAdminDecodedOutput &&
+                    !getAdminDecodedOutput.isError &&
+                    getAdminDecodedOutput.value ? (
                       <p>{getAdminDecodedOutput.value}</p>
                     ) : (
                       'no'
@@ -108,7 +118,9 @@ export const DaoInfo = () => {
                   <LoadingSpinner />
                 ) : (
                   <>
-                    {getDaoIdOutput && getDaoIdOutput.value ? (
+                    {getDaoIdOutput &&
+                    !getDaoIdOutput.isError &&
+                    getDaoIdOutput.value ? (
                       <p>{getDaoIdOutput.value}</p>
                     ) : (
                       'no'

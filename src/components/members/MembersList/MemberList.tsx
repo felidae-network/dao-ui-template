@@ -62,11 +62,11 @@ export const MemberList: React.FC<MemberListProps> = () => {
           ) : (
             <>
               {decodedOutput &&
+              !decodedOutput.isError &&
               decodedOutput.value.length &&
               getDaoIdDecodedOutput &&
-              getDaoIdDecodedOutput.value &&
-              decodedOutput.value &&
-              decodedOutput.value.length ? (
+              getDaoIdDecodedOutput.isError &&
+              getDaoIdDecodedOutput.value ? (
                 <>
                   {decodedOutput.value.map((member, index) => (
                     <Table.Row key={member.memberId}>
