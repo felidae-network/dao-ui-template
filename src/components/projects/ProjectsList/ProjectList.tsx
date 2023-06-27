@@ -70,6 +70,7 @@ export const ProjectList: React.FC<ProjectListProps> = () => {
             <>
               {decodedOutput &&
               decodedOutput.value &&
+              !decodedOutput.isError &&
               decodedOutput.value.length ? (
                 <>
                   {decodedOutput.value.map((project, index) => (

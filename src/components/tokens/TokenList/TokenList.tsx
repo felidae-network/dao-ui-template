@@ -2,10 +2,7 @@ import { useState } from 'react';
 import { Button, Modal, Table } from 'react-daisyui';
 import { AiOutlinePlus } from 'react-icons/ai';
 
-import {
-  IGetTokenList,
-  useGetTokenList,
-} from '@/hooks/messages/useGetTokenList';
+import { useGetTokenList } from '@/hooks/messages/useGetTokenList';
 
 import { LoadingSpinner } from '@/components/loading';
 import { AddToken } from '@/components/tokens/AddToken';
@@ -51,14 +48,14 @@ export const TokenList: React.FC<TokenListProps> = () => {
             <>
               {decodedOutput &&
               decodedOutput.value &&
-              (decodedOutput.value as unknown as IGetTokenList).length ? (
+              !decodedOutput.isError &&
+              decodedOutput.value.length ? (
                 <>
-                  {(decodedOutput.value as unknown as IGetTokenList).map(
-                    (token, index) => (
-                      <Table.Row key={token.tokenType}>
-                        <span>{index + 1}</span>
-                        <span>{token.tokenType}</span>
-                        {/* <span>
+                  {decodedOutput.value.map((token, index) => (
+                    <Table.Row key={token.tokenType}>
+                      <span>{index + 1}</span>
+                      <span>{token.tokenType}</span>
+                      {/* <span>
                           <Button
                             onClick={toggleVisible}
                             startIcon={<AiOutlinePlus />}
@@ -69,11 +66,10 @@ export const TokenList: React.FC<TokenListProps> = () => {
                         <span>
                           {new Date(project.startTime).toDateString()}
                         </span> */}
-                        {/* <span>{project.projectId}</span> */}
-                        <span>{token.tokenAddress}</span>
-                      </Table.Row>
-                    )
-                  )}
+                      {/* <span>{project.projectId}</span> */}
+                      <span>{token.tokenAddress}</span>
+                    </Table.Row>
+                  ))}
                 </>
               ) : (
                 'no data'

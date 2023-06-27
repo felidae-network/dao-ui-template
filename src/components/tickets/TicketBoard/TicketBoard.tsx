@@ -87,7 +87,11 @@ export const TicketBoard = () => {
       {}
     );
 
-    if (decodedOutput.value && decodedOutput.value.length) {
+    if (
+      decodedOutput.value &&
+      !decodedOutput.isError &&
+      decodedOutput.value.length
+    ) {
       decodedOutput.value.forEach((ticket) => {
         const columnIndex =
           ticketStatusesObj[ticket.ticketStatus as string].columnIndex;
