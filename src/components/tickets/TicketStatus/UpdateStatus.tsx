@@ -1,5 +1,6 @@
 import { Dispatch, FormEvent, SetStateAction } from 'react';
 import { Button, Modal, Select } from 'react-daisyui';
+import { toast } from 'react-hot-toast';
 
 import { useUpdateTaskStatus } from '@/hooks/messages';
 import { IGetTicket } from '@/hooks/messages/useGetTicketList';
@@ -32,9 +33,10 @@ export const UpdateTicketStatus: React.FC<UpdateTicketStatusProps> = ({
 
     const mutateValue = await mutate();
     if (mutateValue) {
-      if (mutateValue.isError) return;
+      if (mutateValue.isError)
+        toast.error(mutateValue.decodedOutput || 'Something went wrong');
 
-      alert(mutateValue.decodedOutput);
+      toast.success('Ticket status updated!');
       refetchTickets();
     }
     toggleVisible(false);

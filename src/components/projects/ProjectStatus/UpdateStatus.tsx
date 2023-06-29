@@ -1,5 +1,6 @@
 import { Dispatch, FormEvent, SetStateAction } from 'react';
 import { Button, Modal, Select } from 'react-daisyui';
+import { toast } from 'react-hot-toast';
 
 import { IGetProject, useUpdateProjectStatus } from '@/hooks/messages';
 
@@ -29,7 +30,10 @@ export const UpdateProjectStatus: React.FC<UpdateProjectStatusProps> = ({
     e.preventDefault();
     const mutateValue = await mutate();
     if (mutateValue) {
-      alert(mutateValue.decodedOutput);
+      if (mutateValue.isError)
+        return toast.error(mutateValue.decodedOutput || 'An error occurred');
+
+      toast.success('Project status updated!');
       refetchProjects();
     }
     toggleVisible(false);

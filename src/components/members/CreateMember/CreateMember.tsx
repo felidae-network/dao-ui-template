@@ -25,7 +25,8 @@ export const CreateMember: React.FC<CreateMemberProps> = ({
     e.preventDefault();
     const mutateValue = await mutate();
     if (mutateValue) {
-      if (mutateValue.isError) return toast.error(mutateValue.decodedOutput);
+      if (mutateValue.isError)
+        return toast.error(mutateValue.decodedOutput || 'An error occurred');
 
       toast.success('Member created!');
       refetchMembers();

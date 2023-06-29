@@ -23,7 +23,9 @@ export const CreateProject: React.FC<CreateProjectProps> = ({
     e.preventDefault();
     const mutateValue = await mutate();
     if (mutateValue) {
-      if (mutateValue.isError) return toast.error(mutateValue.decodedOutput);
+      if (mutateValue.isError)
+        return toast.error(mutateValue.decodedOutput || 'An error occurred');
+
       toast.success('Project created!');
       refetchProjects();
     }

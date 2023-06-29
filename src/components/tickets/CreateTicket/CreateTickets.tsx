@@ -1,5 +1,6 @@
 import { Dispatch, FormEvent, SetStateAction } from 'react';
 import { Button, Input, Modal, Select } from 'react-daisyui';
+import { toast } from 'react-hot-toast';
 
 import { useCreateTicket } from '@/hooks/messages';
 
@@ -25,9 +26,10 @@ export const CreateTicket: React.FC<CreateTicketProps> = ({
     const mutateValue = await mutate();
 
     if (mutateValue) {
-      if (mutateValue.isError) return;
+      if (mutateValue.isError)
+        return toast.error(mutateValue.decodedOutput || 'An error occurred');
 
-      alert(mutateValue.decodedOutput);
+      toast.success('Ticket created!');
       refetchTickets();
     }
     toggleVisible(false);
