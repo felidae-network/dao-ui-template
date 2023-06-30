@@ -66,15 +66,20 @@ const ContractContextProvider = (props: ContractContextProviderProps) => {
       ...transformUserInput(contract.registry, message.args, argValues)
     );
 
-    await value.signAndSend(
-      account,
-      {
-        signer: injector?.signer || undefined,
-      },
-      async (result) => {
-        await cb(result);
-      }
-    );
+    await new Promise((resolve) => {
+      value.signAndSend(
+        account,
+        {
+          signer: injector?.signer || undefined,
+        },
+        async (result) => {
+          if (result.isFinalized || result.isInBlock) {
+            await cb(result);
+            resolve(true);
+          }
+        }
+      );
+    });
   };
 
   const queryMessage = async (args: QueryMessageProps) => {

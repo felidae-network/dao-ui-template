@@ -123,9 +123,11 @@ export function useQuery<DecodedValueType = unknown, ArgValueType = unknown>(
         value: message?.isPayable ? params.balance : undefined,
       };
 
-      await callMessage<ArgValueType>(message, options, argValues, (res) =>
-        setResult(res)
-      );
+      if (queryOptions.mutate) {
+        await callMessage<ArgValueType>(message, options, argValues, (res) =>
+          setResult(res)
+        );
+      }
     },
     [
       storageDepositLimit,
@@ -136,6 +138,7 @@ export function useQuery<DecodedValueType = unknown, ArgValueType = unknown>(
       refTime.limit,
       isCustom,
       argValues,
+      queryOptions.mutate,
     ]
   );
 
