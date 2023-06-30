@@ -65,7 +65,7 @@ export const MemberList: React.FC<MemberListProps> = () => {
               !decodedOutput.isError &&
               decodedOutput.value.length &&
               getDaoIdDecodedOutput &&
-              getDaoIdDecodedOutput.isError &&
+              !getDaoIdDecodedOutput.isError &&
               getDaoIdDecodedOutput.value ? (
                 <>
                   {decodedOutput.value.map((member, index) => (

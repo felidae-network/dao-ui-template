@@ -123,7 +123,7 @@ export function useQuery<DecodedValueType = unknown, ArgValueType = unknown>(
         value: message?.isPayable ? params.balance : undefined,
       };
 
-      await callMessage<ArgValueType>(message!, options, argValues, (res) =>
+      await callMessage<ArgValueType>(message, options, argValues, (res) =>
         setResult(res)
       );
     },

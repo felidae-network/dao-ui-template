@@ -34,7 +34,7 @@ export const UpdateTicketStatus: React.FC<UpdateTicketStatusProps> = ({
     const mutateValue = await mutate();
     if (mutateValue) {
       if (mutateValue.isError)
-        toast.error(mutateValue.decodedOutput || 'Something went wrong');
+        return toast.error(mutateValue.decodedOutput || 'Something went wrong');
 
       toast.success('Ticket status updated!');
       refetchTickets();
