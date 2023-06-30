@@ -27,7 +27,7 @@ export enum CONTRACT_MESSAGES {
   CLOSE_TASK = 'closeTask',
   GET_TICKET_LIST = 'getTicketList',
   DISTRIBUTE_GOVERNANCE_TOKEN = 'distributeGovernanceToken',
-  TIME_LOG = 'timeLog',
+  TIME_LOG = 'logTime',
   GET_STAKE_FOR_ACCOUNT = 'getStakeForAccount',
   EARLY_WITHDRAWAL = 'earlyWithdraw',
   READ_TIMESTAMPS = 'readTimestamp',
@@ -41,4 +41,6 @@ export enum CONTRACT_MESSAGES {
   SET_CODE = 'setCode',
   CREATE_SPRINT = 'updateSprint',
   GET_DAO_ID = 'getDaoId',
+  GET_DAO_CONTRACT_ADDRESS = 'getContractAddress',
+  GET_AVAILABILITY_DATA = 'getAvailabilityEfficiencyData',
 }

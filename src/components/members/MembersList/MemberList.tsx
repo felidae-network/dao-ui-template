@@ -51,7 +51,8 @@ export const MemberList: React.FC<MemberListProps> = () => {
           <span />
           <span>Name</span>
           <span>Status</span>
-          <span>Created At</span>
+          <span>Joined On</span>
+          <span>Role</span>
         </Table.Head>
 
         <Table.Body>
@@ -88,6 +89,7 @@ export const MemberList: React.FC<MemberListProps> = () => {
                       <span>
                         {new Date(parseInt(member.startTime)).toDateString()}
                       </span>
+                      <span>{member.memberRole}</span>
                     </Table.Row>
                   ))}
                 </>

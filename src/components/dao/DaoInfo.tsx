@@ -1,4 +1,5 @@
 import { useGetAdmin, useGetDaoInfo } from '@/hooks/messages';
+import { useGetContractAddress } from '@/hooks/messages/useGetContractaddress';
 import { useGetDaoId } from '@/hooks/messages/useGetDaoId';
 
 import { LoadingSpinner } from '@/components/loading';
@@ -9,6 +10,12 @@ export const DaoInfo = () => {
     useGetDaoId();
   const { loading: getAdminLoading, decodedOutput: getAdminDecodedOutput } =
     useGetAdmin();
+
+  const {
+    loading: getDaoAddressLoading,
+    decodedOutput: getDaoAddressDecodedOutput,
+  } = useGetContractAddress();
+  console.log('loading', getDaoAddressDecodedOutput?.value);
 
   return (
     <>
@@ -28,9 +35,7 @@ export const DaoInfo = () => {
                   <LoadingSpinner />
                 ) : (
                   <>
-                    {decodedOutput &&
-                    !decodedOutput.isError &&
-                    decodedOutput.value ? (
+                    {decodedOutput && decodedOutput.value ? (
                       <p>{decodedOutput.value.daoName}</p>
                     ) : (
                       'no'
@@ -46,9 +51,7 @@ export const DaoInfo = () => {
                   <LoadingSpinner />
                 ) : (
                   <>
-                    {decodedOutput &&
-                    !decodedOutput.isError &&
-                    decodedOutput.value ? (
+                    {decodedOutput && decodedOutput.value ? (
                       <p>{decodedOutput.value.description}</p>
                     ) : (
                       'no'
@@ -64,9 +67,7 @@ export const DaoInfo = () => {
                   <LoadingSpinner />
                 ) : (
                   <>
-                    {decodedOutput &&
-                    !decodedOutput.isError &&
-                    decodedOutput.value ? (
+                    {decodedOutput && decodedOutput.value ? (
                       <p>{decodedOutput.value.profile}</p>
                     ) : (
                       'no'
@@ -82,9 +83,7 @@ export const DaoInfo = () => {
                   <LoadingSpinner />
                 ) : (
                   <>
-                    {decodedOutput &&
-                    !decodedOutput.isError &&
-                    decodedOutput.value ? (
+                    {decodedOutput && decodedOutput.value ? (
                       <p>{decodedOutput.value.website}</p>
                     ) : (
                       'no'
@@ -100,9 +99,7 @@ export const DaoInfo = () => {
                   <LoadingSpinner />
                 ) : (
                   <>
-                    {getAdminDecodedOutput &&
-                    !getAdminDecodedOutput.isError &&
-                    getAdminDecodedOutput.value ? (
+                    {getAdminDecodedOutput && getAdminDecodedOutput.value ? (
                       <p>{getAdminDecodedOutput.value}</p>
                     ) : (
                       'no'
@@ -118,10 +115,25 @@ export const DaoInfo = () => {
                   <LoadingSpinner />
                 ) : (
                   <>
-                    {getDaoIdOutput &&
-                    !getDaoIdOutput.isError &&
-                    getDaoIdOutput.value ? (
+                    {getDaoIdOutput && getDaoIdOutput.value ? (
                       <p>{getDaoIdOutput.value}</p>
+                    ) : (
+                      'no'
+                    )}
+                  </>
+                )}
+              </div>
+            </div>
+            <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
+              <dt className='text-sm font-medium leading-6'>Dao Address</dt>
+              <div className='mt-1 text-sm leading-6'>
+                {getDaoAddressLoading ? (
+                  <LoadingSpinner />
+                ) : (
+                  <>
+                    {getDaoAddressDecodedOutput &&
+                    getDaoAddressDecodedOutput.value ? (
+                      <p>{getDaoAddressDecodedOutput.value}</p>
                     ) : (
                       'no'
                     )}

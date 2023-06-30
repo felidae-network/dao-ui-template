@@ -1,6 +1,6 @@
 {
   "source": {
-    "hash": "0x7e9d8eff4c4a113513b044587a99eafc0bff746aaf771967e91765fc1883576d",
+    "hash": "0xb66e6cdecb6ac293f366509d2656d3c372bbb9a301c55c676ed937e416ac1681",
     "language": "ink! 4.2.0",
     "compiler": "rustc 1.69.0-nightly",
     "build_info": {
@@ -81,15 +81,15 @@
       },
       "blockNumber": {
         "displayName": ["BlockNumber"],
-        "type": 70
+        "type": 75
       },
       "chainExtension": {
         "displayName": ["ChainExtension"],
-        "type": 71
+        "type": 76
       },
       "hash": {
         "displayName": ["Hash"],
-        "type": 69
+        "type": 74
       },
       "maxEventTopics": 4,
       "timestamp": {
@@ -415,7 +415,7 @@
             "label": "task_type",
             "type": {
               "displayName": ["TaskType"],
-              "type": 42
+              "type": 47
             }
           },
           {
@@ -448,7 +448,7 @@
             "label": "stake",
             "type": {
               "displayName": ["Stake"],
-              "type": 60
+              "type": 65
             }
           }
         ],
@@ -472,7 +472,7 @@
             "label": "stake",
             "type": {
               "displayName": ["Stake"],
-              "type": 60
+              "type": 65
             }
           }
         ],
@@ -496,7 +496,7 @@
             "label": "stake",
             "type": {
               "displayName": ["Stake"],
-              "type": 60
+              "type": 65
             }
           }
         ],
@@ -937,6 +937,19 @@
         "selector": "0x434f4970"
       },
       {
+        "args": [],
+        "default": false,
+        "docs": ["get contract balance"],
+        "label": "get_contract_address",
+        "mutates": false,
+        "payable": false,
+        "returnType": {
+          "displayName": ["ink", "MessageResult"],
+          "type": 24
+        },
+        "selector": "0x61f8c91f"
+      },
+      {
         "args": [
           {
             "label": "name",
@@ -1037,6 +1050,27 @@
       {
         "args": [
           {
+            "label": "key",
+            "type": {
+              "displayName": [],
+              "type": 1
+            }
+          }
+        ],
+        "default": false,
+        "docs": ["read runtime "],
+        "label": "read",
+        "mutates": false,
+        "payable": false,
+        "returnType": {
+          "displayName": ["ink", "MessageResult"],
+          "type": 40
+        },
+        "selector": "0x217466df"
+      },
+      {
+        "args": [
+          {
             "label": "project_id",
             "type": {
               "displayName": ["u16"],
@@ -1099,7 +1133,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 40
+          "type": 43
         },
         "selector": "0x4cf2a0b0"
       },
@@ -1141,6 +1175,27 @@
       {
         "args": [
           {
+            "label": "project_id",
+            "type": {
+              "displayName": ["ProjectId"],
+              "type": 4
+            }
+          }
+        ],
+        "default": false,
+        "docs": [" update sprint"],
+        "label": "get_sprint",
+        "mutates": true,
+        "payable": false,
+        "returnType": {
+          "displayName": ["ink", "MessageResult"],
+          "type": 45
+        },
+        "selector": "0x494d31c5"
+      },
+      {
+        "args": [
+          {
             "label": "name",
             "type": {
               "displayName": ["String"],
@@ -1158,7 +1213,7 @@
             "label": "ticket_type",
             "type": {
               "displayName": ["TaskType"],
-              "type": 42
+              "type": 47
             }
           },
           {
@@ -1221,7 +1276,7 @@
             "label": "opinion",
             "type": {
               "displayName": ["ReviewOpinion"],
-              "type": 43
+              "type": 48
             }
           }
         ],
@@ -1256,7 +1311,7 @@
             "label": "ticket_status",
             "type": {
               "displayName": ["TaskStatus"],
-              "type": 44
+              "type": 49
             }
           }
         ],
@@ -1288,7 +1343,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 45
+          "type": 50
         },
         "selector": "0x2e6a8d7b"
       },
@@ -1329,7 +1384,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 52
+          "type": 57
         },
         "selector": "0xb63b3e84"
       },
@@ -1380,27 +1435,14 @@
         ],
         "default": false,
         "docs": [],
-        "label": "get_availability",
+        "label": "get_availability_efficiency_data",
         "mutates": true,
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 54
+          "type": 59
         },
-        "selector": "0x866bf8e5"
-      },
-      {
-        "args": [],
-        "default": false,
-        "docs": [],
-        "label": "get_quality",
-        "mutates": true,
-        "payable": false,
-        "returnType": {
-          "displayName": ["ink", "MessageResult"],
-          "type": 9
-        },
-        "selector": "0x7d0cd86b"
+        "selector": "0x0ad64755"
       },
       {
         "args": [
@@ -1408,13 +1450,6 @@
             "label": "ticket_id",
             "type": {
               "displayName": ["TaskId"],
-              "type": 4
-            }
-          },
-          {
-            "label": "project_id",
-            "type": {
-              "displayName": ["ProjectId"],
               "type": 4
             }
           },
@@ -1427,15 +1462,43 @@
           }
         ],
         "default": false,
-        "docs": [" get project list."],
-        "label": "time_log",
+        "docs": [" record the time."],
+        "label": "log_time",
         "mutates": true,
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
           "type": 18
         },
-        "selector": "0x594d953a"
+        "selector": "0x4edaeda6"
+      },
+      {
+        "args": [
+          {
+            "label": "ticket_id",
+            "type": {
+              "displayName": ["TaskId"],
+              "type": 4
+            }
+          },
+          {
+            "label": "time",
+            "type": {
+              "displayName": ["u16"],
+              "type": 4
+            }
+          }
+        ],
+        "default": false,
+        "docs": [" record the time."],
+        "label": "log_extra_time",
+        "mutates": true,
+        "payable": false,
+        "returnType": {
+          "displayName": ["ink", "MessageResult"],
+          "type": 18
+        },
+        "selector": "0x7ae751ae"
       },
       {
         "args": [
@@ -1454,7 +1517,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 58
+          "type": 63
         },
         "selector": "0x3aa7ce16"
       },
@@ -1467,7 +1530,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 61
+          "type": 66
         },
         "selector": "0x6d5d6604"
       },
@@ -1480,7 +1543,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 63
+          "type": 68
         },
         "selector": "0xc753f6ce"
       },
@@ -1540,7 +1603,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 65
+          "type": 70
         },
         "selector": "0x88c150ad"
       },
@@ -1574,7 +1637,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 67
+          "type": 72
         },
         "selector": "0x03409a7e"
       },
@@ -1605,15 +1668,7 @@
         "selector": "0x694fb50f"
       },
       {
-        "args": [
-          {
-            "label": "code_hash",
-            "type": {
-              "displayName": [],
-              "type": 1
-            }
-          }
-        ],
+        "args": [],
         "default": false,
         "docs": [],
         "label": "get_contract_ownership",
@@ -1621,7 +1676,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 65
+          "type": 70
         },
         "selector": "0x110ece03"
       }
@@ -3360,6 +3415,10 @@
               {
                 "index": 40,
                 "name": "DaoDoesNotExist"
+              },
+              {
+                "index": 41,
+                "name": "CanNotLogMoreTimeWithOutApproveMent"
               }
             ]
           }
@@ -4076,10 +4135,40 @@
       "id": 41,
       "type": {
         "def": {
-          "sequence": {
-            "type": 37
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 1
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 42
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
           }
-        }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 1
+          },
+          {
+            "name": "E",
+            "type": 42
+          }
+        ],
+        "path": ["Result"]
       }
     },
     {
@@ -4090,20 +4179,12 @@
             "variants": [
               {
                 "index": 0,
-                "name": "Bug"
-              },
-              {
-                "index": 1,
-                "name": "Feature"
-              },
-              {
-                "index": 2,
-                "name": "None"
+                "name": "FailGetRandomSource"
               }
             ]
           }
         },
-        "path": ["felideaDAO", "felideaDAO", "TaskType"]
+        "path": ["felideaDAO", "RandomReadErr"]
       }
     },
     {
@@ -4113,69 +4194,47 @@
           "variant": {
             "variants": [
               {
+                "fields": [
+                  {
+                    "type": 44
+                  }
+                ],
                 "index": 0,
-                "name": "YES"
+                "name": "Ok"
               },
               {
+                "fields": [
+                  {
+                    "type": 11
+                  }
+                ],
                 "index": 1,
-                "name": "NO"
-              },
-              {
-                "index": 2,
-                "name": "None"
+                "name": "Err"
               }
             ]
           }
         },
-        "path": ["felideaDAO", "felideaDAO", "ReviewOpinion"]
+        "params": [
+          {
+            "name": "T",
+            "type": 44
+          },
+          {
+            "name": "E",
+            "type": 11
+          }
+        ],
+        "path": ["Result"]
       }
     },
     {
       "id": 44,
       "type": {
         "def": {
-          "variant": {
-            "variants": [
-              {
-                "index": 0,
-                "name": "ToDO"
-              },
-              {
-                "index": 1,
-                "name": "InProgress"
-              },
-              {
-                "index": 2,
-                "name": "ReadyToPR"
-              },
-              {
-                "index": 3,
-                "name": "BackToCw"
-              },
-              {
-                "index": 4,
-                "name": "DevVerfied"
-              },
-              {
-                "index": 5,
-                "name": "LiveDeployed"
-              },
-              {
-                "index": 6,
-                "name": "Closed"
-              },
-              {
-                "index": 7,
-                "name": "Completed"
-              },
-              {
-                "index": 8,
-                "name": "None"
-              }
-            ]
+          "sequence": {
+            "type": 37
           }
-        },
-        "path": ["felideaDAO", "felideaDAO", "TaskStatus"]
+        }
       }
     },
     {
@@ -4227,7 +4286,7 @@
               {
                 "fields": [
                   {
-                    "type": 47
+                    "type": 39
                   }
                 ],
                 "index": 0,
@@ -4248,7 +4307,7 @@
         "params": [
           {
             "name": "T",
-            "type": 47
+            "type": 39
           },
           {
             "name": "E",
@@ -4260,6 +4319,182 @@
     },
     {
       "id": 47,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "index": 0,
+                "name": "Bug"
+              },
+              {
+                "index": 1,
+                "name": "Feature"
+              },
+              {
+                "index": 2,
+                "name": "None"
+              }
+            ]
+          }
+        },
+        "path": ["felideaDAO", "felideaDAO", "TaskType"]
+      }
+    },
+    {
+      "id": 48,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "index": 0,
+                "name": "YES"
+              },
+              {
+                "index": 1,
+                "name": "NO"
+              },
+              {
+                "index": 2,
+                "name": "None"
+              }
+            ]
+          }
+        },
+        "path": ["felideaDAO", "felideaDAO", "ReviewOpinion"]
+      }
+    },
+    {
+      "id": 49,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "index": 0,
+                "name": "ToDO"
+              },
+              {
+                "index": 1,
+                "name": "InProgress"
+              },
+              {
+                "index": 2,
+                "name": "ReadyToPR"
+              },
+              {
+                "index": 3,
+                "name": "BackToCw"
+              },
+              {
+                "index": 4,
+                "name": "DevVerfied"
+              },
+              {
+                "index": 5,
+                "name": "LiveDeployed"
+              },
+              {
+                "index": 6,
+                "name": "Closed"
+              },
+              {
+                "index": 7,
+                "name": "Completed"
+              },
+              {
+                "index": 8,
+                "name": "None"
+              }
+            ]
+          }
+        },
+        "path": ["felideaDAO", "felideaDAO", "TaskStatus"]
+      }
+    },
+    {
+      "id": 50,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 51
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 11
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 51
+          },
+          {
+            "name": "E",
+            "type": 11
+          }
+        ],
+        "path": ["Result"]
+      }
+    },
+    {
+      "id": 51,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 52
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 20
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 52
+          },
+          {
+            "name": "E",
+            "type": 20
+          }
+        ],
+        "path": ["Result"]
+      }
+    },
+    {
+      "id": 52,
       "type": {
         "def": {
           "composite": {
@@ -4286,7 +4521,7 @@
               },
               {
                 "name": "ticket_status",
-                "type": 44,
+                "type": 49,
                 "typeName": "TaskStatus"
               },
               {
@@ -4296,7 +4531,7 @@
               },
               {
                 "name": "task_type",
-                "type": 42,
+                "type": 47,
                 "typeName": "TaskType"
               },
               {
@@ -4311,12 +4546,12 @@
               },
               {
                 "name": "review",
-                "type": 48,
+                "type": 53,
                 "typeName": "Option<ReviewStatus>"
               },
               {
                 "name": "total_time_logged_in",
-                "type": 51,
+                "type": 56,
                 "typeName": "Option<u16>"
               }
             ]
@@ -4326,7 +4561,7 @@
       }
     },
     {
-      "id": 48,
+      "id": 53,
       "type": {
         "def": {
           "variant": {
@@ -4338,7 +4573,7 @@
               {
                 "fields": [
                   {
-                    "type": 49
+                    "type": 54
                   }
                 ],
                 "index": 1,
@@ -4350,21 +4585,21 @@
         "params": [
           {
             "name": "T",
-            "type": 49
+            "type": 54
           }
         ],
         "path": ["Option"]
       }
     },
     {
-      "id": 49,
+      "id": 54,
       "type": {
         "def": {
           "composite": {
             "fields": [
               {
                 "name": "records",
-                "type": 50,
+                "type": 55,
                 "typeName": "ReviewRecord"
               }
             ]
@@ -4374,7 +4609,7 @@
       }
     },
     {
-      "id": 50,
+      "id": 55,
       "type": {
         "def": {
           "composite": {
@@ -4391,7 +4626,7 @@
               },
               {
                 "name": "option",
-                "type": 43,
+                "type": 48,
                 "typeName": "ReviewOpinion"
               }
             ]
@@ -4401,7 +4636,7 @@
       }
     },
     {
-      "id": 51,
+      "id": 56,
       "type": {
         "def": {
           "variant": {
@@ -4432,191 +4667,53 @@
       }
     },
     {
-      "id": 52,
-      "type": {
-        "def": {
-          "variant": {
-            "variants": [
-              {
-                "fields": [
-                  {
-                    "type": 53
-                  }
-                ],
-                "index": 0,
-                "name": "Ok"
-              },
-              {
-                "fields": [
-                  {
-                    "type": 11
-                  }
-                ],
-                "index": 1,
-                "name": "Err"
-              }
-            ]
-          }
-        },
-        "params": [
-          {
-            "name": "T",
-            "type": 53
-          },
-          {
-            "name": "E",
-            "type": 11
-          }
-        ],
-        "path": ["Result"]
-      }
-    },
-    {
-      "id": 53,
-      "type": {
-        "def": {
-          "sequence": {
-            "type": 47
-          }
-        }
-      }
-    },
-    {
-      "id": 54,
-      "type": {
-        "def": {
-          "variant": {
-            "variants": [
-              {
-                "fields": [
-                  {
-                    "type": 55
-                  }
-                ],
-                "index": 0,
-                "name": "Ok"
-              },
-              {
-                "fields": [
-                  {
-                    "type": 11
-                  }
-                ],
-                "index": 1,
-                "name": "Err"
-              }
-            ]
-          }
-        },
-        "params": [
-          {
-            "name": "T",
-            "type": 55
-          },
-          {
-            "name": "E",
-            "type": 11
-          }
-        ],
-        "path": ["Result"]
-      }
-    },
-    {
-      "id": 55,
-      "type": {
-        "def": {
-          "variant": {
-            "variants": [
-              {
-                "fields": [
-                  {
-                    "type": 56
-                  }
-                ],
-                "index": 0,
-                "name": "Ok"
-              },
-              {
-                "fields": [
-                  {
-                    "type": 20
-                  }
-                ],
-                "index": 1,
-                "name": "Err"
-              }
-            ]
-          }
-        },
-        "params": [
-          {
-            "name": "T",
-            "type": 56
-          },
-          {
-            "name": "E",
-            "type": 20
-          }
-        ],
-        "path": ["Result"]
-      }
-    },
-    {
-      "id": 56,
-      "type": {
-        "def": {
-          "sequence": {
-            "type": 57
-          }
-        }
-      }
-    },
-    {
       "id": 57,
       "type": {
         "def": {
-          "tuple": [4, 4]
-        }
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 58
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 11
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 58
+          },
+          {
+            "name": "E",
+            "type": 11
+          }
+        ],
+        "path": ["Result"]
       }
     },
     {
       "id": 58,
       "type": {
         "def": {
-          "variant": {
-            "variants": [
-              {
-                "fields": [
-                  {
-                    "type": 59
-                  }
-                ],
-                "index": 0,
-                "name": "Ok"
-              },
-              {
-                "fields": [
-                  {
-                    "type": 11
-                  }
-                ],
-                "index": 1,
-                "name": "Err"
-              }
-            ]
+          "sequence": {
+            "type": 52
           }
-        },
-        "params": [
-          {
-            "name": "T",
-            "type": 59
-          },
-          {
-            "name": "E",
-            "type": 11
-          }
-        ],
-        "path": ["Result"]
+        }
       }
     },
     {
@@ -4626,67 +4723,9 @@
           "variant": {
             "variants": [
               {
-                "index": 0,
-                "name": "None"
-              },
-              {
                 "fields": [
                   {
                     "type": 60
-                  }
-                ],
-                "index": 1,
-                "name": "Some"
-              }
-            ]
-          }
-        },
-        "params": [
-          {
-            "name": "T",
-            "type": 60
-          }
-        ],
-        "path": ["Option"]
-      }
-    },
-    {
-      "id": 60,
-      "type": {
-        "def": {
-          "composite": {
-            "fields": [
-              {
-                "name": "staked_amount",
-                "type": 5,
-                "typeName": "Balance"
-              },
-              {
-                "name": "deposit_time",
-                "type": 3,
-                "typeName": "String"
-              },
-              {
-                "name": "release_time",
-                "type": 8,
-                "typeName": "Option<String>"
-              }
-            ]
-          }
-        },
-        "path": ["felideaDAO", "felideaDAO", "Stake"]
-      }
-    },
-    {
-      "id": 61,
-      "type": {
-        "def": {
-          "variant": {
-            "variants": [
-              {
-                "fields": [
-                  {
-                    "type": 62
                   }
                 ],
                 "index": 0,
@@ -4707,7 +4746,7 @@
         "params": [
           {
             "name": "T",
-            "type": 62
+            "type": 60
           },
           {
             "name": "E",
@@ -4718,7 +4757,7 @@
       }
     },
     {
-      "id": 62,
+      "id": 60,
       "type": {
         "def": {
           "variant": {
@@ -4726,7 +4765,7 @@
               {
                 "fields": [
                   {
-                    "type": 60
+                    "type": 61
                   }
                 ],
                 "index": 0,
@@ -4747,7 +4786,7 @@
         "params": [
           {
             "name": "T",
-            "type": 60
+            "type": 61
           },
           {
             "name": "E",
@@ -4755,6 +4794,24 @@
           }
         ],
         "path": ["Result"]
+      }
+    },
+    {
+      "id": 61,
+      "type": {
+        "def": {
+          "sequence": {
+            "type": 62
+          }
+        }
+      }
+    },
+    {
+      "id": 62,
+      "type": {
+        "def": {
+          "tuple": [4, 4]
+        }
       }
     },
     {
@@ -4810,7 +4867,7 @@
               {
                 "fields": [
                   {
-                    "type": 7
+                    "type": 65
                   }
                 ],
                 "index": 1,
@@ -4822,7 +4879,7 @@
         "params": [
           {
             "name": "T",
-            "type": 7
+            "type": 65
           }
         ],
         "path": ["Option"]
@@ -4832,12 +4889,39 @@
       "id": 65,
       "type": {
         "def": {
+          "composite": {
+            "fields": [
+              {
+                "name": "staked_amount",
+                "type": 5,
+                "typeName": "Balance"
+              },
+              {
+                "name": "deposit_time",
+                "type": 3,
+                "typeName": "String"
+              },
+              {
+                "name": "release_time",
+                "type": 8,
+                "typeName": "Option<String>"
+              }
+            ]
+          }
+        },
+        "path": ["felideaDAO", "felideaDAO", "Stake"]
+      }
+    },
+    {
+      "id": 66,
+      "type": {
+        "def": {
           "variant": {
             "variants": [
               {
                 "fields": [
                   {
-                    "type": 66
+                    "type": 67
                   }
                 ],
                 "index": 0,
@@ -4858,7 +4942,7 @@
         "params": [
           {
             "name": "T",
-            "type": 66
+            "type": 67
           },
           {
             "name": "E",
@@ -4869,7 +4953,158 @@
       }
     },
     {
-      "id": 66,
+      "id": 67,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 65
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 20
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 65
+          },
+          {
+            "name": "E",
+            "type": 20
+          }
+        ],
+        "path": ["Result"]
+      }
+    },
+    {
+      "id": 68,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 69
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 11
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 69
+          },
+          {
+            "name": "E",
+            "type": 11
+          }
+        ],
+        "path": ["Result"]
+      }
+    },
+    {
+      "id": 69,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "index": 0,
+                "name": "None"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 7
+                  }
+                ],
+                "index": 1,
+                "name": "Some"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 7
+          }
+        ],
+        "path": ["Option"]
+      }
+    },
+    {
+      "id": 70,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 71
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 11
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 71
+          },
+          {
+            "name": "E",
+            "type": 11
+          }
+        ],
+        "path": ["Result"]
+      }
+    },
+    {
+      "id": 71,
       "type": {
         "def": {
           "variant": {
@@ -4909,7 +5144,7 @@
       }
     },
     {
-      "id": 67,
+      "id": 72,
       "type": {
         "def": {
           "variant": {
@@ -4917,7 +5152,7 @@
               {
                 "fields": [
                   {
-                    "type": 68
+                    "type": 73
                   }
                 ],
                 "index": 0,
@@ -4938,7 +5173,7 @@
         "params": [
           {
             "name": "T",
-            "type": 68
+            "type": 73
           },
           {
             "name": "E",
@@ -4949,7 +5184,7 @@
       }
     },
     {
-      "id": 68,
+      "id": 73,
       "type": {
         "def": {
           "variant": {
@@ -4989,7 +5224,7 @@
       }
     },
     {
-      "id": 69,
+      "id": 74,
       "type": {
         "def": {
           "composite": {
@@ -5005,7 +5240,7 @@
       }
     },
     {
-      "id": 70,
+      "id": 75,
       "type": {
         "def": {
           "primitive": "u32"
@@ -5013,12 +5248,12 @@
       }
     },
     {
-      "id": 71,
+      "id": 76,
       "type": {
         "def": {
           "variant": {}
         },
-        "path": ["ink_env", "types", "NoChainExtension"]
+        "path": ["felideaDAO", "FetchRandom"]
       }
     }
   ],
