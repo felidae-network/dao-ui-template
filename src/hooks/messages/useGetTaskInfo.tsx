@@ -8,7 +8,7 @@ import { GetTaskInfoInput } from '@/types/schemaTypes';
 export const useGetTaskInfo = (initialArgValues: GetTaskInfoInput) => {
   const { contract } = useContract();
 
-  const messageInfo = contract.abi?.findMessage(
+  const messageInfo = contract?.abi?.findMessage(
     CONTRACT_MESSAGES.GET_TASK_INFO
   );
 
