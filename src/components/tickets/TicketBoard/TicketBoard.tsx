@@ -16,6 +16,7 @@ import {
   useGetTicketList,
 } from '@/hooks/messages/useGetTicketList';
 
+import { LoadingSpinner } from '@/components/loading';
 import { CreateTicket } from '@/components/tickets/CreateTicket';
 import {
   Ticket,
@@ -46,13 +47,18 @@ const allColumns: BoardColumn[] = Object.keys(TaskStatusEnum).map(
 );
 
 export const TicketBoard = () => {
-  const { decodedOutput, refetch } = useGetTicketList();
+  const {
+    decodedOutput,
+    refetch,
+    loading: ticketListLoading,
+  } = useGetTicketList();
   const {
     setArgValues,
     mutate,
-    loading: _updateStatusLoading,
+    loading: updateStatusLoading,
   } = useUpdateTaskStatus();
   const [columns, _setColumns] = useState(allColumns);
+
   const [createTicketModalVisible, setCreateTicketModalVisible] =
     useState(false);
 
@@ -93,12 +99,14 @@ export const TicketBoard = () => {
   }, [columns, decodedOutput]);
 
   const onDragEnd = async (
-    { destination, draggableId }: DropResult,
+    { destination, draggableId, source }: DropResult,
     _provider: ResponderProvided
   ) => {
     if (!destination) {
       return; // Item was dropped outside of any droppable area
     }
+
+    if (source.droppableId === destination.droppableId) return;
 
     setArgValues({
       ticketId: draggableId,
@@ -106,12 +114,12 @@ export const TicketBoard = () => {
     });
 
     const mutateValue = await mutate();
-    console.log('mutateValue ', mutateValue);
 
     if (mutateValue) {
-      if (mutateValue.isError) return toast.error(mutateValue.decodedOutput);
+      if (mutateValue.isError)
+        return toast.error(mutateValue.decodedOutput || 'An error occurred');
 
-      toast.success(mutateValue.decodedOutput);
+      toast.success('Ticket status updated!');
       refetch();
     }
   };
@@ -145,49 +153,59 @@ export const TicketBoard = () => {
 
       <div className='flex overflow-x-scroll'>
         {columnsWithData.map((column) => (
-          <div key={column.id} className='min-w-[350px] flex-1 p-4'>
+          <div
+            key={column.id}
+            className='flex min-w-[350px] flex-1 flex-col p-4'
+          >
             <h2 className='bg-base-300 rounded-t p-2 text-lg font-semibold'>
               {TaskStatusEnum[column.title as keyof typeof TaskStatusEnum]}
             </h2>
-            <Droppable droppableId={column.id} key={column.id}>
-              {(provided) => (
-                <div
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                  className='bg-base-200 min-h-[400px] rounded rounded-t-none p-4 shadow-md'
-                >
-                  {column.tickets.map((ticket, index) => (
-                    <Draggable
-                      key={ticket.ticketId}
-                      draggableId={ticket.ticketId}
-                      index={index}
-                    >
-                      {(provided) => (
-                        <Ticket
-                          openTicketModal={() => {
-                            setSelectedTicket(ticket);
-                            setTicketModalVisible(true);
-                          }}
-                          provided={provided}
-                          ticket={ticket}
-                        />
-                      )}
-                    </Draggable>
-                  ))}
-                  {column.id === Object.keys(TaskStatusEnum)[0] && (
-                    <Button
-                      color='ghost'
-                      className='mt-auto w-full'
-                      startIcon={<AiOutlinePlus />}
-                      onClick={() => setCreateTicketModalVisible(true)}
-                    >
-                      Create
-                    </Button>
-                  )}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
+
+            {updateStatusLoading || ticketListLoading ? (
+              <div className='bg-base-200 flex min-h-[400px] items-center justify-center rounded rounded-t-none p-4 shadow-md'>
+                <LoadingSpinner size='md' />
+              </div>
+            ) : (
+              <Droppable droppableId={column.id} key={column.id}>
+                {(provided) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                    className='bg-base-200 min-h-[400px]  flex-1 rounded rounded-t-none p-4 shadow-md'
+                  >
+                    {column.tickets.map((ticket, index) => (
+                      <Draggable
+                        key={ticket.ticketId}
+                        draggableId={ticket.ticketId}
+                        index={index}
+                      >
+                        {(provided) => (
+                          <Ticket
+                            openTicketModal={() => {
+                              setSelectedTicket(ticket);
+                              setTicketModalVisible(true);
+                            }}
+                            provided={provided}
+                            ticket={ticket}
+                          />
+                        )}
+                      </Draggable>
+                    ))}
+                    {column.id === Object.keys(TaskStatusEnum)[0] && (
+                      <Button
+                        color='ghost'
+                        className='mt-auto w-full'
+                        startIcon={<AiOutlinePlus />}
+                        onClick={() => setCreateTicketModalVisible(true)}
+                      >
+                        Create
+                      </Button>
+                    )}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            )}
           </div>
         ))}
       </div>
