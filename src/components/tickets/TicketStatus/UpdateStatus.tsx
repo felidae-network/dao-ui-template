@@ -5,8 +5,6 @@ import { toast } from 'react-hot-toast';
 import { useUpdateTaskStatus } from '@/hooks/messages';
 import { IGetTicket } from '@/hooks/messages/useGetTicketList';
 
-import { useContract } from '@/context/contract/ContractContextProvider';
-
 import { TaskStatusEnum } from '@/types/enums/taskStatus.enum';
 import { UpdateTaskStatusInput } from '@/types/schemaTypes';
 interface UpdateTicketStatusProps {
@@ -21,9 +19,7 @@ export const UpdateTicketStatus: React.FC<UpdateTicketStatusProps> = ({
   ticket,
   refetchTickets,
 }) => {
-  const { contract } = useContract();
   const { loading, mutate, argValues, setArgValues } = useUpdateTaskStatus({
-    daoAddress: contract.address.toString(),
     ticketId: ticket.ticketId,
     ticketStatus: ticket.ticketStatus,
   } as UpdateTaskStatusInput);
@@ -41,6 +37,8 @@ export const UpdateTicketStatus: React.FC<UpdateTicketStatusProps> = ({
     }
     toggleVisible(false);
   };
+
+  console.log(argValues);
 
   return (
     <>

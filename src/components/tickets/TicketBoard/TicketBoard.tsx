@@ -22,8 +22,6 @@ import {
   TicketModal,
 } from '@/components/tickets/TicketBoard/components';
 
-import { useContract } from '@/context/contract/ContractContextProvider';
-
 import { TaskStatusEnum } from '@/types/enums/taskStatus.enum';
 
 interface BoardColumn {
@@ -48,7 +46,6 @@ const allColumns: BoardColumn[] = Object.keys(TaskStatusEnum).map(
 );
 
 export const TicketBoard = () => {
-  const { contract } = useContract();
   const { decodedOutput, refetch } = useGetTicketList();
   const {
     setArgValues,
@@ -58,13 +55,6 @@ export const TicketBoard = () => {
   const [columns, _setColumns] = useState(allColumns);
   const [createTicketModalVisible, setCreateTicketModalVisible] =
     useState(false);
-
-  console.log(
-    'asdas ',
-    Object.keys(TaskStatusEnum).indexOf(
-      TaskStatusEnum.ToDO
-    ) as unknown as string
-  );
 
   const [ticketModalVisible, setTicketModalVisible] = useState(false);
 
@@ -111,7 +101,6 @@ export const TicketBoard = () => {
     }
 
     setArgValues({
-      daoAddress: contract.address?.toString(),
       ticketId: draggableId,
       ticketStatus: destination.droppableId,
     });

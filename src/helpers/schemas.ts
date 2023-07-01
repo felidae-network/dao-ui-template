@@ -90,7 +90,6 @@ export const createTicketInputSchema = object({
 });
 
 export const updateTaskStatusInputSchema = object({
-  daoAddress: string().required(),
   ticketId: string().required(),
   ticketStatus: string().required(),
 });

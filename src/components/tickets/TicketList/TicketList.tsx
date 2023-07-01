@@ -42,13 +42,17 @@ export const TicketList: React.FC<TicketListProps> = () => {
       {selectedTicket && (
         <Modal
           open={updateTicketModalVisible}
-          onClickBackdrop={() => setUpdateTicketModalVisible(false)}
+          onClickBackdrop={() => {
+            setUpdateTicketModalVisible(false);
+            setSelectedTicket(undefined);
+          }}
         >
           <UpdateTicketStatus
             ticket={selectedTicket!}
-            toggleVisible={() =>
-              setUpdateTicketModalVisible(!updateTicketModalVisible)
-            }
+            toggleVisible={() => {
+              setUpdateTicketModalVisible(!updateTicketModalVisible);
+              setSelectedTicket(undefined);
+            }}
             refetchTickets={() => refetch()}
           />
         </Modal>
