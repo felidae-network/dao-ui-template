@@ -19,12 +19,12 @@ export const useUpdateMemberRole = () => {
     CONTRACT_MESSAGES.UPDATE_MEMBER_ROLE
   );
 
-  const queryInfo = useQuery<UpdateMemberRoleInput>(messageInfo, {
+  const queryInfo = useQuery<unknown, UpdateMemberRoleInput>(messageInfo, {
     mutate: true,
   });
 
-  const mutate = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const mutate = async () => {
+    // e.preventDefault();
     const validationError = await validateSchema(
       updateMemberRoleInputSchema,
       queryInfo.argValues

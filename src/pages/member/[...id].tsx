@@ -8,8 +8,10 @@
 // !STARTERCONF -> Select !STARTERCONF and CMD + SHIFT + F
 // Before you begin editing, follow all comments with `STARTERCONF`,
 // to customize the default configuration.
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { Button } from 'react-daisyui';
 
 import { useGetMemberInfo } from '@/hooks/messages';
 
@@ -64,7 +66,15 @@ export default function MemberInfoPage() {
                         Role
                       </dt>
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        {decodedOutput.value.Ok.memberRole}
+                        <Link href='/member'>
+                          <Button
+                            onClick={() => {
+                              console.log('logged');
+                            }}
+                          >
+                            {decodedOutput.value.Ok.memberRole}
+                          </Button>
+                        </Link>
                       </dd>
                     </div>
                     <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>

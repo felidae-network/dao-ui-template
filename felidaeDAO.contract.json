@@ -1,6 +1,6 @@
 {
   "source": {
-    "hash": "0xb66e6cdecb6ac293f366509d2656d3c372bbb9a301c55c676ed937e416ac1681",
+    "hash": "0x54919e84939158e0e1a1ffac25ad8ad7db0fe8bcfc9fd038d75b11d13adc6293",
     "language": "ink! 4.2.0",
     "compiler": "rustc 1.69.0-nightly",
     "build_info": {
@@ -1238,13 +1238,6 @@
       {
         "args": [
           {
-            "label": "dao_address",
-            "type": {
-              "displayName": ["AccountId"],
-              "type": 0
-            }
-          },
-          {
             "label": "reviewer",
             "type": {
               "displayName": ["AccountId"],
@@ -1293,13 +1286,6 @@
       },
       {
         "args": [
-          {
-            "label": "dao_address",
-            "type": {
-              "displayName": ["AccountId"],
-              "type": 0
-            }
-          },
           {
             "label": "ticket_id",
             "type": {
