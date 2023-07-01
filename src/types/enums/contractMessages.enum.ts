@@ -23,7 +23,7 @@ export enum CONTRACT_MESSAGES {
   CREATE_TICKET = 'createTicket',
   CREATE_REVIEW = 'createReview',
   UPDATE_TAKS_STATUS = 'updateTicketStatus',
-  GET_TASK_INFO = 'getTaskInfo',
+  GET_TASK_INFO = 'getTicketInfo',
   CLOSE_TASK = 'closeTask',
   GET_TICKET_LIST = 'getTicketList',
   DISTRIBUTE_GOVERNANCE_TOKEN = 'distributeGovernanceToken',
