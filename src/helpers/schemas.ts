@@ -40,6 +40,10 @@ export const getMemberInfoInputSchema = object({
   memberId: number().required(),
 });
 
+export const getAvalabilityInfoInputSchema = object({
+  memberAddress: string().required(),
+});
+
 export const setDaoAdminInputSchema = object({
   memberAddress: string().required(),
 });
@@ -104,10 +108,8 @@ export const closeTaskInputSchema = object({
 });
 
 export const timeLogInputSchema = object({
-  taskId: string().required(),
-  daoAddress: string().required(),
-  projectId: string().required(),
-  time: string().required(),
+  taskId: number().required(),
+  time: number().required(),
 });
 
 export const calculateEfficiencyInputSchema = object({

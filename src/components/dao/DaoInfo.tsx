@@ -1,4 +1,5 @@
 import { useGetAdmin, useGetDaoInfo } from '@/hooks/messages';
+import { useGetContractAddress } from '@/hooks/messages/useGetContractaddress';
 import { useGetDaoId } from '@/hooks/messages/useGetDaoId';
 
 import { LoadingSpinner } from '@/components/loading';
@@ -9,6 +10,12 @@ export const DaoInfo = () => {
     useGetDaoId();
   const { loading: getAdminLoading, decodedOutput: getAdminDecodedOutput } =
     useGetAdmin();
+
+  const {
+    loading: getDaoAddressLoading,
+    decodedOutput: getDaoAddressDecodedOutput,
+  } = useGetContractAddress();
+  console.log('loading', getDaoAddressDecodedOutput?.value);
 
   return (
     <>
@@ -122,6 +129,24 @@ export const DaoInfo = () => {
                     !getDaoIdOutput.isError &&
                     getDaoIdOutput.value ? (
                       <p>{getDaoIdOutput.value}</p>
+                    ) : (
+                      'no'
+                    )}
+                  </>
+                )}
+              </div>
+            </div>
+            <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
+              <dt className='text-sm font-medium leading-6'>Dao Address</dt>
+              <div className='mt-1 text-sm leading-6'>
+                {getDaoAddressLoading ? (
+                  <LoadingSpinner />
+                ) : (
+                  <>
+                    {getDaoAddressDecodedOutput &&
+                    !getDaoAddressDecodedOutput.isError &&
+                    getDaoAddressDecodedOutput.value ? (
+                      <p>{getDaoAddressDecodedOutput.value}</p>
                     ) : (
                       'no'
                     )}
