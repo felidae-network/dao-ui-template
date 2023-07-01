@@ -15,6 +15,8 @@ import { AiOutlinePlus } from 'react-icons/ai';
 import { useTimeLog } from '@/hooks/messages';
 import { IGetTicket } from '@/hooks/messages/useGetTicketList';
 
+import { useSubstrateState } from '@/context/substrate/SubstrateContextProvider';
+
 import { TaskStatusEnum } from '@/types/enums/taskStatus.enum';
 interface TicketModalProps {
   children?: React.ReactNode;
@@ -26,13 +28,14 @@ export const TicketModal: React.FC<TicketModalProps> = ({
   ticket,
   closeModal,
 }) => {
-  const [hours, setHours] = useState(0);
-  const [minutes, setMinutes] = useState(0);
-  const [collapse, setCollapse] = useState(false);
+  const { currentAccount } = useSubstrateState();
   const { mutate, setArgValues, loading } = useTimeLog({
     taskId: Number(ticket.ticketId),
     time: 0,
   });
+  const [hours, setHours] = useState(0);
+  const [minutes, setMinutes] = useState(0);
+  const [collapse, setCollapse] = useState(false);
 
   useEffect(() => {
     setArgValues((prevState) => ({ ...prevState, time: hours * 60 + minutes }));
@@ -125,67 +128,70 @@ export const TicketModal: React.FC<TicketModalProps> = ({
                   <p className='text-sm opacity-75'>4d 3h 30m logged in</p>
                 </div>
               </div>
-              <Collapse open={collapse} checkbox icon='arrow'>
-                <Collapse.Title
-                  onClick={() => setCollapse(!collapse)}
-                  className='bg-base-300 my-3 mb-0 cursor-pointer rounded rounded-b-none'
-                >
-                  LOG TIME
-                </Collapse.Title>
-                <Collapse.Content className='bg-base-200 rounded rounded-t-none'>
-                  <form onSubmit={handleLogTime}>
-                    <div className='flex w-full gap-2'>
-                      <div className='w-1/2'>
-                        <label className='label'>
-                          <span className='label-text'>HOURS</span>
-                        </label>
-                        <Select
-                          color='info'
-                          placeholder='Ticket Type'
-                          className='w-full'
-                          defaultValue={0}
-                          value={hours}
-                          onChange={(e) => setHours(Number(e.target.value))}
-                        >
-                          {[...new Array(25)].map((_, index) => (
-                            <option value={index} key={index}>
-                              {index}
-                            </option>
-                          ))}
-                        </Select>
-                      </div>
 
-                      <div className='w-1/2'>
-                        <label className='label'>
-                          <span className='label-text'>MINUTES</span>
-                        </label>
-                        <Select
-                          color='info'
-                          placeholder='Ticket Type'
-                          className='w-full'
-                          defaultValue={0}
-                          value={minutes}
-                          onChange={(e) => setMinutes(Number(e.target.value))}
-                        >
-                          {[...new Array(61)].map((_, index) => (
-                            <option value={index} key={index}>
-                              {index}
-                            </option>
-                          ))}
-                        </Select>
+              {currentAccount.address === ticket.assignedTo && (
+                <Collapse open={collapse} checkbox icon='arrow'>
+                  <Collapse.Title
+                    onClick={() => setCollapse(!collapse)}
+                    className='bg-base-300 my-3 mb-0 cursor-pointer rounded rounded-b-none'
+                  >
+                    LOG TIME
+                  </Collapse.Title>
+                  <Collapse.Content className='bg-base-200 rounded rounded-t-none'>
+                    <form onSubmit={handleLogTime}>
+                      <div className='flex w-full gap-2'>
+                        <div className='w-1/2'>
+                          <label className='label'>
+                            <span className='label-text'>HOURS</span>
+                          </label>
+                          <Select
+                            color='info'
+                            placeholder='Ticket Type'
+                            className='w-full'
+                            defaultValue={0}
+                            value={hours}
+                            onChange={(e) => setHours(Number(e.target.value))}
+                          >
+                            {[...new Array(25)].map((_, index) => (
+                              <option value={index} key={index}>
+                                {index}
+                              </option>
+                            ))}
+                          </Select>
+                        </div>
+
+                        <div className='w-1/2'>
+                          <label className='label'>
+                            <span className='label-text'>MINUTES</span>
+                          </label>
+                          <Select
+                            color='info'
+                            placeholder='Ticket Type'
+                            className='w-full'
+                            defaultValue={0}
+                            value={minutes}
+                            onChange={(e) => setMinutes(Number(e.target.value))}
+                          >
+                            {[...new Array(61)].map((_, index) => (
+                              <option value={index} key={index}>
+                                {index}
+                              </option>
+                            ))}
+                          </Select>
+                        </div>
                       </div>
-                    </div>
-                    <Button
-                      className='mt-3 w-full'
-                      type='submit'
-                      startIcon={<AiOutlinePlus />}
-                      loading={loading}
-                    >
-                      LOG
-                    </Button>
-                  </form>
-                </Collapse.Content>
-              </Collapse>
+                      <Button
+                        className='mt-3 w-full'
+                        type='submit'
+                        startIcon={<AiOutlinePlus />}
+                        loading={loading}
+                      >
+                        LOG
+                      </Button>
+                    </form>
+                  </Collapse.Content>
+                </Collapse>
+              )}
             </div>
           </div>
         </div>
