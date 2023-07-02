@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { useState } from 'react';
 import { Button, Modal, Table } from 'react-daisyui';
 import { AiOutlinePlus } from 'react-icons/ai';
@@ -76,7 +77,18 @@ export const ProjectList: React.FC<ProjectListProps> = () => {
                   {decodedOutput.value.map((project, index) => (
                     <Table.Row key={project.projectId}>
                       <span>{index + 1}</span>
-                      <span>{project.name}</span>
+                      <span>
+                        {' '}
+                        <Link href={`/projects/${project.projectId}`}>
+                          <Button
+                            onClick={() => {
+                              console.log('logged');
+                            }}
+                          >
+                            {project.name}
+                          </Button>
+                        </Link>
+                      </span>
                       <span>
                         <Button
                           onClick={() => {
