@@ -15,6 +15,7 @@ import {
   getMemberInfoInputSchema,
   getMemberListInputSchema,
   getProjectInputSchema,
+  getSprintInfoInputSchema,
   getStakeForAccountInputSchema,
   getTaskInfoInputSchema,
   getTokenListInputSchema,
@@ -55,6 +56,8 @@ export type UpdateTaskStatusInput = InferType<
   typeof updateTaskStatusInputSchema
 >;
 export type GetTaskInfoInput = InferType<typeof getTaskInfoInputSchema>;
+export type GetSprintInput = InferType<typeof getSprintInfoInputSchema>;
+
 export type CloseTaskInput = InferType<typeof closeTaskInputSchema>;
 export type TimeLogInput = InferType<typeof timeLogInputSchema>;
 export type CalculateEfficiencyInput = InferType<

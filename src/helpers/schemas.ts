@@ -102,6 +102,10 @@ export const getTaskInfoInputSchema = object({
   ticketId: string().required(),
 });
 
+export const getSprintInfoInputSchema = object({
+  projectId: string().required(),
+});
+
 export const closeTaskInputSchema = object({
   ticketId: string().required(),
   daoAddress: string().required(),
