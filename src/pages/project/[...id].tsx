@@ -1,7 +1,8 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { IGetProject, useGetProjectInfo } from '@/hooks/messages';
+import { IGetProject } from '@/hooks/messages';
+import { useGetProjectInfo } from '@/hooks/messages';
 
 import Layout from '@/components/layout/Layout';
 import Seo from '@/components/Seo';
@@ -21,7 +22,6 @@ import Skeleton from '@/components/Skeleton';
 export default function ProjectInfoPage() {
   const router = useRouter();
   const projectId = router.query.id![0] as unknown as string;
-
   const { loading, decodedOutput } = useGetProjectInfo({ projectId });
   console.log('loa', decodedOutput?.value);
   console.log('skj', projectId);
