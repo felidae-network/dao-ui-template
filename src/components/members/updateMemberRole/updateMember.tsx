@@ -23,7 +23,7 @@
 // }) => {
 //   const { contract } = useContract();
 //   const { accounts } = useSubstrateState();
-//   const { loading, mutate, argValues, setArgValues } = useUpdateMemberRole( );
+//   const { loading, mutate, argValues, setArgValues } = useUpdateMemberRole();
 
 //   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 //     e.preventDefault();
