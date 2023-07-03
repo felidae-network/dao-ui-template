@@ -10,7 +10,9 @@ import { validateSchema } from '@/helpers/validateSchema';
 import { CONTRACT_MESSAGES } from '@/types/enums';
 import { UpdateMemberRoleInput } from '@/types/schemaTypes';
 
-export const useUpdateMemberRole = () => {
+export const useUpdateMemberRole = (
+  initialArgValues?: UpdateMemberRoleInput
+) => {
   const { contract } = useContract();
   const [validationErrors, setValidationErrors] =
     useState<ValidationError | null>(null);
@@ -21,10 +23,10 @@ export const useUpdateMemberRole = () => {
 
   const queryInfo = useQuery<unknown, UpdateMemberRoleInput>(messageInfo, {
     mutate: true,
+    initialArgValues,
   });
 
   const mutate = async () => {
-    // e.preventDefault();
     const validationError = await validateSchema(
       updateMemberRoleInputSchema,
       queryInfo.argValues
@@ -34,7 +36,7 @@ export const useUpdateMemberRole = () => {
       return setValidationErrors(validationError);
     }
 
-    queryInfo.query(messageInfo);
+    return await queryInfo.query(messageInfo);
   };
 
   return {

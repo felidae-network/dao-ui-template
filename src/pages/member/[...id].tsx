@@ -8,7 +8,6 @@
 // !STARTERCONF -> Select !STARTERCONF and CMD + SHIFT + F
 // Before you begin editing, follow all comments with `STARTERCONF`,
 // to customize the default configuration.
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { Button } from 'react-daisyui';
@@ -27,11 +26,26 @@ export default function MemberInfoPage() {
     memberId,
   });
 
+  // const [selectedMember, setSelectedMember] = useState<IGetMember>();
+  // const [UpdateModalOpen, setUpdateModalOpen] = useState<boolean>(false);
+
   return (
     <Layout>
       {/* <Seo templateTitle='Home' /> */}
       <Seo />
-
+      {/* <Modal
+        open={UpdateModalOpen}
+        onClickBackdrop={() => setUpdateModalOpen(false)}
+      >
+        <UpdateMemberRole
+          member={selectedMember!}
+          toggleVisible={() => {setUpdateModalOpen(!UpdateModalOpen);
+            setSelectedMember(undefined);
+          
+          }}
+          refetchProjects={() => refetch()}
+        />
+      </Modal> */}
       <main>
         <h1 className='text-center'>Membner Info</h1>
 
@@ -66,15 +80,13 @@ export default function MemberInfoPage() {
                         Role
                       </dt>
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        <Link href='/member'>
-                          <Button
-                            onClick={() => {
-                              console.log('logged');
-                            }}
-                          >
-                            {decodedOutput.value.Ok.memberRole}
-                          </Button>
-                        </Link>
+                        <Button
+                          onClick={() => {
+                            // setCreateModalOpen(true)
+                          }}
+                        >
+                          {decodedOutput.value.Ok.memberRole}
+                        </Button>
                       </dd>
                     </div>
                     <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>

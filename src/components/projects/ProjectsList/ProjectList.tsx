@@ -94,7 +94,9 @@ export const ProjectList: React.FC<ProjectListProps> = () => {
                           {project.projectStatus}
                         </Button>
                       </span>
-                      <span>{new Date(project.startTime).toDateString()}</span>
+                      <span>
+                        {new Date(parseInt(project.startTime)).toDateString()}
+                      </span>
                       <span>{project.projectId}</span>
                       <span>{project.description}</span>
                     </Table.Row>
