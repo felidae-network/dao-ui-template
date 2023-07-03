@@ -14,10 +14,13 @@ import {
   getAvalabilityInfoInputSchema,
   getMemberInfoInputSchema,
   getMemberListInputSchema,
+  getMembersProjectInputSchema,
+  getMembersTicketInputSchema,
   getProjectInputSchema,
   getSprintInfoInputSchema,
   getStakeForAccountInputSchema,
   getTaskInfoInputSchema,
+  getTimeLoggedInputSchema,
   getTokenListInputSchema,
   isAdminInputSchema,
   isMemberInputSchema,
@@ -36,6 +39,13 @@ export type IsAdminInput = InferType<typeof isAdminInputSchema>;
 export type DeleteMemberInput = InferType<typeof deleteMemberInputSchema>;
 export type AddDaoAsMemberInput = InferType<typeof addDaoAsMemberInputSchema>;
 export type GetMemberInfoInput = InferType<typeof getMemberInfoInputSchema>;
+export type GetMemberTicketInput = InferType<
+  typeof getMembersTicketInputSchema
+>;
+export type GetMembersProjectInput = InferType<
+  typeof getMembersProjectInputSchema
+>;
+export type GetTimeLoggedInput = InferType<typeof getTimeLoggedInputSchema>;
 export type GetAvailabilityInfoInput = InferType<
   typeof getAvalabilityInfoInputSchema
 >;

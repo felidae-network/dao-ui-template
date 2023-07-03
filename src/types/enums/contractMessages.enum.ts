@@ -44,4 +44,7 @@ export enum CONTRACT_MESSAGES {
   GET_DAO_ID = 'getDaoId',
   GET_DAO_CONTRACT_ADDRESS = 'getContractAddress',
   GET_AVAILABILITY_DATA = 'getAvailabilityEfficiencyData',
+  GET_TICKET_LIST_OF_MEMBER = 'getMembersTicketList',
+  GET_PROJECT_LIST_OF_MEMBER = 'getMembersProjectList',
+  GET_TIME_LOGGED_DATA_FOR_TICKET = 'getTimeLoggedDataForTicket',
 }

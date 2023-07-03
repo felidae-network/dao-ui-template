@@ -40,6 +40,18 @@ export const getMemberInfoInputSchema = object({
   memberId: number().required(),
 });
 
+export const getMembersProjectInputSchema = object({
+  memberId: number().required(),
+});
+
+export const getMembersTicketInputSchema = object({
+  memberId: number().required(),
+});
+
+export const getTimeLoggedInputSchema = object({
+  ticketId: number().required(),
+});
+
 export const getAvalabilityInfoInputSchema = object({
   memberAddress: string().required(),
 });
