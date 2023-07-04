@@ -1,3 +1,4 @@
+import { IGetProject } from '@/hooks/messages/useGetProjectList';
 import { useQuery } from '@/hooks/useQuery';
 
 import { useContract } from '@/context/contract/ContractContextProvider';
@@ -11,7 +12,7 @@ export const useGetProjectInfo = (initialArgValues: GetProjectInput) => {
     CONTRACT_MESSAGES.GET_PROJECT_INFO
   );
 
-  return useQuery<GetProjectInput>(messageInfo, {
+  return useQuery<{ Ok: IGetProject }, GetProjectInput>(messageInfo, {
     initialArgValues,
     skip: !initialArgValues.projectId,
   });

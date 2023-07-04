@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { IGetProject } from '@/hooks/messages';
 import { useGetProjectInfo } from '@/hooks/messages';
 
 import Layout from '@/components/layout/Layout';
@@ -21,10 +20,14 @@ import Skeleton from '@/components/Skeleton';
 
 export default function ProjectInfoPage() {
   const router = useRouter();
-  const projectId = router.query.id![0] as unknown as string;
+  const projectId = router.query.id![1] as unknown as number;
   const { loading, decodedOutput } = useGetProjectInfo({ projectId });
   console.log('loa', decodedOutput?.value);
   console.log('skj', projectId);
+  // const project = decodedOutput!.value as IGetProject;
+  // const sprint = project.sprint;
+  // console.log("id", (decodedOutput?.value as unknown as IGetProject)
+  // .projectId)
   return (
     <Layout>
       {/* <Seo templateTitle='Home' /> */}
@@ -47,6 +50,32 @@ export default function ProjectInfoPage() {
                   </h3>
                   <p className='mt-1 max-w-2xl text-sm leading-6 text-gray-500'></p>
                 </div>
+                <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
+                  <dt className='text-sm font-medium leading-6 text-gray-900'>
+                    Project sprint
+                  </dt>
+                  <div>
+                    <span>
+                      Project ID: {decodedOutput.value.Ok.sprint.projectId}
+                    </span>
+                    <br />
+                    <span>
+                      Start Date:{' '}
+                      {new Date(
+                        parseInt(decodedOutput.value.Ok.sprint.startDate)
+                      ).toDateString()}
+                    </span>
+                    <br />
+                    <span>
+                      End Date:{' '}
+                      {new Date(
+                        parseInt(decodedOutput.value.Ok.sprint.endDate)
+                      ).toDateString()}
+                    </span>
+                    <br />
+                    <span>Action: {decodedOutput.value.Ok.sprint.action}</span>
+                  </div>
+                </div>
                 <div className='mt-6 border-t border-gray-100'>
                   <dl className='divide-y divide-gray-100'>
                     <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
@@ -54,10 +83,7 @@ export default function ProjectInfoPage() {
                         Project Id
                       </dt>
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        {
-                          (decodedOutput.value as unknown as IGetProject)
-                            .projectId
-                        }
+                        {decodedOutput.value.Ok.projectId}
                       </dd>
                     </div>
                     <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
@@ -65,10 +91,7 @@ export default function ProjectInfoPage() {
                         Assigned to
                       </dt>
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        {
-                          (decodedOutput.value as unknown as IGetProject)
-                            .assignedTo
-                        }
+                        {decodedOutput.value.Ok.assignedTo}
                       </dd>
                     </div>
                     <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
@@ -76,21 +99,7 @@ export default function ProjectInfoPage() {
                         Creator
                       </dt>
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        {
-                          (decodedOutput.value as unknown as IGetProject)
-                            .creator
-                        }
-                      </dd>
-                    </div>
-                    <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
-                      <dt className='text-sm font-medium leading-6 text-gray-900'>
-                        Project Id
-                      </dt>
-                      <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        {
-                          (decodedOutput.value as unknown as IGetProject)
-                            .projectId
-                        }
+                        {decodedOutput.value.Ok.creator}
                       </dd>
                     </div>
                     <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
@@ -98,10 +107,7 @@ export default function ProjectInfoPage() {
                         StartTime
                       </dt>
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        {
-                          (decodedOutput.value as unknown as IGetProject)
-                            .startTime
-                        }
+                        {decodedOutput.value.Ok.startTime}
                       </dd>
                     </div>
                     <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
@@ -109,10 +115,11 @@ export default function ProjectInfoPage() {
                         End Time
                       </dt>
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        {
-                          (decodedOutput.value as unknown as IGetProject)
-                            .endTime
-                        }
+                        {decodedOutput.value.Ok.endTime !== null ? (
+                          decodedOutput.value.Ok.endTime
+                        ) : (
+                          <span>Project is not closed yet</span>
+                        )}
                       </dd>
                     </div>
                     <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
@@ -120,10 +127,7 @@ export default function ProjectInfoPage() {
                         Project Status
                       </dt>
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        {
-                          (decodedOutput.value as unknown as IGetProject)
-                            .projectStatus
-                        }
+                        {decodedOutput.value.Ok.projectStatus}
                       </dd>
                     </div>
                     <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
@@ -131,10 +135,7 @@ export default function ProjectInfoPage() {
                         Project Description
                       </dt>
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        {
-                          (decodedOutput.value as unknown as IGetProject)
-                            .description
-                        }
+                        {decodedOutput.value.Ok.description}
                       </dd>
                     </div>
                   </dl>

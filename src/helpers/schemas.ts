@@ -84,7 +84,7 @@ export const createProjectInputSchema = object({
 });
 
 export const getProjectInputSchema = object({
-  projectId: string().required(),
+  projectId: number().required(),
 });
 
 export const updateProjectStatusInputSchema = object({
