@@ -38,6 +38,10 @@ export const getMemberInfoInputSchema = object({
   memberId: number().required(),
 });
 
+export const getMemberInfoInputByAddressSchema = object({
+  memberAddress: string().required(),
+});
+
 export const getAvalabilityInfoInputSchema = object({
   memberAddress: string().required(),
 });

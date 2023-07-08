@@ -15,7 +15,6 @@ export const DaoInfo = () => {
     loading: getDaoAddressLoading,
     decodedOutput: getDaoAddressDecodedOutput,
   } = useGetContractAddress();
-  console.log('loading', getDaoAddressDecodedOutput?.value);
 
   return (
     <>

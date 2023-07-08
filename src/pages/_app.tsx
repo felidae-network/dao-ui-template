@@ -11,6 +11,7 @@ import { PrivateRoute } from '@/components/route/PrivateRoute';
 import { ContractContextProvider } from '@/context/contract/ContractContextProvider';
 import { SubstrateContextProvider } from '@/context/substrate/SubstrateContextProvider';
 import { ThemeContextProvider } from '@/context/theme/ThemeContextProvider';
+import { UserContextProvider } from '@/context/user/UserContextProvider';
 
 /**
  * !STARTERCONF info
@@ -23,12 +24,14 @@ function MyApp({ Component, pageProps }: AppProps) {
       <SubstrateContextProvider>
         <AwaitApis>
           <ContractContextProvider>
-            <PrivateRoute>
-              <>
-                <Toaster />
-                <Component {...pageProps} />
-              </>
-            </PrivateRoute>
+            <UserContextProvider>
+              <PrivateRoute>
+                <>
+                  <Toaster />
+                  <Component {...pageProps} />
+                </>
+              </PrivateRoute>
+            </UserContextProvider>
           </ContractContextProvider>
         </AwaitApis>
       </SubstrateContextProvider>

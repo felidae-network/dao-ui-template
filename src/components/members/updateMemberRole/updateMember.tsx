@@ -38,8 +38,6 @@ export const UpdateMemberRole: React.FC<UpdateMemberRoleProps> = ({
     toggleVisible(false);
   };
 
-  console.log(argValues);
-
   return (
     <>
       <Modal.Header className='font-bold'>Update Ticket Status</Modal.Header>
