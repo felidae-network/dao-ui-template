@@ -1,34 +1,54 @@
+import Link from 'next/link';
 import { useState } from 'react';
 import { Button, Modal, Table } from 'react-daisyui';
 import { AiOutlinePlus } from 'react-icons/ai';
 
-import { IGetProjectList, useGetProjectList } from '@/hooks/messages';
+import { useGetProjectList } from '@/hooks/messages';
+import { useGetDaoId } from '@/hooks/messages/useGetDaoId';
 
+import { LoadingSpinner } from '@/components/loading';
 import { CreateProject } from '@/components/projects/CreateProject';
-import { UpdateProjectStatus } from '@/components/projects/ProjectStatus';
-import Skeleton from '@/components/Skeleton';
 interface SprintListProps {
   children?: React.ReactNode;
 }
 
 export const SprintList: React.FC<SprintListProps> = () => {
-  const { decodedOutput, loading } = useGetProjectList();
-  const [visible, setVisible] = useState<boolean>(false);
-  const toggleVisible = () => {
-    setVisible(!visible);
-  };
+  const { decodedOutput, loading, refetch } = useGetProjectList();
+  const [createModalOpen, setCreateModalOpen] = useState<boolean>(false);
+  // const [updateModalOpen, setUpdateModalOpen] = useState<boolean>(false);
+  const { decodedOutput: getDaoIdDecodedOutput, loading: getDaoIdLoading } =
+    useGetDaoId();
+  // const [selectedProject, setSelectedProject] = useState<IGetProject>();
 
   return (
     <div>
-      <Modal open={visible} onClickBackdrop={toggleVisible}>
-        <CreateProject toggleVisible={toggleVisible} />
+      <Modal
+        open={createModalOpen}
+        onClickBackdrop={() => setCreateModalOpen(false)}
+      >
+        <CreateProject
+          toggleVisible={() => setCreateModalOpen(!createModalOpen)}
+          refetchProjects={() => refetch()}
+        />
       </Modal>
-      <Modal open={visible} onClickBackdrop={toggleVisible}>
-        <UpdateProjectStatus toggleVisible={toggleVisible} />
-      </Modal>
+      {/* {selectedProject && (
+        // <Modal
+        //   open={updateModalOpen}
+        //   onClickBackdrop={() => setUpdateModalOpen(false)}
+        // >
+        //   <UpdateProjectStatus
+        //     toggleVisible={() => setUpdateModalOpen(!updateModalOpen)}
+        //     refetchProjects={() => refetch()}
+        //     project={selectedProject!}
+        //   />
+        // </Modal>
+      )} */}
       <div className='mb-3 flex items-center justify-between'>
-        <h3>Your Projects</h3>
-        <Button onClick={toggleVisible} startIcon={<AiOutlinePlus />}>
+        <h3>Your Sprints</h3>
+        <Button
+          onClick={() => setCreateModalOpen(true)}
+          startIcon={<AiOutlinePlus />}
+        >
           Add New
         </Button>
       </div>
@@ -37,43 +57,64 @@ export const SprintList: React.FC<SprintListProps> = () => {
         <Table.Head>
           <span />
           <span>Name</span>
-          <span>Status</span>
-          <span>Created At</span>
-          <span>ProjectId</span>
-          <span>Description</span>
           <span>Sprint</span>
+          <span>Start Date</span>
+          <span>End Date</span>
+          <span>Action</span>
         </Table.Head>
 
         <Table.Body>
-          {loading ? (
-            <Skeleton />
+          {loading && getDaoIdLoading ? (
+            <div className='flex items-center justify-center'>
+              <LoadingSpinner />
+            </div>
           ) : (
             <>
               {decodedOutput &&
               decodedOutput.value &&
-              (decodedOutput.value as unknown as IGetProjectList).length ? (
+              !decodedOutput.isError &&
+              decodedOutput.value.length &&
+              getDaoIdDecodedOutput &&
+              !getDaoIdDecodedOutput.isError &&
+              getDaoIdDecodedOutput.value ? (
                 <>
-                  {(decodedOutput.value as unknown as IGetProjectList).map(
-                    (project, index) => (
-                      <Table.Row key={project.projectId}>
-                        <span>{index + 1}</span>
-                        <span>{project.name}</span>
-                        <span>
+                  {decodedOutput.value.map((project, index) => (
+                    <Table.Row key={project.projectId}>
+                      <span>{index + 1}</span>
+                      <span>
+                        {' '}
+                        <Link
+                          href={`/project/${getDaoIdDecodedOutput.value}/${project.projectId}`}
+                        >
                           <Button
-                            onClick={toggleVisible}
-                            startIcon={<AiOutlinePlus />}
+                            onClick={() => {
+                              console.log('logged');
+                            }}
                           >
-                            {project.projectStatus}
+                            {project.name}
                           </Button>
-                        </span>
-                        <span>
-                          {new Date(project.startTime).toDateString()}
-                        </span>
-                        <span>{project.projectId}</span>
-                        <span>{project.description}</span>
-                      </Table.Row>
-                    )
-                  )}
+                        </Link>
+                      </span>
+                      <span>
+                        {`Sprint_${new Date(
+                          parseInt(project.sprint.startDate)
+                        ).toDateString()}_${new Date(
+                          parseInt(project.sprint.endDate)
+                        ).toDateString()}`}
+                      </span>
+                      <span>
+                        {new Date(
+                          parseInt(project.sprint.startDate)
+                        ).toDateString()}
+                      </span>
+                      <span>
+                        {new Date(
+                          parseInt(project.sprint.endDate)
+                        ).toDateString()}
+                      </span>
+                      <span>{project.sprint.action}</span>
+                    </Table.Row>
+                  ))}
                 </>
               ) : (
                 'no data'

@@ -5,7 +5,6 @@ import { useQuery } from '@/hooks/useQuery';
 
 import { useContract } from '@/context/contract/ContractContextProvider';
 import { addDaoAsMemberInputSchema } from '@/helpers/schemas';
-import { validateSchema } from '@/helpers/validateSchema';
 
 import { CONTRACT_MESSAGES } from '@/types/enums';
 import { AddDaoAsMemberInput } from '@/types/schemaTypes';

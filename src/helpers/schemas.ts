@@ -38,7 +38,19 @@ export const getMemberInfoInputSchema = object({
   memberId: number().required(),
 });
 
-export const getMemberInfoInputByAddressSchema = object({
+export const getMembersProjectInputSchema = object({
+  memberId: number().required(),
+});
+
+export const getMembersTicketInputSchema = object({
+  memberId: number().required(),
+});
+
+export const getTimeLoggedInputSchema = object({
+  ticketId: number().required(),
+});
+
+export const getMemberInfoByAddressInputSchema = object({
   memberAddress: string().required(),
 });
 
@@ -71,7 +83,7 @@ export const createProjectInputSchema = object({
 });
 
 export const getProjectInputSchema = object({
-  projectId: string().required(),
+  projectId: number().required(),
 });
 
 export const updateProjectStatusInputSchema = object({
@@ -98,7 +110,11 @@ export const updateTaskStatusInputSchema = object({
 });
 
 export const getTaskInfoInputSchema = object({
-  ticketId: string().required(),
+  ticketId: number().required(),
+});
+
+export const getSprintInfoInputSchema = object({
+  projectId: string().required(),
 });
 
 export const closeTaskInputSchema = object({

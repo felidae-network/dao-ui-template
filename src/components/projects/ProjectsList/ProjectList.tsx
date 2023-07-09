@@ -1,8 +1,10 @@
+import Link from 'next/link';
 import { useState } from 'react';
 import { Button, Modal, Table } from 'react-daisyui';
 import { AiOutlinePlus } from 'react-icons/ai';
 
 import { IGetProject, useGetProjectList } from '@/hooks/messages';
+import { useGetDaoId } from '@/hooks/messages/useGetDaoId';
 
 import { LoadingSpinner } from '@/components/loading';
 import { CreateProject } from '@/components/projects/CreateProject';
@@ -15,7 +17,8 @@ export const ProjectList: React.FC<ProjectListProps> = () => {
   const { decodedOutput, loading, refetch } = useGetProjectList();
   const [createModalOpen, setCreateModalOpen] = useState<boolean>(false);
   const [updateModalOpen, setUpdateModalOpen] = useState<boolean>(false);
-
+  const { decodedOutput: getDaoIdDecodedOutput, loading: getDaoIdLoading } =
+    useGetDaoId();
   const [selectedProject, setSelectedProject] = useState<IGetProject>();
 
   return (
@@ -68,7 +71,7 @@ export const ProjectList: React.FC<ProjectListProps> = () => {
         </Table.Head>
 
         <Table.Body>
-          {loading ? (
+          {loading && getDaoIdLoading ? (
             <div className='flex items-center justify-center'>
               <LoadingSpinner />
             </div>
@@ -77,12 +80,28 @@ export const ProjectList: React.FC<ProjectListProps> = () => {
               {decodedOutput &&
               decodedOutput.value &&
               !decodedOutput.isError &&
-              decodedOutput.value.length ? (
+              decodedOutput.value.length &&
+              getDaoIdDecodedOutput &&
+              !getDaoIdDecodedOutput.isError &&
+              getDaoIdDecodedOutput.value ? (
                 <>
                   {decodedOutput.value.map((project, index) => (
                     <Table.Row key={project.projectId}>
                       <span>{index + 1}</span>
-                      <span>{project.name}</span>
+                      <span>
+                        {' '}
+                        <Link
+                          href={`/project/${getDaoIdDecodedOutput.value}/${project.projectId}`}
+                        >
+                          <Button
+                            onClick={() => {
+                              console.log('logged');
+                            }}
+                          >
+                            {project.name}
+                          </Button>
+                        </Link>
+                      </span>
                       <span>
                         <Button
                           onClick={() => {

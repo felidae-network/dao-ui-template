@@ -5,21 +5,21 @@ import { useContract } from '@/context/contract/ContractContextProvider';
 import { CONTRACT_MESSAGES } from '@/types/enums';
 
 export interface IGetProject {
+  assignedTo: string | null;
+  creator: string | null;
+  description: string;
+  endTime: string | null;
   projectId: string;
   name: string;
-  creator: string | null;
   projectStatus: string | null;
-  assignedTo: string | null;
-  startTime: string;
-  endTime: null;
-  taskList: [unknown];
-  description: string;
   sprint: {
     projectId: string;
     startDate: string;
     endDate: string;
     action: string;
   };
+  startTime: string;
+  taskList: [unknown];
 }
 export type IGetProjectList = IGetProject[];
 

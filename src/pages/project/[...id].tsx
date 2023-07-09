@@ -1,9 +1,8 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { useGetTaskInfo } from '@/hooks/messages';
+import { useGetProjectInfo } from '@/hooks/messages';
 
-// import { IGetTicket } from '@/hooks/messages/useGetTicketList';
 import Layout from '@/components/layout/Layout';
 import Seo from '@/components/Seo';
 import Skeleton from '@/components/Skeleton';
@@ -19,18 +18,23 @@ import Skeleton from '@/components/Skeleton';
 // Before you begin editing, follow all comments with `STARTERCONF`,
 // to customize the default configuration.
 
-export default function TicketInfoPage() {
+export default function ProjectInfoPage() {
   const router = useRouter();
-  const ticketId = router.query.id![0] as unknown as number;
-  const { loading, decodedOutput } = useGetTaskInfo({ ticketId });
-
+  const projectId = router.query.id![1] as unknown as number;
+  const { loading, decodedOutput } = useGetProjectInfo({ projectId });
+  console.log('loa', decodedOutput?.value);
+  console.log('skj', projectId);
+  // const project = decodedOutput!.value as IGetProject;
+  // const sprint = project.sprint;
+  // console.log("id", (decodedOutput?.value as unknown as IGetProject)
+  // .projectId)
   return (
     <Layout>
       {/* <Seo templateTitle='Home' /> */}
       <Seo />
 
       <main>
-        <h1 className='text-center'>Ticket Info</h1>
+        <h1 className='text-center'>Project Info</h1>
 
         {loading ? (
           <Skeleton />
@@ -42,18 +46,44 @@ export default function TicketInfoPage() {
               <div className='mx-auto my-5 w-full max-w-[1000px]'>
                 <div className='px-4 sm:px-0'>
                   <h3 className='text-base font-semibold leading-7 text-gray-900'>
-                    Ticket Information
+                    Project Information
                   </h3>
                   <p className='mt-1 max-w-2xl text-sm leading-6 text-gray-500'></p>
+                </div>
+                <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
+                  <dt className='text-sm font-medium leading-6 text-gray-900'>
+                    Project sprint
+                  </dt>
+                  <div>
+                    <span>
+                      Project ID: {decodedOutput.value.Ok.sprint.projectId}
+                    </span>
+                    <br />
+                    <span>
+                      Start Date:{' '}
+                      {new Date(
+                        parseInt(decodedOutput.value.Ok.sprint.startDate)
+                      ).toDateString()}
+                    </span>
+                    <br />
+                    <span>
+                      End Date:{' '}
+                      {new Date(
+                        parseInt(decodedOutput.value.Ok.sprint.endDate)
+                      ).toDateString()}
+                    </span>
+                    <br />
+                    <span>Action: {decodedOutput.value.Ok.sprint.action}</span>
+                  </div>
                 </div>
                 <div className='mt-6 border-t border-gray-100'>
                   <dl className='divide-y divide-gray-100'>
                     <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
                       <dt className='text-sm font-medium leading-6 text-gray-900'>
-                        Ticket Id
+                        Project Id
                       </dt>
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        {decodedOutput.value.Ok.ticketId}
+                        {decodedOutput.value.Ok.projectId}
                       </dd>
                     </div>
                     <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
@@ -74,20 +104,10 @@ export default function TicketInfoPage() {
                     </div>
                     <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
                       <dt className='text-sm font-medium leading-6 text-gray-900'>
-                        Project Id
-                      </dt>
-                      <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        {decodedOutput.value.Ok.projectId}
-                      </dd>
-                    </div>
-                    <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
-                      <dt className='text-sm font-medium leading-6 text-gray-900'>
                         StartTime
                       </dt>
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        {new Date(
-                          parseInt(decodedOutput.value.Ok.startTime)
-                        ).toDateString()}
+                        {decodedOutput.value.Ok.startTime}
                       </dd>
                     </div>
                     <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
@@ -100,40 +120,24 @@ export default function TicketInfoPage() {
                             parseInt(decodedOutput.value.Ok.endTime)
                           ).toDateString()
                         ) : (
-                          <span>Ticket is not closed yet</span>
+                          <span>Project is not closed yet</span>
                         )}
                       </dd>
                     </div>
                     <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
                       <dt className='text-sm font-medium leading-6 text-gray-900'>
-                        Review
+                        Project Status
                       </dt>
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        {decodedOutput.value.Ok.review}
+                        {decodedOutput.value.Ok.projectStatus}
                       </dd>
                     </div>
                     <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
                       <dt className='text-sm font-medium leading-6 text-gray-900'>
-                        Ticket Status
+                        Project Description
                       </dt>
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        {decodedOutput.value.Ok.ticketStatus}
-                      </dd>
-                    </div>
-                    <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
-                      <dt className='text-sm font-medium leading-6 text-gray-900'>
-                        ticketType
-                      </dt>
-                      <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        {decodedOutput.value.Ok.taskType}
-                      </dd>
-                    </div>
-                    <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
-                      <dt className='text-sm font-medium leading-6 text-gray-900'>
-                        Total Time Logged In
-                      </dt>
-                      <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        {decodedOutput.value.Ok.totaltimeloggedin}
+                        {decodedOutput.value.Ok.description}
                       </dd>
                     </div>
                   </dl>

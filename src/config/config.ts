@@ -1,6 +1,7 @@
 export const APP_NAME = 'FelidaeDAO';
 export const CUSTOM_RPC_METHODS = {};
-export const PROVIDER_SOCKET = process.env.NEXT_PUBLIC_PROVIDER_SOCKET;
+export const PROVIDER_SOCKET = 'wss://panther-testnet.live';
+// process.env.NEXT_PUBLIC_PROVIDER_SOCKET;
 
 export const LOCAL_STORAGE_ADDRESS_KEY = 'address';
 

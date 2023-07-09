@@ -5,7 +5,6 @@ import { useQuery } from '@/hooks/useQuery';
 
 import { useContract } from '@/context/contract/ContractContextProvider';
 import { getStakeForAccountInputSchema } from '@/helpers/schemas';
-import { validateSchema } from '@/helpers/validateSchema';
 
 import { CONTRACT_MESSAGES } from '@/types/enums';
 import { GetStakeForAccountInput } from '@/types/schemaTypes';
