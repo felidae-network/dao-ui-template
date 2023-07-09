@@ -1,6 +1,4 @@
-import { mixed, number, object, string } from 'yup';
-
-import { MemberRoleEnum } from '@/types/enums';
+import { number, object, string } from 'yup';
 
 export const addMemberInputSchema = object({
   daoAddress: string().required(),
@@ -52,6 +50,10 @@ export const getTimeLoggedInputSchema = object({
   ticketId: number().required(),
 });
 
+export const getMemberInfoByAddressInputSchema = object({
+  memberAddress: string().required(),
+});
+
 export const getAvalabilityInfoInputSchema = object({
   memberAddress: string().required(),
 });
@@ -69,11 +71,8 @@ export const getMemberListInputSchema = object({
 });
 
 export const updateMemberRoleInputSchema = object({
-  daoAddress: string().required(),
-  memberAddress: string().required(),
-  role: mixed<MemberRoleEnum>()
-    .oneOf(Object.values(MemberRoleEnum) as MemberRoleEnum[])
-    .required(),
+  memberId: string().required(),
+  role: string().required(),
 });
 
 export const createProjectInputSchema = object({

@@ -37,12 +37,24 @@ export default function MemberInfoPage() {
 
   const { decodedOutput: getDaoIdDecodedOutput, loading: getDaoIdLoading } =
     useGetDaoId();
-  console.log('loading', getMembersTicketListdecodeOutput?.value);
+
   return (
     <Layout>
       {/* <Seo templateTitle='Home' /> */}
       <Seo />
-
+      {/* <Modal
+        open={UpdateModalOpen}
+        onClickBackdrop={() => setUpdateModalOpen(false)}
+      >
+        <UpdateMemberRole
+          member={selectedMember!}
+          toggleVisible={() => {setUpdateModalOpen(!UpdateModalOpen);
+            setSelectedMember(undefined);
+          
+          }}
+          refetchProjects={() => refetch()}
+        />
+      </Modal> */}
       <main>
         <h1 className='text-center'>Membner Info</h1>
 
@@ -82,15 +94,13 @@ export default function MemberInfoPage() {
                         Role
                       </dt>
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        <Link href='/member'>
-                          <Button
-                            onClick={() => {
-                              console.log('logged');
-                            }}
-                          >
-                            {decodedOutput.value.Ok.memberRole}
-                          </Button>
-                        </Link>
+                        <Button
+                          onClick={() => {
+                            // setCreateModalOpen(true)
+                          }}
+                        >
+                          {decodedOutput.value.Ok.memberRole}
+                        </Button>
                       </dd>
                     </div>
                     <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>

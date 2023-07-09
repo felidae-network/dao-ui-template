@@ -23,9 +23,7 @@ export default function TicketInfoPage() {
   const router = useRouter();
   const ticketId = router.query.id![0] as unknown as number;
   const { loading, decodedOutput } = useGetTaskInfo({ ticketId });
-  console.log('loa', decodedOutput?.value);
-  console.log('skj', ticketId);
-  console.log('s', decodedOutput?.value.Ok.totaltimeloggedin);
+
   return (
     <Layout>
       {/* <Seo templateTitle='Home' /> */}

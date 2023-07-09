@@ -5,8 +5,7 @@ import { CONTRACT_ADDRESS } from '@/config';
 import { ContractContext } from '@/context/contract/ContractContext';
 import { useSubstrateState } from '@/context/substrate/SubstrateContextProvider';
 import { transformUserInput } from '@/helpers/callOptions';
-
-import data from '../../../felidaeDAO.contract.json';
+import { getContractMatadata } from '@/helpers/getContractMetadata';
 
 import {
   AbiMessage,
@@ -32,9 +31,9 @@ const ContractContextProvider = (props: ContractContextProviderProps) => {
     (async () => {
       if (api) {
         try {
-          // const contractMetadata = await getContractMatadata();
+          const contractMetadata = await getContractMatadata();
           const address = CONTRACT_ADDRESS as string;
-          const contract = new ContractPromise(api, data, address);
+          const contract = new ContractPromise(api, contractMetadata, address);
 
           setContract(contract);
           setContractLoading(false);
@@ -66,15 +65,20 @@ const ContractContextProvider = (props: ContractContextProviderProps) => {
       ...transformUserInput(contract.registry, message.args, argValues)
     );
 
-    await value.signAndSend(
-      account,
-      {
-        signer: injector?.signer || undefined,
-      },
-      async (result) => {
-        await cb(result);
-      }
-    );
+    await new Promise((resolve) => {
+      value.signAndSend(
+        account,
+        {
+          signer: injector?.signer || undefined,
+        },
+        async (result) => {
+          if (result.isFinalized || result.isInBlock) {
+            await cb(result);
+            resolve(true);
+          }
+        }
+      );
+    });
   };
 
   const queryMessage = async (args: QueryMessageProps) => {

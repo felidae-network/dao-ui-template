@@ -1,10 +1,10 @@
 export enum MemberRoleEnum {
-  Creator,
-  Recruiter,
-  Supporter,
-  Auditor,
-  Marketer,
-  Seller,
-  Advisor,
-  None,
+  Creator = 'Creator',
+  Recruiter = 'Recruiter',
+  Supporter = 'Supporter',
+  Auditor = 'Auditor',
+  Marketer = 'Marketer',
+  Seller = 'Seller',
+  Advisor = 'Advisor',
+  None = 'None',
 }

@@ -35,10 +35,16 @@ export const ProjectList: React.FC<ProjectListProps> = () => {
       {selectedProject && (
         <Modal
           open={updateModalOpen}
-          onClickBackdrop={() => setUpdateModalOpen(false)}
+          onClickBackdrop={() => {
+            setUpdateModalOpen(false);
+            setSelectedProject(undefined);
+          }}
         >
           <UpdateProjectStatus
-            toggleVisible={() => setUpdateModalOpen(!updateModalOpen)}
+            toggleVisible={() => {
+              setUpdateModalOpen(false);
+              setSelectedProject(undefined);
+            }}
             refetchProjects={() => refetch()}
             project={selectedProject!}
           />

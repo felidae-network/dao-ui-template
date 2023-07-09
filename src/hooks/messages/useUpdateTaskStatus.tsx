@@ -26,17 +26,18 @@ export const useUpdateTaskStatus = (
     initialArgValues,
   });
 
-  const mutate = async () => {
+  const mutate = async (manualArgs?: UpdateTaskStatusInput) => {
+    const argValues = manualArgs || queryInfo.argValues;
     const validationError = await validateSchema(
       updateTaskStatusInputSchema,
-      queryInfo.argValues
+      argValues
     );
 
     if (validationError) {
       return setValidationErrors(validationError);
     }
 
-    return await queryInfo.query(messageInfo);
+    return await queryInfo.query(messageInfo, argValues || undefined);
   };
 
   return {

@@ -3,6 +3,10 @@ import { AiOutlineClockCircle, AiOutlineClose } from 'react-icons/ai';
 
 import { IGetTicket } from '@/hooks/messages/useGetTicketList';
 
+import { TimeLogAccordion } from '@/components/tickets/TicketBoard/components/TimeLogAccordion';
+
+import { useSubstrateState } from '@/context/substrate/SubstrateContextProvider';
+
 import { TaskStatusEnum } from '@/types/enums/taskStatus.enum';
 interface TicketModalProps {
   children?: React.ReactNode;
@@ -14,6 +18,8 @@ export const TicketModal: React.FC<TicketModalProps> = ({
   ticket,
   closeModal,
 }) => {
+  const { currentAccount } = useSubstrateState();
+
   return (
     <>
       <Modal.Header>
@@ -68,7 +74,7 @@ export const TicketModal: React.FC<TicketModalProps> = ({
           <div className='w-1/3'>
             <div>
               <label className='label'>
-                <span className='label-text'>STATUS</span>
+                <span className='label-text font-bold'>STATUS</span>
               </label>
               <Select color='info' placeholder='Ticket Type' className='w-full'>
                 {Object.keys(TaskStatusEnum).map((ticketType) => (
@@ -80,7 +86,7 @@ export const TicketModal: React.FC<TicketModalProps> = ({
             </div>
             <div className='mt-10'>
               <label className='label'>
-                <span className='label-text'>TIME TRACKING</span>
+                <span className='label-text font-bold'>TIME TRACKING</span>
               </label>
               <div className='flex items-center'>
                 <AiOutlineClockCircle className='mr-2 text-4xl' />
@@ -89,6 +95,10 @@ export const TicketModal: React.FC<TicketModalProps> = ({
                   <p className='text-sm opacity-75'>4d 3h 30m logged in</p>
                 </div>
               </div>
+
+              {currentAccount.address === ticket.assignedTo && (
+                <TimeLogAccordion ticket={ticket} />
+              )}
             </div>
           </div>
         </div>

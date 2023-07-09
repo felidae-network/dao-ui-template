@@ -4,6 +4,7 @@ import Layout from '@/components/layout/Layout';
 import Seo from '@/components/Seo';
 
 import { useSubstrateState } from '@/context/substrate/SubstrateContextProvider';
+import { useUser } from '@/context/user/UserContextProvider';
 
 /**
  * SVGR Support
@@ -19,6 +20,7 @@ import { useSubstrateState } from '@/context/substrate/SubstrateContextProvider'
 
 export default function ProfilePage() {
   const { currentAccount, api } = useSubstrateState();
+  const { user } = useUser();
   const [balance, setBalance] = useState(0);
   const [nonce, setNoce] = useState();
 
@@ -44,49 +46,61 @@ export default function ProfilePage() {
       <Seo />
 
       <main>
-        {currentAccount && (
+        {user && (
           <div className='mx-auto w-full max-w-[1000px]'>
             <div className='px-4 sm:px-0'>
-              <h3 className='text-base font-semibold leading-7 text-gray-900'>
+              <h3 className='text-base font-semibold leading-7'>
                 Applicant Information
               </h3>
-              <p className='mt-1 max-w-2xl text-sm leading-6 text-gray-500'>
+              <p className='mt-1 max-w-2xl text-sm leading-6'>
                 Personal details and application.
               </p>
             </div>
             <div className='mt-6 border-t border-gray-100'>
               <dl className='divide-y divide-gray-100'>
                 <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
-                  <dt className='text-sm font-medium leading-6 text-gray-900'>
-                    Full name
-                  </dt>
-                  <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                    {currentAccount.meta.name}
-                  </dd>
+                  <dt className='text-sm font-medium leading-6'>Full name</dt>
+                  <div className='mt-1 text-sm leading-6'>
+                    <p>{user.name}</p>
+                  </div>
                 </div>
                 <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
-                  <dt className='text-sm font-medium leading-6 text-gray-900'>
-                    Address
-                  </dt>
-                  <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                    {currentAccount.address}
-                  </dd>
+                  <dt className='text-sm font-medium leading-6'>Address</dt>
+                  <div className='mt-1 text-sm leading-6'>
+                    <p>{currentAccount.address}</p>
+                  </div>
                 </div>
                 <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
-                  <dt className='text-sm font-medium leading-6 text-gray-900'>
-                    Balance
-                  </dt>
-                  <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                    {balance}
-                  </dd>
+                  <dt className='text-sm font-medium leading-6'>Balance</dt>
+                  <div className='mt-1 text-sm leading-6'>
+                    <p>{balance}</p>
+                  </div>
                 </div>
                 <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
-                  <dt className='text-sm font-medium leading-6 text-gray-900'>
-                    Nonce
+                  <dt className='text-sm font-medium leading-6'>Nonce</dt>
+                  <div className='mt-1 text-sm leading-6'>
+                    <p>{nonce}</p>
+                  </div>
+                </div>
+                <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
+                  <dt className='text-sm font-medium leading-6'>Status</dt>
+                  <div className='mt-1 text-sm leading-6'>
+                    <p>{user.memberStatus}</p>
+                  </div>
+                </div>
+                <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
+                  <dt className='text-sm font-medium leading-6'>Role</dt>
+                  <div className='mt-1 text-sm leading-6'>
+                    <p>{user.memberRole}</p>
+                  </div>
+                </div>
+                <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
+                  <dt className='text-sm font-medium leading-6'>
+                    Member since
                   </dt>
-                  <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                    {nonce}
-                  </dd>
+                  <div className='mt-1 text-sm leading-6'>
+                    <p>{new Date(parseInt(user.startTime)).toDateString()}</p>
+                  </div>
                 </div>
               </dl>
             </div>

@@ -2,14 +2,14 @@ import { useQuery } from '@/hooks/useQuery';
 
 import { useContract } from '@/context/contract/ContractContextProvider';
 
-import { CONTRACT_MESSAGES, MemberRoleEnum } from '@/types/enums';
+import { CONTRACT_MESSAGES } from '@/types/enums';
 import { GetMemberListInput } from '@/types/schemaTypes';
 
 export interface IGetMember {
   endTime: string | null;
   memberEfficiency: string;
   memberId: string;
-  memberRole: MemberRoleEnum;
+  memberRole: string | null;
   memberStatus: string;
   name: string;
   projectList: [unknown];

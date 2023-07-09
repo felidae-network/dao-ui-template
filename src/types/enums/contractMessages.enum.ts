@@ -14,6 +14,7 @@ export enum CONTRACT_MESSAGES {
   IS_MEMBER = 'isMember',
   GET_MEMBER_LIST = 'getMemberList',
   GET_MEMBER_INFO = 'getMemberInfo',
+  GET_MEMBER_INFO_BY_ADDRESS = 'getMemberInfoByAddress',
   UPDATE_MEMBER_ROLE = 'updateMemberRole',
   CREATE_PROJECT = 'createProject',
   GET_PROJECT_INFO = 'getProjectInfo',

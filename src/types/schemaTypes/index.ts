@@ -12,6 +12,7 @@ import {
   createTicketInputSchema,
   deleteMemberInputSchema,
   getAvalabilityInfoInputSchema,
+  getMemberInfoByAddressInputSchema,
   getMemberInfoInputSchema,
   getMemberListInputSchema,
   getMembersProjectInputSchema,
@@ -46,6 +47,9 @@ export type GetMembersProjectInput = InferType<
   typeof getMembersProjectInputSchema
 >;
 export type GetTimeLoggedInput = InferType<typeof getTimeLoggedInputSchema>;
+export type getMemberInfoByAddressInput = InferType<
+  typeof getMemberInfoByAddressInputSchema
+>;
 export type GetAvailabilityInfoInput = InferType<
   typeof getAvalabilityInfoInputSchema
 >;

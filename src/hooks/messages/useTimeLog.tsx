@@ -9,17 +9,19 @@ import { timeLogInputSchema } from '@/helpers/schemas';
 import { CONTRACT_MESSAGES } from '@/types/enums';
 import { TimeLogInput } from '@/types/schemaTypes';
 
-export const useTimeLog = () => {
+export const useTimeLog = (initialArgValues?: TimeLogInput) => {
   const { contract } = useContract();
   const [validationErrors, setValidationErrors] =
     useState<ValidationError | null>(null);
 
   const messageInfo = contract?.abi?.findMessage(CONTRACT_MESSAGES.TIME_LOG);
 
-  const queryInfo = useQuery<TimeLogInput>(messageInfo, { mutate: true });
+  const queryInfo = useQuery<unknown, TimeLogInput>(messageInfo, {
+    mutate: true,
+    initialArgValues,
+  });
 
-  const mutate = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const mutate = async () => {
     const validationError = await validateSchema(
       timeLogInputSchema,
       queryInfo.argValues
@@ -29,7 +31,7 @@ export const useTimeLog = () => {
       return setValidationErrors(validationError);
     }
 
-    queryInfo.query(messageInfo);
+    return await queryInfo.query(messageInfo);
   };
 
   return {
