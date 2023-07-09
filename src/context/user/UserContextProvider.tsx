@@ -16,7 +16,7 @@ const UserContextProvider = (props: UserContextProviderProps) => {
   const [user, setUser] = useState<IGetMember>();
 
   const { decodedOutput, loading } = useGetMemberInfoByAddress({
-    memberAddress: currentAccount.address,
+    memberAddress: currentAccount?.address,
   });
 
   useEffect(() => {

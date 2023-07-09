@@ -3,7 +3,7 @@
 
 import { useMemo, useState } from 'react';
 
-import { transformUserInput } from '@/helpers/callOptions';
+import { getInputData } from '@/helpers/getInputData';
 
 import { AbiMessage, Registry, SetState } from '@/types';
 
@@ -34,15 +34,7 @@ export function useArgValues<T>(
   const [value, setValue] = useState<T>(initialArgValues || ({} as T));
 
   const inputData = useMemo(() => {
-    let data: Uint8Array | undefined;
-    try {
-      data = message?.toU8a(
-        transformUserInput(registry, message.args, value as T)
-      );
-    } catch (e) {
-      console.error(e);
-    }
-    return data;
+    return getInputData(message, registry, value);
   }, [value, registry, message]);
 
   return [value, setValue, inputData];

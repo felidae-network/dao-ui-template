@@ -21,6 +21,7 @@ import {
   getGasLimit,
   getStorageDepositLimit,
 } from '@/helpers/callOptions';
+import { getInputData } from '@/helpers/getInputData';
 
 type QueryOptions<T> = {
   mutate?: boolean;
@@ -97,11 +98,21 @@ export function useQuery<DecodedValueType = unknown, ArgValueType = unknown>(
     message,
   ]);
 
-  const dryRun = useCallback(async () => {
-    const o = await queryMessage(params);
-    setOutcome(o);
-    return o;
-  }, [queryMessage, params]);
+  const dryRun = useCallback(
+    async (message: AbiMessage, args?: ArgValueType) => {
+      const manualArgValueInputData = args
+        ? getInputData(message, api.registry, args)
+        : undefined;
+
+      const o = await queryMessage({
+        ...params,
+        value: manualArgValueInputData || params.value,
+      });
+      setOutcome(o);
+      return o;
+    },
+    [queryMessage, params, api.registry]
+  );
 
   const call = useCallback(
     async (message: AbiMessage, outcome: ContractExecResult) => {
@@ -143,10 +154,10 @@ export function useQuery<DecodedValueType = unknown, ArgValueType = unknown>(
   );
 
   const query = useCallback(
-    async (message: AbiMessage) => {
+    async (message: AbiMessage, args?: ArgValueType) => {
       try {
         setLoading(true);
-        const o = await dryRun();
+        const o = await dryRun(message, args);
         await call(message, o);
         setLoading(false);
         return getDecodedOutput<DecodedValueType>(

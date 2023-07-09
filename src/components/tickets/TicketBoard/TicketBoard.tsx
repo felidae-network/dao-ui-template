@@ -113,7 +113,10 @@ export const TicketBoard = () => {
       ticketStatus: destination.droppableId,
     });
 
-    const mutateValue = await mutate();
+    const mutateValue = await mutate({
+      ticketId: draggableId,
+      ticketStatus: destination.droppableId,
+    });
 
     if (mutateValue) {
       if (mutateValue.isError)
