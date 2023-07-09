@@ -14,6 +14,8 @@ import React from 'react';
 import { Button } from 'react-daisyui';
 
 import { useGetMemberInfo } from '@/hooks/messages';
+import { useGetDaoId } from '@/hooks/messages/useGetDaoId';
+import { useGetMembersTicket } from '@/hooks/useGetMembersTicketList';
 
 import Layout from '@/components/layout/Layout';
 import Seo from '@/components/Seo';
@@ -26,7 +28,16 @@ export default function MemberInfoPage() {
   const { loading, decodedOutput } = useGetMemberInfo({
     memberId,
   });
+  const {
+    loading: getMembersTicketListLoading,
+    decodedOutput: getMembersTicketListdecodeOutput,
+  } = useGetMembersTicket({
+    memberId,
+  });
 
+  const { decodedOutput: getDaoIdDecodedOutput, loading: getDaoIdLoading } =
+    useGetDaoId();
+  console.log('loading', getMembersTicketListdecodeOutput?.value);
   return (
     <Layout>
       {/* <Seo templateTitle='Home' /> */}
@@ -35,11 +46,16 @@ export default function MemberInfoPage() {
       <main>
         <h1 className='text-center'>Membner Info</h1>
 
-        {loading ? (
+        {loading && getMembersTicketListLoading && getDaoIdLoading ? (
           <Skeleton />
         ) : (
           <>
-            {!decodedOutput || !decodedOutput.value ? (
+            {!decodedOutput ||
+            !decodedOutput.value ||
+            !getMembersTicketListdecodeOutput ||
+            !getMembersTicketListdecodeOutput.value ||
+            !getDaoIdDecodedOutput ||
+            !getDaoIdDecodedOutput.value ? (
               'no data'
             ) : (
               <div className='mx-auto my-5 w-full max-w-[1000px]'>
@@ -91,6 +107,53 @@ export default function MemberInfoPage() {
                       </dt>
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
                         {decodedOutput.value.Ok.memberStatus}
+                      </dd>
+                    </div>
+                    <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
+                      <dt className='text-sm font-medium leading-6 text-gray-900'>
+                        Ticket List
+                      </dt>
+                      <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
+                        {decodedOutput.value.Ok.taskList.map(
+                          (taskId, index) => (
+                            <Link key={index} href={`/ticket/${taskId}`}>
+                              <Button
+                                onClick={() => {
+                                  console.log('logged');
+                                }}
+                                className='mb-2 mr-2'
+                              >
+                                {`T${taskId}`}
+                              </Button>
+                            </Link>
+                          )
+                        )}
+                      </dd>
+                    </div>
+
+                    <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
+                      <dt className='text-sm font-medium leading-6 text-gray-900'>
+                        Project List
+                      </dt>
+                      <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
+                        {decodedOutput.value.Ok.projectList.map(
+                          (ProjectId, index) => (
+                            <Link
+                              key={index}
+                              href={`/project/${getDaoIdDecodedOutput.value}/${ProjectId}`}
+                            >
+                              <Button
+                                key={index}
+                                onClick={() => {
+                                  console.log('logged');
+                                }}
+                                className='mb-2 mr-2'
+                              >
+                                {`P${ProjectId}`}
+                              </Button>
+                            </Link>
+                          )
+                        )}
                       </dd>
                     </div>
                   </dl>

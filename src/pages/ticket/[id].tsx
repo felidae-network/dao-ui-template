@@ -2,8 +2,8 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { useGetTaskInfo } from '@/hooks/messages';
-import { IGetTicket } from '@/hooks/messages/useGetTicketList';
 
+// import { IGetTicket } from '@/hooks/messages/useGetTicketList';
 import Layout from '@/components/layout/Layout';
 import Seo from '@/components/Seo';
 import Skeleton from '@/components/Skeleton';
@@ -21,10 +21,11 @@ import Skeleton from '@/components/Skeleton';
 
 export default function TicketInfoPage() {
   const router = useRouter();
-  const ticketId = router.query.id![0] as unknown as string;
+  const ticketId = router.query.id![0] as unknown as number;
   const { loading, decodedOutput } = useGetTaskInfo({ ticketId });
   console.log('loa', decodedOutput?.value);
   console.log('skj', ticketId);
+  console.log('s', decodedOutput?.value.Ok.totaltimeloggedin);
   return (
     <Layout>
       {/* <Seo templateTitle='Home' /> */}
@@ -54,10 +55,7 @@ export default function TicketInfoPage() {
                         Ticket Id
                       </dt>
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        {
-                          (decodedOutput.value as unknown as IGetTicket)
-                            .ticketId
-                        }
+                        {decodedOutput.value.Ok.ticketId}
                       </dd>
                     </div>
                     <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
@@ -65,10 +63,7 @@ export default function TicketInfoPage() {
                         Assigned to
                       </dt>
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        {
-                          (decodedOutput.value as unknown as IGetTicket)
-                            .assignedTo
-                        }
+                        {decodedOutput.value.Ok.assignedTo}
                       </dd>
                     </div>
                     <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
@@ -76,7 +71,7 @@ export default function TicketInfoPage() {
                         Creator
                       </dt>
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        {(decodedOutput.value as unknown as IGetTicket).creator}
+                        {decodedOutput.value.Ok.creator}
                       </dd>
                     </div>
                     <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
@@ -84,10 +79,7 @@ export default function TicketInfoPage() {
                         Project Id
                       </dt>
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        {
-                          (decodedOutput.value as unknown as IGetTicket)
-                            .projectId
-                        }
+                        {decodedOutput.value.Ok.projectId}
                       </dd>
                     </div>
                     <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
@@ -95,10 +87,9 @@ export default function TicketInfoPage() {
                         StartTime
                       </dt>
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        {
-                          (decodedOutput.value as unknown as IGetTicket)
-                            .startTime
-                        }
+                        {new Date(
+                          parseInt(decodedOutput.value.Ok.startTime)
+                        ).toDateString()}
                       </dd>
                     </div>
                     <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
@@ -106,7 +97,13 @@ export default function TicketInfoPage() {
                         End Time
                       </dt>
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        {(decodedOutput.value as unknown as IGetTicket).review}
+                        {decodedOutput.value.Ok.endTime !== null ? (
+                          new Date(
+                            parseInt(decodedOutput.value.Ok.endTime)
+                          ).toDateString()
+                        ) : (
+                          <span>Ticket is not closed yet</span>
+                        )}
                       </dd>
                     </div>
                     <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
@@ -114,7 +111,7 @@ export default function TicketInfoPage() {
                         Review
                       </dt>
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        {(decodedOutput.value as unknown as IGetTicket).review}
+                        {decodedOutput.value.Ok.review}
                       </dd>
                     </div>
                     <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
@@ -122,10 +119,7 @@ export default function TicketInfoPage() {
                         Ticket Status
                       </dt>
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        {
-                          (decodedOutput.value as unknown as IGetTicket)
-                            .ticketStatus
-                        }
+                        {decodedOutput.value.Ok.ticketStatus}
                       </dd>
                     </div>
                     <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
@@ -133,10 +127,7 @@ export default function TicketInfoPage() {
                         ticketType
                       </dt>
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        {
-                          (decodedOutput.value as unknown as IGetTicket)
-                            .taskType
-                        }
+                        {decodedOutput.value.Ok.taskType}
                       </dd>
                     </div>
                     <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
@@ -144,10 +135,7 @@ export default function TicketInfoPage() {
                         Total Time Logged In
                       </dt>
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
-                        {
-                          (decodedOutput.value as unknown as IGetTicket)
-                            .totaltimeloggedin
-                        }
+                        {decodedOutput.value.Ok.totaltimeloggedin}
                       </dd>
                     </div>
                   </dl>

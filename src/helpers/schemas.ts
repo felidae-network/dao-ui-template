@@ -111,7 +111,7 @@ export const updateTaskStatusInputSchema = object({
 });
 
 export const getTaskInfoInputSchema = object({
-  ticketId: string().required(),
+  ticketId: number().required(),
 });
 
 export const getSprintInfoInputSchema = object({

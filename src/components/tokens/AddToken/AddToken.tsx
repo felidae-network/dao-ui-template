@@ -14,8 +14,7 @@ interface AddTokenProps {
 
 export const AddToken: React.FC<AddTokenProps> = ({ toggleVisible }) => {
   const { accounts } = useSubstrateState();
-  const { loading, mutate, argValues, setArgValues, decodedOutput } =
-    useAddDaoToken();
+  const { loading, mutate, decodedOutput } = useAddDaoToken();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -35,9 +34,9 @@ export const AddToken: React.FC<AddTokenProps> = ({ toggleVisible }) => {
           <Select
             placeholder='Dao Address'
             className='w-full'
-            onChange={(event) =>
-              setArgValues({ ...argValues, daoAddress: event.target.value })
-            }
+            // onChange={(event) =>
+            //   setArgValues({ ...argValues, daoAddress: event.target.value })
+            // }
           >
             {accounts &&
               accounts.map((account) => (
@@ -53,9 +52,9 @@ export const AddToken: React.FC<AddTokenProps> = ({ toggleVisible }) => {
           <Select
             placeholder='Account Address'
             className='w-full'
-            onChange={(event) =>
-              setArgValues({ ...argValues, tokenType: event.target.value })
-            }
+            // onChange={(event) =>
+            //   setArgValues({ ...argValues, tokenType: event.target.value })
+            // }
           >
             {Object.values(TokenTypeEnum).map((tokenType) => (
               <option key={tokenType}>{tokenType}</option>
@@ -68,9 +67,9 @@ export const AddToken: React.FC<AddTokenProps> = ({ toggleVisible }) => {
           <Select
             placeholder='Token Address'
             className='w-full'
-            onChange={(event) =>
-              setArgValues({ ...argValues, tokenAddress: event.target.value })
-            }
+            // onChange={(event) =>
+            //   setArgValues({ ...argValues, tokenAddress: event.target.value })
+            // }
           >
             {accounts &&
               accounts.map((account) => (

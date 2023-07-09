@@ -116,7 +116,9 @@ export default function ProjectInfoPage() {
                       </dt>
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
                         {decodedOutput.value.Ok.endTime !== null ? (
-                          decodedOutput.value.Ok.endTime
+                          new Date(
+                            parseInt(decodedOutput.value.Ok.endTime)
+                          ).toDateString()
                         ) : (
                           <span>Project is not closed yet</span>
                         )}

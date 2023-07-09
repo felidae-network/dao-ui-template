@@ -6,9 +6,7 @@ import { useContract } from '@/context/contract/ContractContextProvider';
 import { CONTRACT_MESSAGES } from '@/types/enums';
 import { GetMemberTicketInput } from '@/types/schemaTypes';
 
-export const useGetMembersProject = (
-  initialArgValues: GetMemberTicketInput
-) => {
+export const useGetMembersTicket = (initialArgValues: GetMemberTicketInput) => {
   const { contract } = useContract();
 
   const projectList = contract?.abi?.findMessage(

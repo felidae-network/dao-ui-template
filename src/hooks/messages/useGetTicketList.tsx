@@ -13,6 +13,7 @@ export interface IGetTicket {
   assignedTo: string | null;
   taskType: string;
   startTime: string;
+  endTime: string;
   review: string | null;
   totaltimeloggedin: string;
 }

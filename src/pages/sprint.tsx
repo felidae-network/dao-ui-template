@@ -1,8 +1,8 @@
 import React from 'react';
 
 import Layout from '@/components/layout/Layout';
-import { ProjectList } from '@/components/projects';
 import Seo from '@/components/Seo';
+import { SprintList } from '@/components/sprints/SprintList';
 
 /**
  * SVGR Support
@@ -25,7 +25,7 @@ export default function SprintssPage() {
       <main>
         <h1 className='text-center'>Projects</h1>
 
-        <ProjectList />
+        <SprintList />
       </main>
     </Layout>
   );
