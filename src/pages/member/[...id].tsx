@@ -32,9 +32,8 @@ export default function MemberInfoPage() {
     loading: getMembersTicketListLoading,
     decodedOutput: getMembersTicketListdecodeOutput,
   } = useGetMembersTicket({
-    memberId,
+    memberId: 2,
   });
-
   const { decodedOutput: getDaoIdDecodedOutput, loading: getDaoIdLoading } =
     useGetDaoId();
 
