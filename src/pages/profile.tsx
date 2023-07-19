@@ -23,7 +23,8 @@ export default function ProfilePage() {
   const { user } = useUser();
   const [balance, setBalance] = useState(0);
   const [nonce, setNoce] = useState();
-
+  console.log('user', user);
+  console.log('account', currentAccount);
   useEffect(() => {
     (async () => {
       if (currentAccount) {

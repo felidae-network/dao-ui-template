@@ -15,12 +15,14 @@ import { Button } from 'react-daisyui';
 
 import { useGetMemberInfo } from '@/hooks/messages';
 import { useGetDaoId } from '@/hooks/messages/useGetDaoId';
+// useGetMembersProject
+// import { useGetMembersProject } from '@/hooks/messages/useGetMembersprojectList';
 import { useGetMembersTicket } from '@/hooks/useGetMembersTicketList';
 
 import Layout from '@/components/layout/Layout';
 import Seo from '@/components/Seo';
 import Skeleton from '@/components/Skeleton';
-
+// import { useGetMembersProject } from '@/hooks/messages/useGetMembersprojectList';
 export default function MemberInfoPage() {
   const router = useRouter();
   const memberId = router.query.id![1] as unknown as number;
@@ -34,8 +36,14 @@ export default function MemberInfoPage() {
   } = useGetMembersTicket({
     memberId: 2,
   });
+  console.log(
+    'getMembersTicketListdecodeOutput',
+    getMembersTicketListdecodeOutput?.value
+  );
   const { decodedOutput: getDaoIdDecodedOutput, loading: getDaoIdLoading } =
     useGetDaoId();
+  // const { loading:l, decodedOutput:doc } = useAddStake({amount:1});
+  // console.log("loadingM",doc?.value);
 
   return (
     <Layout>

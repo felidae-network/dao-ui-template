@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { useIsMember } from '@/hooks/messages';
+
 import Layout from '@/components/layout/Layout';
 import { MemberList } from '@/components/members';
 import Seo from '@/components/Seo';
@@ -17,6 +19,10 @@ import Seo from '@/components/Seo';
 // to customize the default configuration.
 
 export default function MembersPage() {
+  // const { currentAccount, api } = useSubstrateState();
+  const { loading, decodedOutput } = useIsMember();
+  console.log('loading', loading);
+  const isMember = decodedOutput?.value;
   return (
     <Layout>
       {/* <Seo templateTitle='Home' /> */}
@@ -25,7 +31,7 @@ export default function MembersPage() {
       <main>
         <h1 className='text-center'>Members</h1>
 
-        <MemberList />
+        {isMember ? <MemberList /> : <p>You are not a member.</p>}
       </main>
     </Layout>
   );

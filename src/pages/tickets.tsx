@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { useIsMember } from '@/hooks/messages';
+
 import Layout from '@/components/layout/Layout';
 import Seo from '@/components/Seo';
 import { TicketList } from '@/components/tickets';
@@ -17,6 +19,10 @@ import { TicketList } from '@/components/tickets';
 // to customize the default configuration.
 
 export default function TicketsPage() {
+  const { loading, decodedOutput } = useIsMember();
+  console.log('loading', loading);
+  const isMember = decodedOutput?.value;
+
   return (
     <Layout>
       {/* <Seo templateTitle='Home' /> */}
@@ -25,7 +31,7 @@ export default function TicketsPage() {
       <main>
         <h1 className='text-center'>Tickets</h1>
 
-        <TicketList />
+        {isMember ? <TicketList /> : <p>You are not a member.</p>}
       </main>
     </Layout>
   );

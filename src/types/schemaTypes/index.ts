@@ -4,6 +4,7 @@ import {
   addDaoAsMemberInputSchema,
   addDaoTokenInputSchema,
   addMemberInputSchema,
+  addStakeInputSchema,
   calculateEfficiencyInputSchema,
   closeProjectInputSchema,
   closeTaskInputSchema,
@@ -60,6 +61,7 @@ export type UpdateMemberRoleInput = InferType<
   typeof updateMemberRoleInputSchema
 >;
 export type CreateProjectInput = InferType<typeof createProjectInputSchema>;
+export type addStakeInput = InferType<typeof addStakeInputSchema>;
 export type GetProjectInput = InferType<typeof getProjectInputSchema>;
 export type UpdateProjectStatusInput = InferType<
   typeof updateProjectStatusInputSchema

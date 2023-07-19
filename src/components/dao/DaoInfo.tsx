@@ -3,13 +3,14 @@ import { useGetContractAddress } from '@/hooks/messages/useGetContractaddress';
 import { useGetDaoId } from '@/hooks/messages/useGetDaoId';
 
 import { LoadingSpinner } from '@/components/loading';
-
 export const DaoInfo = () => {
   const { loading, decodedOutput } = useGetDaoInfo();
   const { loading: getDaoIdLoading, decodedOutput: getDaoIdOutput } =
     useGetDaoId();
   const { loading: getAdminLoading, decodedOutput: getAdminDecodedOutput } =
     useGetAdmin();
+  // const { loading: l, decodedOutput: doc } = useAddStake({ amount: 1 });
+  // console.log('loadingM', doc?.value);
 
   const {
     loading: getDaoAddressLoading,

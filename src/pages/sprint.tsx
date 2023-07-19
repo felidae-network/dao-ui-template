@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { useIsMember } from '@/hooks/messages';
+
 import Layout from '@/components/layout/Layout';
 import Seo from '@/components/Seo';
 import { SprintList } from '@/components/sprints/SprintList';
@@ -17,6 +19,10 @@ import { SprintList } from '@/components/sprints/SprintList';
 // to customize the default configuration.
 
 export default function SprintssPage() {
+  const { loading, decodedOutput } = useIsMember();
+  console.log('loading', loading);
+  const isMember = decodedOutput?.value;
+
   return (
     <Layout>
       {/* <Seo templateTitle='Home' /> */}
@@ -25,7 +31,7 @@ export default function SprintssPage() {
       <main>
         <h1 className='text-center'>Projects</h1>
 
-        <SprintList />
+        {isMember ? <SprintList /> : <p>You are not a member.</p>}
       </main>
     </Layout>
   );
