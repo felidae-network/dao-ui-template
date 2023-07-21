@@ -1,10 +1,8 @@
 import { Dispatch, FormEvent, SetStateAction } from 'react';
-import { Button, Input, Modal, Select } from 'react-daisyui';
+import { Button, Input, Modal } from 'react-daisyui';
 import { toast } from 'react-hot-toast';
 
 import { useAddMember } from '@/hooks/messages';
-
-import { useSubstrateState } from '@/context/substrate/SubstrateContextProvider';
 
 import { ADdMemberInput } from '@/types/schemaTypes';
 
@@ -18,7 +16,7 @@ export const CreateMember: React.FC<CreateMemberProps> = ({
   toggleVisible,
   refetchMembers,
 }) => {
-  const { accounts } = useSubstrateState();
+  // const { accounts } = useSubstrateState();
   const { loading, mutate, argValues, setArgValues } = useAddMember();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -56,20 +54,15 @@ export const CreateMember: React.FC<CreateMemberProps> = ({
           <label className='label'>
             <span className='label-text'>Choose member account</span>
           </label>
-          <Select
-            placeholder='Account Address'
+          <Input
+            name='address'
             className='w-full'
-            onChange={(event) =>
-              setArgValues({ ...argValues, memberAddress: event.target.value })
+            placeholder='address'
+            value={argValues.memberAddress}
+            onChange={(e) =>
+              setArgValues({ ...argValues, memberAddress: e.target.value })
             }
-          >
-            {accounts &&
-              accounts.map((account) => (
-                <option key={account.address} value={account.address}>
-                  {account.meta.name}
-                </option>
-              ))}
-          </Select>
+          />
         </Modal.Body>
 
         <Modal.Actions>

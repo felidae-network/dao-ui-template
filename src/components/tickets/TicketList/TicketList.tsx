@@ -46,14 +46,15 @@ export const TicketList: React.FC<TicketListProps> = () => {
   console.log('getMemberInfoloading', getMemberInfoloading);
   const [selectedTicket, setSelectedTicket] = useState<IGetTicket>();
   const {
-    loading: loadingMembersTickets,
-    decodedOutput: decodedOutputMembersTickets,
+    loading: getMembersTicketListLoading,
+    decodedOutput: getMembersTicketListdecodeOutput,
   } = useGetMembersTicket({
-    memberId: decodedOutputMembersInfo?.value.Ok.memberId as unknown as number,
+    memberId: user?.memberId as unknown as number,
   });
+  console.log('useget', user?.memberId as unknown as number);
   console.log(
-    'decodedOutputMembersTickets',
-    decodedOutputMembersTickets?.value.Ok
+    'getMembersTicketListdecodeOutput',
+    getMembersTicketListdecodeOutput?.value.Ok
   );
   console.log('user', user);
   console.log('isAdmin', isAdmin);
@@ -62,7 +63,7 @@ export const TicketList: React.FC<TicketListProps> = () => {
   if (isAdmin) {
     ticketListToMap = decodedOutput?.value as unknown as IGetTicketList;
   } else {
-    ticketListToMap = decodedOutputMembersTickets?.value.Ok;
+    ticketListToMap = getMembersTicketListdecodeOutput?.value.Ok;
   }
   console.log('ticketmap', ticketListToMap);
   return (
@@ -117,7 +118,7 @@ export const TicketList: React.FC<TicketListProps> = () => {
         </Table.Head>
 
         <Table.Body>
-          {loading && loadingMembersTickets ? (
+          {loading && getMembersTicketListLoading ? (
             <div className='flex items-center justify-center'>
               <LoadingSpinner />
             </div>

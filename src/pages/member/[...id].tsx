@@ -11,18 +11,23 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { Button } from 'react-daisyui';
+import { useState } from 'react';
+import { Button, Modal } from 'react-daisyui';
+import { AiOutlinePlus } from 'react-icons/ai';
 
 import { useGetMemberInfo } from '@/hooks/messages';
+import { IGetMember } from '@/hooks/messages';
+import { useGetMemberList } from '@/hooks/messages';
 import { useGetDaoId } from '@/hooks/messages/useGetDaoId';
 // useGetMembersProject
-// import { useGetMembersProject } from '@/hooks/messages/useGetMembersprojectList';
+import { useGetMembersProject } from '@/hooks/messages/useGetMembersprojectList';
 import { useGetMembersTicket } from '@/hooks/useGetMembersTicketList';
 
 import Layout from '@/components/layout/Layout';
+// import { useGetMembersProject } from '@/hooks/messages/useGetMembersprojectList';
+import { UpdateMemberRole } from '@/components/members/updateMemberRole';
 import Seo from '@/components/Seo';
 import Skeleton from '@/components/Skeleton';
-// import { useGetMembersProject } from '@/hooks/messages/useGetMembersprojectList';
 export default function MemberInfoPage() {
   const router = useRouter();
   const memberId = router.query.id![1] as unknown as number;
@@ -34,7 +39,7 @@ export default function MemberInfoPage() {
     loading: getMembersTicketListLoading,
     decodedOutput: getMembersTicketListdecodeOutput,
   } = useGetMembersTicket({
-    memberId: 2,
+    memberId: memberId,
   });
   console.log(
     'getMembersTicketListdecodeOutput',
@@ -44,6 +49,22 @@ export default function MemberInfoPage() {
     useGetDaoId();
   // const { loading:l, decodedOutput:doc } = useAddStake({amount:1});
   // console.log("loadingM",doc?.value);
+  const [updateModalOpen, setUpdateModalOpen] = useState<boolean>(false);
+  const [selectedProject, setSelectedProject] = useState<IGetMember>();
+  const {
+    decodedOutput: decodecoutputMEmberList,
+    loading: loadingMemberList,
+    refetch,
+  } = useGetMemberList();
+  console.log('decodecoutputProjectList', decodecoutputMEmberList?.value);
+  console.log('loadingMemberList', loadingMemberList);
+
+  const {
+    decodedOutput: decodecoutputProjectList,
+    loading: loadingProjectList,
+  } = useGetMembersProject({ memberId: memberId });
+  console.log('decodecoutputProjectList', decodecoutputProjectList?.value.Ok);
+  console.log('loadingProjectList', loadingProjectList);
 
   return (
     <Layout>
@@ -62,6 +83,25 @@ export default function MemberInfoPage() {
           refetchProjects={() => refetch()}
         />
       </Modal> */}
+
+      {selectedProject && (
+        <Modal
+          open={updateModalOpen}
+          onClickBackdrop={() => {
+            setUpdateModalOpen(false);
+            setSelectedProject(undefined);
+          }}
+        >
+          <UpdateMemberRole
+            toggleVisible={() => {
+              setUpdateModalOpen(false);
+              setSelectedProject(undefined);
+            }}
+            refetchMember={() => refetch()}
+            member={selectedProject!}
+          />
+        </Modal>
+      )}
       <main>
         <h1 className='text-center'>Membner Info</h1>
 
@@ -103,8 +143,10 @@ export default function MemberInfoPage() {
                       <dd className='mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0'>
                         <Button
                           onClick={() => {
-                            // setCreateModalOpen(true)
+                            setSelectedProject(decodedOutput.value.Ok);
+                            setUpdateModalOpen(true);
                           }}
+                          startIcon={<AiOutlinePlus />}
                         >
                           {decodedOutput.value.Ok.memberRole}
                         </Button>

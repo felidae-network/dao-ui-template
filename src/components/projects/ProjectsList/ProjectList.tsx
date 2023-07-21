@@ -6,6 +6,7 @@ import { AiOutlinePlus } from 'react-icons/ai';
 import { IGetProject, useGetAdmin, useGetProjectList } from '@/hooks/messages';
 import { useGetDaoId } from '@/hooks/messages/useGetDaoId';
 import { useGetMemberInfoByAddress } from '@/hooks/messages/useGetMemberInfoByAddress';
+// import { useGetMembersProject } from '@/hooks/messages/useGetMembersprojectList';
 import { useGetMembersProject } from '@/hooks/messages/useGetMembersprojectList';
 
 import { LoadingSpinner } from '@/components/loading';
@@ -13,6 +14,7 @@ import { CreateProject } from '@/components/projects/CreateProject';
 import { UpdateProjectStatus } from '@/components/projects/ProjectStatus';
 
 import { useSubstrateState } from '@/context/substrate/SubstrateContextProvider';
+import { useUser } from '@/context/user/UserContextProvider';
 interface ProjectListProps {
   children?: React.ReactNode;
 }
@@ -24,7 +26,7 @@ export const ProjectList: React.FC<ProjectListProps> = () => {
   const { decodedOutput: getDaoIdDecodedOutput, loading: getDaoIdLoading } =
     useGetDaoId();
   const [selectedProject, setSelectedProject] = useState<IGetProject>();
-  // const { user } = useUser();
+  const { user } = useUser();
   // console.log("user",user?.memberId);
   const { currentAccount, api } = useSubstrateState();
   console.log('api', api);
@@ -36,18 +38,26 @@ export const ProjectList: React.FC<ProjectListProps> = () => {
   } = useGetMemberInfoByAddress({ memberAddress: currentAccount.address });
   console.log('decodedOutputMembersInfo', decodedOutputMembersInfo?.value.Ok);
   console.log('getMemberInfoloading', getMemberInfoloading);
-
+  // let memberId = decodedOutputMembersInfo?.value.Ok.memberId as unknown as number
   const {
     decodedOutput: decodedOutputMembersProjects,
     loading: loadingMembersProjects,
   } = useGetMembersProject({
-    memberId: decodedOutputMembersInfo?.value.Ok.memberId as unknown as number,
+    memberId: user?.memberId as unknown as number,
   });
   const { loading: getAdminLoading, decodedOutput: getAdminDecodedOutput } =
     useGetAdmin();
   const isAdmin = getAdminDecodedOutput?.value == currentAccount?.address;
   console.log('isAdmin', isAdmin);
   console.log('getAdminLoading', getAdminLoading);
+  console.log(
+    'decodedOutputMembersProjects',
+    decodedOutputMembersProjects?.value.Ok
+  );
+  console.log(
+    'memberId',
+    decodedOutputMembersInfo?.value.Ok.memberId as unknown as number
+  );
 
   return (
     <div>
