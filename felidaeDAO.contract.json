@@ -1,6 +1,6 @@
 {
   "source": {
-    "hash": "0x1366afe471a71032eeb948af4c3b29770dabca67a4a319c42cc3e9b3aef1d998",
+    "hash": "0x81dfe0e77270db7f97c7fedb01055e37311933833c55d42c2eb656e4d630ac15",
     "language": "ink! 4.2.0",
     "compiler": "rustc 1.69.0-nightly",
     "build_info": {
@@ -81,15 +81,15 @@
       },
       "blockNumber": {
         "displayName": ["BlockNumber"],
-        "type": 79
+        "type": 81
       },
       "chainExtension": {
         "displayName": ["ChainExtension"],
-        "type": 80
+        "type": 82
       },
       "hash": {
         "displayName": ["Hash"],
-        "type": 78
+        "type": 80
       },
       "maxEventTopics": 4,
       "timestamp": {
@@ -163,7 +163,7 @@
             "label": "from",
             "type": {
               "displayName": ["Option"],
-              "type": 16
+              "type": 19
             }
           },
           {
@@ -439,7 +439,7 @@
             "label": "stake",
             "type": {
               "displayName": ["Stake"],
-              "type": 69
+              "type": 71
             }
           }
         ],
@@ -463,7 +463,7 @@
             "label": "stake",
             "type": {
               "displayName": ["Stake"],
-              "type": 69
+              "type": 71
             }
           }
         ],
@@ -487,7 +487,7 @@
             "label": "stake",
             "type": {
               "displayName": ["Stake"],
-              "type": 69
+              "type": 71
             }
           }
         ],
@@ -572,14 +572,28 @@
         "docs": [
           " Constructor that initializes the `bool` value to `false`.",
           "",
-          " Constructors can delegate to other constructors."
+          " Constructors can delegate to other constructors.",
+          " make the dao owner the 100% owner of this dao "
         ],
-        "label": "set_dao_id",
+        "label": "add_stake_for_owner",
         "mutates": true,
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
           "type": 12
+        },
+        "selector": "0x4a6ac426"
+      },
+      {
+        "args": [],
+        "default": false,
+        "docs": [],
+        "label": "set_dao_id",
+        "mutates": true,
+        "payable": false,
+        "returnType": {
+          "displayName": ["ink", "MessageResult"],
+          "type": 15
         },
         "selector": "0xa0bf9d32"
       },
@@ -592,7 +606,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 12
+          "type": 15
         },
         "selector": "0x901421ae"
       },
@@ -605,7 +619,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 14
+          "type": 17
         },
         "selector": "0x5cbe3883"
       },
@@ -615,7 +629,7 @@
             "label": "new_dao_info",
             "type": {
               "displayName": ["DaoInfo"],
-              "type": 15
+              "type": 18
             }
           }
         ],
@@ -643,7 +657,7 @@
             "label": "token_type",
             "type": {
               "displayName": ["TokenType"],
-              "type": 17
+              "type": 20
             }
           },
           {
@@ -661,7 +675,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 18
+          "type": 12
         },
         "selector": "0x795c8be5"
       },
@@ -756,7 +770,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 18
+          "type": 12
         },
         "selector": "0xd2b51e74"
       },
@@ -784,7 +798,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 18
+          "type": 12
         },
         "selector": "0x39a97ce6"
       },
@@ -794,7 +808,7 @@
             "label": "dao_info",
             "type": {
               "displayName": ["DaoInfo"],
-              "type": 15
+              "type": 18
             }
           }
         ],
@@ -805,7 +819,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 18
+          "type": 12
         },
         "selector": "0x4265e88a"
       },
@@ -833,7 +847,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 18
+          "type": 12
         },
         "selector": "0xb6018113"
       },
@@ -848,7 +862,7 @@
           }
         ],
         "default": false,
-        "docs": [" get member info "],
+        "docs": [" get member info by id "],
         "label": "get_member_info",
         "mutates": false,
         "payable": false,
@@ -857,6 +871,27 @@
           "type": 28
         },
         "selector": "0xea6fffed"
+      },
+      {
+        "args": [
+          {
+            "label": "member_address",
+            "type": {
+              "displayName": ["AccountId"],
+              "type": 0
+            }
+          }
+        ],
+        "default": false,
+        "docs": [" get member info "],
+        "label": "get_member_info_by_address",
+        "mutates": false,
+        "payable": false,
+        "returnType": {
+          "displayName": ["ink", "MessageResult"],
+          "type": 28
+        },
+        "selector": "0x66315572"
       },
       {
         "args": [
@@ -880,15 +915,7 @@
         "selector": "0xa04e53f1"
       },
       {
-        "args": [
-          {
-            "label": "account",
-            "type": {
-              "displayName": ["AccountId"],
-              "type": 0
-            }
-          }
-        ],
+        "args": [],
         "default": false,
         "docs": [" check the caller is the member of dao"],
         "label": "is_member",
@@ -937,7 +964,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 18
+          "type": 12
         },
         "selector": "0x434f4970"
       },
@@ -992,7 +1019,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 18
+          "type": 12
         },
         "selector": "0x7edfea88"
       },
@@ -1048,7 +1075,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 18
+          "type": 12
         },
         "selector": "0xc1a11ba8"
       },
@@ -1092,24 +1119,17 @@
         ],
         "default": false,
         "docs": ["set_the_goal"],
-        "label": "set_the_goal",
+        "label": "set_the_confidence",
         "mutates": true,
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 18
+          "type": 12
         },
-        "selector": "0x9fa105de"
+        "selector": "0x4dfd7f0d"
       },
       {
         "args": [
-          {
-            "label": "dao_address",
-            "type": {
-              "displayName": ["AccountId"],
-              "type": 0
-            }
-          },
           {
             "label": "project_id",
             "type": {
@@ -1125,7 +1145,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 18
+          "type": 12
         },
         "selector": "0x36ba64fd"
       },
@@ -1150,20 +1170,6 @@
               "displayName": ["ProjectId"],
               "type": 4
             }
-          },
-          {
-            "label": "start_date",
-            "type": {
-              "displayName": ["String"],
-              "type": 3
-            }
-          },
-          {
-            "label": "end_date",
-            "type": {
-              "displayName": ["String"],
-              "type": 3
-            }
           }
         ],
         "default": false,
@@ -1173,7 +1179,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 18
+          "type": 12
         },
         "selector": "0x7e5917bb"
       },
@@ -1243,7 +1249,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 18
+          "type": 12
         },
         "selector": "0x6e259c1e"
       },
@@ -1285,7 +1291,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 48
+          "type": 58
         },
         "selector": "0xb1bfb007"
       },
@@ -1306,7 +1312,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 50
+          "type": 60
         },
         "selector": "0x986792fc"
       },
@@ -1344,7 +1350,7 @@
             "label": "opinion",
             "type": {
               "displayName": ["ReviewOpinion"],
-              "type": 53
+              "type": 56
             }
           }
         ],
@@ -1355,7 +1361,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 18
+          "type": 12
         },
         "selector": "0xd09b66df"
       },
@@ -1372,7 +1378,7 @@
             "label": "ticket_status",
             "type": {
               "displayName": ["TaskStatus"],
-              "type": 54
+              "type": 52
             }
           }
         ],
@@ -1383,7 +1389,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 18
+          "type": 12
         },
         "selector": "0x99a31815"
       },
@@ -1404,7 +1410,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 55
+          "type": 62
         },
         "selector": "0x2e6a8d7b"
       },
@@ -1432,7 +1438,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 18
+          "type": 12
         },
         "selector": "0x65563f58"
       },
@@ -1445,7 +1451,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 61
+          "type": 64
         },
         "selector": "0xb63b3e84"
       },
@@ -1480,7 +1486,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 18
+          "type": 12
         },
         "selector": "0xdb4e3a28"
       },
@@ -1501,7 +1507,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 63
+          "type": 65
         },
         "selector": "0x0ad64755"
       },
@@ -1536,7 +1542,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 18
+          "type": 12
         },
         "selector": "0x4edaeda6"
       },
@@ -1550,7 +1556,14 @@
             }
           },
           {
-            "label": "time",
+            "label": "hours",
+            "type": {
+              "displayName": ["u16"],
+              "type": 4
+            }
+          },
+          {
+            "label": "minutes",
             "type": {
               "displayName": ["u16"],
               "type": 4
@@ -1564,7 +1577,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 18
+          "type": 12
         },
         "selector": "0x7ae751ae"
       },
@@ -1585,7 +1598,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 67
+          "type": 69
         },
         "selector": "0x3aa7ce16"
       },
@@ -1598,7 +1611,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 70
+          "type": 72
         },
         "selector": "0x6d5d6604"
       },
@@ -1611,7 +1624,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 72
+          "type": 74
         },
         "selector": "0xc753f6ce"
       },
@@ -1624,7 +1637,7 @@
         "payable": true,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 18
+          "type": 12
         },
         "selector": "0x42802622"
       },
@@ -1645,7 +1658,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 18
+          "type": 12
         },
         "selector": "0x3a656e31"
       },
@@ -1658,7 +1671,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 18
+          "type": 12
         },
         "selector": "0x66a1963e"
       },
@@ -1671,7 +1684,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 74
+          "type": 76
         },
         "selector": "0x88c150ad"
       },
@@ -1705,7 +1718,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 76
+          "type": 78
         },
         "selector": "0x03409a7e"
       },
@@ -1744,7 +1757,7 @@
         "payable": false,
         "returnType": {
           "displayName": ["ink", "MessageResult"],
-          "type": 74
+          "type": 76
         },
         "selector": "0x110ece03"
       }
@@ -3118,189 +3131,6 @@
       "id": 13,
       "type": {
         "def": {
-          "array": {
-            "len": 16,
-            "type": 2
-          }
-        }
-      }
-    },
-    {
-      "id": 14,
-      "type": {
-        "def": {
-          "variant": {
-            "variants": [
-              {
-                "fields": [
-                  {
-                    "type": 15
-                  }
-                ],
-                "index": 0,
-                "name": "Ok"
-              },
-              {
-                "fields": [
-                  {
-                    "type": 11
-                  }
-                ],
-                "index": 1,
-                "name": "Err"
-              }
-            ]
-          }
-        },
-        "params": [
-          {
-            "name": "T",
-            "type": 15
-          },
-          {
-            "name": "E",
-            "type": 11
-          }
-        ],
-        "path": ["Result"]
-      }
-    },
-    {
-      "id": 15,
-      "type": {
-        "def": {
-          "composite": {
-            "fields": [
-              {
-                "name": "dao_name",
-                "type": 3,
-                "typeName": "String"
-              },
-              {
-                "name": "description",
-                "type": 3,
-                "typeName": "String"
-              },
-              {
-                "name": "website",
-                "type": 8,
-                "typeName": "Option<String>"
-              },
-              {
-                "name": "profile",
-                "type": 8,
-                "typeName": "Option<String>"
-              },
-              {
-                "name": "dao_address",
-                "type": 16,
-                "typeName": "Option<AccountId>"
-              }
-            ]
-          }
-        },
-        "path": ["felideaDAO", "felideaDAO", "DaoInfo"]
-      }
-    },
-    {
-      "id": 16,
-      "type": {
-        "def": {
-          "variant": {
-            "variants": [
-              {
-                "index": 0,
-                "name": "None"
-              },
-              {
-                "fields": [
-                  {
-                    "type": 0
-                  }
-                ],
-                "index": 1,
-                "name": "Some"
-              }
-            ]
-          }
-        },
-        "params": [
-          {
-            "name": "T",
-            "type": 0
-          }
-        ],
-        "path": ["Option"]
-      }
-    },
-    {
-      "id": 17,
-      "type": {
-        "def": {
-          "variant": {
-            "variants": [
-              {
-                "index": 0,
-                "name": "GovernanceToken"
-              },
-              {
-                "index": 1,
-                "name": "Psp22"
-              },
-              {
-                "index": 2,
-                "name": "Psp34"
-              }
-            ]
-          }
-        },
-        "path": ["felideaDAO", "felideaDAO", "TokenType"]
-      }
-    },
-    {
-      "id": 18,
-      "type": {
-        "def": {
-          "variant": {
-            "variants": [
-              {
-                "fields": [
-                  {
-                    "type": 19
-                  }
-                ],
-                "index": 0,
-                "name": "Ok"
-              },
-              {
-                "fields": [
-                  {
-                    "type": 11
-                  }
-                ],
-                "index": 1,
-                "name": "Err"
-              }
-            ]
-          }
-        },
-        "params": [
-          {
-            "name": "T",
-            "type": 19
-          },
-          {
-            "name": "E",
-            "type": 11
-          }
-        ],
-        "path": ["Result"]
-      }
-    },
-    {
-      "id": 19,
-      "type": {
-        "def": {
           "variant": {
             "variants": [
               {
@@ -3315,7 +3145,7 @@
               {
                 "fields": [
                   {
-                    "type": 20
+                    "type": 14
                   }
                 ],
                 "index": 1,
@@ -3331,14 +3161,14 @@
           },
           {
             "name": "E",
-            "type": 20
+            "type": 14
           }
         ],
         "path": ["Result"]
       }
     },
     {
-      "id": 20,
+      "id": 14,
       "type": {
         "def": {
           "variant": {
@@ -3518,6 +3348,189 @@
       }
     },
     {
+      "id": 15,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 16
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 11
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 16
+          },
+          {
+            "name": "E",
+            "type": 11
+          }
+        ],
+        "path": ["Result"]
+      }
+    },
+    {
+      "id": 16,
+      "type": {
+        "def": {
+          "array": {
+            "len": 16,
+            "type": 2
+          }
+        }
+      }
+    },
+    {
+      "id": 17,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 18
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 11
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 18
+          },
+          {
+            "name": "E",
+            "type": 11
+          }
+        ],
+        "path": ["Result"]
+      }
+    },
+    {
+      "id": 18,
+      "type": {
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "name": "dao_name",
+                "type": 3,
+                "typeName": "String"
+              },
+              {
+                "name": "description",
+                "type": 3,
+                "typeName": "String"
+              },
+              {
+                "name": "website",
+                "type": 8,
+                "typeName": "Option<String>"
+              },
+              {
+                "name": "profile",
+                "type": 8,
+                "typeName": "Option<String>"
+              },
+              {
+                "name": "dao_address",
+                "type": 19,
+                "typeName": "Option<AccountId>"
+              }
+            ]
+          }
+        },
+        "path": ["felideaDAO", "felideaDAO", "DaoInfo"]
+      }
+    },
+    {
+      "id": 19,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "index": 0,
+                "name": "None"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 0
+                  }
+                ],
+                "index": 1,
+                "name": "Some"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 0
+          }
+        ],
+        "path": ["Option"]
+      }
+    },
+    {
+      "id": 20,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "index": 0,
+                "name": "GovernanceToken"
+              },
+              {
+                "index": 1,
+                "name": "Psp22"
+              },
+              {
+                "index": 2,
+                "name": "Psp34"
+              }
+            ]
+          }
+        },
+        "path": ["felideaDAO", "felideaDAO", "TokenType"]
+      }
+    },
+    {
       "id": 21,
       "type": {
         "def": {
@@ -3575,7 +3588,7 @@
             "fields": [
               {
                 "name": "token_type",
-                "type": 17,
+                "type": 20,
                 "typeName": "TokenType"
               },
               {
@@ -3775,7 +3788,7 @@
               {
                 "fields": [
                   {
-                    "type": 20
+                    "type": 14
                   }
                 ],
                 "index": 1,
@@ -3791,7 +3804,7 @@
           },
           {
             "name": "E",
-            "type": 20
+            "type": 14
           }
         ],
         "path": ["Result"]
@@ -4034,7 +4047,7 @@
               {
                 "fields": [
                   {
-                    "type": 20
+                    "type": 14
                   }
                 ],
                 "index": 1,
@@ -4050,7 +4063,7 @@
           },
           {
             "name": "E",
-            "type": 20
+            "type": 14
           }
         ],
         "path": ["Result"]
@@ -4386,7 +4399,7 @@
               {
                 "fields": [
                   {
-                    "type": 20
+                    "type": 14
                   }
                 ],
                 "index": 1,
@@ -4402,7 +4415,7 @@
           },
           {
             "name": "E",
-            "type": 20
+            "type": 14
           }
         ],
         "path": ["Result"]
@@ -4481,7 +4494,7 @@
               {
                 "fields": [
                   {
-                    "type": 6
+                    "type": 50
                   }
                 ],
                 "index": 0,
@@ -4490,7 +4503,7 @@
               {
                 "fields": [
                   {
-                    "type": 20
+                    "type": 14
                   }
                 ],
                 "index": 1,
@@ -4502,11 +4515,11 @@
         "params": [
           {
             "name": "T",
-            "type": 6
+            "type": 50
           },
           {
             "name": "E",
-            "type": 20
+            "type": 14
           }
         ],
         "path": ["Result"]
@@ -4516,139 +4529,86 @@
       "id": 50,
       "type": {
         "def": {
-          "variant": {
-            "variants": [
-              {
-                "fields": [
-                  {
-                    "type": 51
-                  }
-                ],
-                "index": 0,
-                "name": "Ok"
-              },
-              {
-                "fields": [
-                  {
-                    "type": 11
-                  }
-                ],
-                "index": 1,
-                "name": "Err"
-              }
-            ]
-          }
-        },
-        "params": [
-          {
-            "name": "T",
+          "sequence": {
             "type": 51
-          },
-          {
-            "name": "E",
-            "type": 11
           }
-        ],
-        "path": ["Result"]
+        }
       }
     },
     {
       "id": 51,
       "type": {
         "def": {
-          "variant": {
-            "variants": [
+          "composite": {
+            "fields": [
               {
-                "fields": [
-                  {
-                    "type": 52
-                  }
-                ],
-                "index": 0,
-                "name": "Ok"
+                "name": "ticket_id",
+                "type": 4,
+                "typeName": "TaskId"
               },
               {
-                "fields": [
-                  {
-                    "type": 20
-                  }
-                ],
-                "index": 1,
-                "name": "Err"
+                "name": "project_id",
+                "type": 4,
+                "typeName": "u16"
+              },
+              {
+                "name": "name",
+                "type": 3,
+                "typeName": "String"
+              },
+              {
+                "name": "creator",
+                "type": 0,
+                "typeName": "AccountId"
+              },
+              {
+                "name": "ticket_description",
+                "type": 3,
+                "typeName": "String"
+              },
+              {
+                "name": "ticket_status",
+                "type": 52,
+                "typeName": "TaskStatus"
+              },
+              {
+                "name": "assigned_to",
+                "type": 0,
+                "typeName": "AccountId"
+              },
+              {
+                "name": "task_type",
+                "type": 47,
+                "typeName": "TaskType"
+              },
+              {
+                "name": "start_time",
+                "type": 3,
+                "typeName": "String"
+              },
+              {
+                "name": "end_time",
+                "type": 8,
+                "typeName": "Option<String>"
+              },
+              {
+                "name": "review",
+                "type": 53,
+                "typeName": "Option<ReviewStatus>"
+              },
+              {
+                "name": "total_time_logged_in",
+                "type": 57,
+                "typeName": "Option<u16>"
               }
             ]
           }
         },
-        "params": [
-          {
-            "name": "T",
-            "type": 52
-          },
-          {
-            "name": "E",
-            "type": 20
-          }
-        ],
-        "path": ["Result"]
+        "path": ["felideaDAO", "felideaDAO", "TicketInfo"]
       }
     },
     {
       "id": 52,
-      "type": {
-        "def": {
-          "variant": {
-            "variants": [
-              {
-                "index": 0,
-                "name": "None"
-              },
-              {
-                "fields": [
-                  {
-                    "type": 4
-                  }
-                ],
-                "index": 1,
-                "name": "Some"
-              }
-            ]
-          }
-        },
-        "params": [
-          {
-            "name": "T",
-            "type": 4
-          }
-        ],
-        "path": ["Option"]
-      }
-    },
-    {
-      "id": 53,
-      "type": {
-        "def": {
-          "variant": {
-            "variants": [
-              {
-                "index": 0,
-                "name": "YES"
-              },
-              {
-                "index": 1,
-                "name": "NO"
-              },
-              {
-                "index": 2,
-                "name": "None"
-              }
-            ]
-          }
-        },
-        "path": ["felideaDAO", "felideaDAO", "ReviewOpinion"]
-      }
-    },
-    {
-      "id": 54,
       "type": {
         "def": {
           "variant": {
@@ -4696,159 +4656,7 @@
       }
     },
     {
-      "id": 55,
-      "type": {
-        "def": {
-          "variant": {
-            "variants": [
-              {
-                "fields": [
-                  {
-                    "type": 56
-                  }
-                ],
-                "index": 0,
-                "name": "Ok"
-              },
-              {
-                "fields": [
-                  {
-                    "type": 11
-                  }
-                ],
-                "index": 1,
-                "name": "Err"
-              }
-            ]
-          }
-        },
-        "params": [
-          {
-            "name": "T",
-            "type": 56
-          },
-          {
-            "name": "E",
-            "type": 11
-          }
-        ],
-        "path": ["Result"]
-      }
-    },
-    {
-      "id": 56,
-      "type": {
-        "def": {
-          "variant": {
-            "variants": [
-              {
-                "fields": [
-                  {
-                    "type": 57
-                  }
-                ],
-                "index": 0,
-                "name": "Ok"
-              },
-              {
-                "fields": [
-                  {
-                    "type": 20
-                  }
-                ],
-                "index": 1,
-                "name": "Err"
-              }
-            ]
-          }
-        },
-        "params": [
-          {
-            "name": "T",
-            "type": 57
-          },
-          {
-            "name": "E",
-            "type": 20
-          }
-        ],
-        "path": ["Result"]
-      }
-    },
-    {
-      "id": 57,
-      "type": {
-        "def": {
-          "composite": {
-            "fields": [
-              {
-                "name": "ticket_id",
-                "type": 4,
-                "typeName": "TaskId"
-              },
-              {
-                "name": "project_id",
-                "type": 4,
-                "typeName": "u16"
-              },
-              {
-                "name": "name",
-                "type": 3,
-                "typeName": "String"
-              },
-              {
-                "name": "creator",
-                "type": 0,
-                "typeName": "AccountId"
-              },
-              {
-                "name": "ticket_description",
-                "type": 3,
-                "typeName": "String"
-              },
-              {
-                "name": "ticket_status",
-                "type": 54,
-                "typeName": "TaskStatus"
-              },
-              {
-                "name": "assigned_to",
-                "type": 0,
-                "typeName": "AccountId"
-              },
-              {
-                "name": "task_type",
-                "type": 47,
-                "typeName": "TaskType"
-              },
-              {
-                "name": "start_time",
-                "type": 3,
-                "typeName": "String"
-              },
-              {
-                "name": "end_time",
-                "type": 8,
-                "typeName": "Option<String>"
-              },
-              {
-                "name": "review",
-                "type": 58,
-                "typeName": "Option<ReviewStatus>"
-              },
-              {
-                "name": "total_time_logged_in",
-                "type": 52,
-                "typeName": "Option<u16>"
-              }
-            ]
-          }
-        },
-        "path": ["felideaDAO", "felideaDAO", "TicketInfo"]
-      }
-    },
-    {
-      "id": 58,
+      "id": 53,
       "type": {
         "def": {
           "variant": {
@@ -4860,7 +4668,7 @@
               {
                 "fields": [
                   {
-                    "type": 59
+                    "type": 54
                   }
                 ],
                 "index": 1,
@@ -4872,21 +4680,21 @@
         "params": [
           {
             "name": "T",
-            "type": 59
+            "type": 54
           }
         ],
         "path": ["Option"]
       }
     },
     {
-      "id": 59,
+      "id": 54,
       "type": {
         "def": {
           "composite": {
             "fields": [
               {
                 "name": "records",
-                "type": 60,
+                "type": 55,
                 "typeName": "ReviewRecord"
               }
             ]
@@ -4896,7 +4704,7 @@
       }
     },
     {
-      "id": 60,
+      "id": 55,
       "type": {
         "def": {
           "composite": {
@@ -4913,13 +4721,188 @@
               },
               {
                 "name": "option",
-                "type": 53,
+                "type": 56,
                 "typeName": "ReviewOpinion"
               }
             ]
           }
         },
         "path": ["felideaDAO", "felideaDAO", "ReviewRecord"]
+      }
+    },
+    {
+      "id": 56,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "index": 0,
+                "name": "YES"
+              },
+              {
+                "index": 1,
+                "name": "NO"
+              },
+              {
+                "index": 2,
+                "name": "None"
+              }
+            ]
+          }
+        },
+        "path": ["felideaDAO", "felideaDAO", "ReviewOpinion"]
+      }
+    },
+    {
+      "id": 57,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "index": 0,
+                "name": "None"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 4
+                  }
+                ],
+                "index": 1,
+                "name": "Some"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 4
+          }
+        ],
+        "path": ["Option"]
+      }
+    },
+    {
+      "id": 58,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 59
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 11
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 59
+          },
+          {
+            "name": "E",
+            "type": 11
+          }
+        ],
+        "path": ["Result"]
+      }
+    },
+    {
+      "id": 59,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 44
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 14
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 44
+          },
+          {
+            "name": "E",
+            "type": 14
+          }
+        ],
+        "path": ["Result"]
+      }
+    },
+    {
+      "id": 60,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 61
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 11
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 61
+          },
+          {
+            "name": "E",
+            "type": 11
+          }
+        ],
+        "path": ["Result"]
       }
     },
     {
@@ -4931,7 +4914,47 @@
               {
                 "fields": [
                   {
-                    "type": 62
+                    "type": 57
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 14
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 57
+          },
+          {
+            "name": "E",
+            "type": 14
+          }
+        ],
+        "path": ["Result"]
+      }
+    },
+    {
+      "id": 62,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 63
                   }
                 ],
                 "index": 0,
@@ -4952,7 +4975,7 @@
         "params": [
           {
             "name": "T",
-            "type": 62
+            "type": 63
           },
           {
             "name": "E",
@@ -4960,16 +4983,6 @@
           }
         ],
         "path": ["Result"]
-      }
-    },
-    {
-      "id": 62,
-      "type": {
-        "def": {
-          "sequence": {
-            "type": 57
-          }
-        }
       }
     },
     {
@@ -4981,7 +4994,7 @@
               {
                 "fields": [
                   {
-                    "type": 64
+                    "type": 51
                   }
                 ],
                 "index": 0,
@@ -4990,7 +5003,7 @@
               {
                 "fields": [
                   {
-                    "type": 11
+                    "type": 14
                   }
                 ],
                 "index": 1,
@@ -5002,11 +5015,11 @@
         "params": [
           {
             "name": "T",
-            "type": 64
+            "type": 51
           },
           {
             "name": "E",
-            "type": 11
+            "type": 14
           }
         ],
         "path": ["Result"]
@@ -5021,65 +5034,7 @@
               {
                 "fields": [
                   {
-                    "type": 65
-                  }
-                ],
-                "index": 0,
-                "name": "Ok"
-              },
-              {
-                "fields": [
-                  {
-                    "type": 20
-                  }
-                ],
-                "index": 1,
-                "name": "Err"
-              }
-            ]
-          }
-        },
-        "params": [
-          {
-            "name": "T",
-            "type": 65
-          },
-          {
-            "name": "E",
-            "type": 20
-          }
-        ],
-        "path": ["Result"]
-      }
-    },
-    {
-      "id": 65,
-      "type": {
-        "def": {
-          "sequence": {
-            "type": 66
-          }
-        }
-      }
-    },
-    {
-      "id": 66,
-      "type": {
-        "def": {
-          "tuple": [4, 4]
-        }
-      }
-    },
-    {
-      "id": 67,
-      "type": {
-        "def": {
-          "variant": {
-            "variants": [
-              {
-                "fields": [
-                  {
-                    "type": 68
+                    "type": 50
                   }
                 ],
                 "index": 0,
@@ -5100,7 +5055,7 @@
         "params": [
           {
             "name": "T",
-            "type": 68
+            "type": 50
           },
           {
             "name": "E",
@@ -5111,7 +5066,145 @@
       }
     },
     {
+      "id": 65,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 66
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 11
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 66
+          },
+          {
+            "name": "E",
+            "type": 11
+          }
+        ],
+        "path": ["Result"]
+      }
+    },
+    {
+      "id": 66,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 67
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 14
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 67
+          },
+          {
+            "name": "E",
+            "type": 14
+          }
+        ],
+        "path": ["Result"]
+      }
+    },
+    {
+      "id": 67,
+      "type": {
+        "def": {
+          "sequence": {
+            "type": 68
+          }
+        }
+      }
+    },
+    {
       "id": 68,
+      "type": {
+        "def": {
+          "tuple": [4, 4]
+        }
+      }
+    },
+    {
+      "id": 69,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 70
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 11
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 70
+          },
+          {
+            "name": "E",
+            "type": 11
+          }
+        ],
+        "path": ["Result"]
+      }
+    },
+    {
+      "id": 70,
       "type": {
         "def": {
           "variant": {
@@ -5123,7 +5216,7 @@
               {
                 "fields": [
                   {
-                    "type": 69
+                    "type": 71
                   }
                 ],
                 "index": 1,
@@ -5135,14 +5228,14 @@
         "params": [
           {
             "name": "T",
-            "type": 69
+            "type": 71
           }
         ],
         "path": ["Option"]
       }
     },
     {
-      "id": 69,
+      "id": 71,
       "type": {
         "def": {
           "composite": {
@@ -5166,86 +5259,6 @@
           }
         },
         "path": ["felideaDAO", "felideaDAO", "Stake"]
-      }
-    },
-    {
-      "id": 70,
-      "type": {
-        "def": {
-          "variant": {
-            "variants": [
-              {
-                "fields": [
-                  {
-                    "type": 71
-                  }
-                ],
-                "index": 0,
-                "name": "Ok"
-              },
-              {
-                "fields": [
-                  {
-                    "type": 11
-                  }
-                ],
-                "index": 1,
-                "name": "Err"
-              }
-            ]
-          }
-        },
-        "params": [
-          {
-            "name": "T",
-            "type": 71
-          },
-          {
-            "name": "E",
-            "type": 11
-          }
-        ],
-        "path": ["Result"]
-      }
-    },
-    {
-      "id": 71,
-      "type": {
-        "def": {
-          "variant": {
-            "variants": [
-              {
-                "fields": [
-                  {
-                    "type": 69
-                  }
-                ],
-                "index": 0,
-                "name": "Ok"
-              },
-              {
-                "fields": [
-                  {
-                    "type": 20
-                  }
-                ],
-                "index": 1,
-                "name": "Err"
-              }
-            ]
-          }
-        },
-        "params": [
-          {
-            "name": "T",
-            "type": 69
-          },
-          {
-            "name": "E",
-            "type": 20
-          }
-        ],
-        "path": ["Result"]
       }
     },
     {
@@ -5295,17 +5308,22 @@
           "variant": {
             "variants": [
               {
+                "fields": [
+                  {
+                    "type": 71
+                  }
+                ],
                 "index": 0,
-                "name": "None"
+                "name": "Ok"
               },
               {
                 "fields": [
                   {
-                    "type": 7
+                    "type": 14
                   }
                 ],
                 "index": 1,
-                "name": "Some"
+                "name": "Err"
               }
             ]
           }
@@ -5313,10 +5331,14 @@
         "params": [
           {
             "name": "T",
-            "type": 7
+            "type": 71
+          },
+          {
+            "name": "E",
+            "type": 14
           }
         ],
-        "path": ["Option"]
+        "path": ["Result"]
       }
     },
     {
@@ -5366,22 +5388,17 @@
           "variant": {
             "variants": [
               {
-                "fields": [
-                  {
-                    "type": 3
-                  }
-                ],
                 "index": 0,
-                "name": "Ok"
+                "name": "None"
               },
               {
                 "fields": [
                   {
-                    "type": 20
+                    "type": 7
                   }
                 ],
                 "index": 1,
-                "name": "Err"
+                "name": "Some"
               }
             ]
           }
@@ -5389,14 +5406,10 @@
         "params": [
           {
             "name": "T",
-            "type": 3
-          },
-          {
-            "name": "E",
-            "type": 20
+            "type": 7
           }
         ],
-        "path": ["Result"]
+        "path": ["Option"]
       }
     },
     {
@@ -5448,6 +5461,86 @@
               {
                 "fields": [
                   {
+                    "type": 3
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 14
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 3
+          },
+          {
+            "name": "E",
+            "type": 14
+          }
+        ],
+        "path": ["Result"]
+      }
+    },
+    {
+      "id": 78,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 79
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 11
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 79
+          },
+          {
+            "name": "E",
+            "type": 11
+          }
+        ],
+        "path": ["Result"]
+      }
+    },
+    {
+      "id": 79,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
                     "type": 5
                   }
                 ],
@@ -5457,7 +5550,7 @@
               {
                 "fields": [
                   {
-                    "type": 20
+                    "type": 14
                   }
                 ],
                 "index": 1,
@@ -5473,14 +5566,14 @@
           },
           {
             "name": "E",
-            "type": 20
+            "type": 14
           }
         ],
         "path": ["Result"]
       }
     },
     {
-      "id": 78,
+      "id": 80,
       "type": {
         "def": {
           "composite": {
@@ -5496,7 +5589,7 @@
       }
     },
     {
-      "id": 79,
+      "id": 81,
       "type": {
         "def": {
           "primitive": "u32"
@@ -5504,7 +5597,7 @@
       }
     },
     {
-      "id": 80,
+      "id": 82,
       "type": {
         "def": {
           "variant": {}

@@ -16,6 +16,7 @@ export interface IGetTicket {
   endTime: string;
   review: string | null;
   totaltimeloggedin: string;
+  ticketDescription: string;
 }
 export type IGetTicketList = IGetTicket[];
 export const useGetTicketList = () => {

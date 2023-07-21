@@ -1,20 +1,46 @@
 import { useGetAdmin, useGetDaoInfo } from '@/hooks/messages';
 import { useGetContractAddress } from '@/hooks/messages/useGetContractaddress';
 import { useGetDaoId } from '@/hooks/messages/useGetDaoId';
+import { useGetMembersProject } from '@/hooks/messages/useGetMembersprojectList';
+import { useGetMembersTicket } from '@/hooks/useGetMembersTicketList';
 
 import { LoadingSpinner } from '@/components/loading';
 
+import { useUser } from '@/context/user/UserContextProvider';
 export const DaoInfo = () => {
   const { loading, decodedOutput } = useGetDaoInfo();
   const { loading: getDaoIdLoading, decodedOutput: getDaoIdOutput } =
     useGetDaoId();
   const { loading: getAdminLoading, decodedOutput: getAdminDecodedOutput } =
     useGetAdmin();
-
+  // const { loading: l, decodedOutput: doc } = useAddStake({ amount: 1 });
+  // console.log('loadingM', doc?.value);
+  const { user } = useUser();
   const {
     loading: getDaoAddressLoading,
     decodedOutput: getDaoAddressDecodedOutput,
   } = useGetContractAddress();
+  const {
+    loading: getMembersTicketListLoading,
+    decodedOutput: getMembersTicketListdecodeOutput,
+  } = useGetMembersTicket({
+    memberId: user?.memberId as unknown as number,
+  });
+  console.log(
+    'getMembersTicketListdecodeOutput',
+    getMembersTicketListdecodeOutput?.value
+  );
+  console.log('getMembersTicketListLoading', getMembersTicketListLoading);
+
+  // const { loading:l, decodedOutput:doc } = useAddStake({amount:1});
+  // console.log("loadingM",doc?.value);
+
+  const {
+    decodedOutput: decodecoutputProjectList,
+    loading: loadingProjectList,
+  } = useGetMembersProject({ memberId: user?.memberId as unknown as number });
+  console.log('decodecoutputProjectList', decodecoutputProjectList?.value.Ok);
+  console.log('loadingProjectList', loadingProjectList);
 
   return (
     <>

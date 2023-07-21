@@ -11,13 +11,13 @@ interface UpdateMemberRoleProps {
   children?: React.ReactNode;
   member: IGetMember;
   toggleVisible: Dispatch<SetStateAction<boolean>>;
-  refetchTickets: () => void;
+  refetchMember: () => void;
 }
 
 export const UpdateMemberRole: React.FC<UpdateMemberRoleProps> = ({
   toggleVisible,
   member,
-  refetchTickets,
+  refetchMember,
 }) => {
   const { loading, mutate, argValues, setArgValues } = useUpdateMemberRole({
     memberId: member.memberId,
@@ -32,8 +32,8 @@ export const UpdateMemberRole: React.FC<UpdateMemberRoleProps> = ({
       if (mutateValue.isError)
         return toast.error(mutateValue.decodedOutput || 'Something went wrong');
 
-      toast.success('Ticket status updated!');
-      refetchTickets();
+      toast.success('Member Role updated!');
+      refetchMember();
     }
     toggleVisible(false);
   };

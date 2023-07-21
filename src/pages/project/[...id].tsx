@@ -21,9 +21,10 @@ import Skeleton from '@/components/Skeleton';
 export default function ProjectInfoPage() {
   const router = useRouter();
   const projectId = router.query.id![1] as unknown as number;
-  const { loading, decodedOutput } = useGetProjectInfo({ projectId });
-  console.log('loa', decodedOutput?.value);
-  console.log('skj', projectId);
+  const { loading, decodedOutput } = useGetProjectInfo({
+    projectId: projectId,
+  });
+
   // const project = decodedOutput!.value as IGetProject;
   // const sprint = project.sprint;
   // console.log("id", (decodedOutput?.value as unknown as IGetProject)

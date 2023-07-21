@@ -5,26 +5,30 @@ import { AiOutlinePlus } from 'react-icons/ai';
 import { useGetTokenList } from '@/hooks/messages/useGetTokenList';
 
 import { LoadingSpinner } from '@/components/loading';
-import { AddToken } from '@/components/tokens/AddToken';
+import { AddStake } from '@/components/tokens/StakeToken';
 interface TokenListProps {
   children?: React.ReactNode;
 }
 
 export const TokenList: React.FC<TokenListProps> = () => {
-  const { decodedOutput, loading } = useGetTokenList();
+  const { decodedOutput, loading, refetch } = useGetTokenList();
   const [visible, setVisible] = useState<boolean>(false);
   const toggleVisible = () => {
     setVisible(!visible);
   };
+  const [createModalOpen, setCreateModalOpen] = useState<boolean>(false);
 
   return (
     <div>
-      <Modal open={visible} onClickBackdrop={toggleVisible}>
-        <AddToken toggleVisible={toggleVisible} />
-      </Modal>
       {/* <Modal open={visible} onClickBackdrop={toggleVisible}>
-        <UpdateProjectStatus toggleVisible={toggleVisible} />
+        <AddToken toggleVisible={toggleVisible} />
       </Modal> */}
+      <Modal open={visible} onClickBackdrop={toggleVisible}>
+        <AddStake
+          toggleVisible={() => setCreateModalOpen(!createModalOpen)}
+          refetchStakes={() => refetch()}
+        />
+      </Modal>
       <div className='mb-3 flex items-center justify-between'>
         <h3>Token List</h3>
         <Button onClick={toggleVisible} startIcon={<AiOutlinePlus />}>

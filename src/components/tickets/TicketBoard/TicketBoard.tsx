@@ -11,10 +11,8 @@ import { toast } from 'react-hot-toast';
 import { AiOutlinePlus } from 'react-icons/ai';
 
 import { useUpdateTaskStatus } from '@/hooks/messages';
-import {
-  IGetTicket,
-  useGetTicketList,
-} from '@/hooks/messages/useGetTicketList';
+import { IGetTicket } from '@/hooks/messages/useGetTicketList';
+import { useGetMembersTicket } from '@/hooks/useGetMembersTicketList';
 
 import { LoadingSpinner } from '@/components/loading';
 import { CreateTicket } from '@/components/tickets/CreateTicket';
@@ -22,6 +20,8 @@ import {
   Ticket,
   TicketModal,
 } from '@/components/tickets/TicketBoard/components';
+
+import { useUser } from '@/context/user/UserContextProvider';
 
 import { TaskStatusEnum } from '@/types/enums/taskStatus.enum';
 
@@ -47,11 +47,15 @@ const allColumns: BoardColumn[] = Object.keys(TaskStatusEnum).map(
 );
 
 export const TicketBoard = () => {
+  const { user } = useUser();
+
   const {
     decodedOutput,
     refetch,
     loading: ticketListLoading,
-  } = useGetTicketList();
+  } = useGetMembersTicket({
+    memberId: user?.memberId as unknown as number,
+  });
   const {
     setArgValues,
     mutate,
@@ -86,9 +90,9 @@ export const TicketBoard = () => {
     if (
       decodedOutput.value &&
       !decodedOutput.isError &&
-      decodedOutput.value.length
+      decodedOutput.value.Ok.length
     ) {
-      decodedOutput.value.forEach((ticket) => {
+      decodedOutput.value.Ok.forEach((ticket) => {
         const columnIndex =
           ticketStatusesObj[ticket.ticketStatus as string].columnIndex;
         _columns[columnIndex].tickets.push(ticket);

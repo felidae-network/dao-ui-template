@@ -6,7 +6,7 @@ import { useContract } from '@/context/contract/ContractContextProvider';
 import { CONTRACT_MESSAGES } from '@/types/enums';
 import { GetTimeLoggedInput } from '@/types/schemaTypes';
 
-export const useGetMembersProject = (initialArgValues: GetTimeLoggedInput) => {
+export const useGetMembersTimeLog = (initialArgValues: GetTimeLoggedInput) => {
   const { contract } = useContract();
 
   const projectList = contract?.abi?.findMessage(

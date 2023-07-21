@@ -1,7 +1,5 @@
 import { number, object, string } from 'yup';
-
 export const addMemberInputSchema = object({
-  daoAddress: string().required(),
   memberAddress: string().required(),
   name: string().optional(),
 });
@@ -80,6 +78,10 @@ export const createProjectInputSchema = object({
   assignedTo: string().required(),
   name: string().required(),
   projectDescription: string().required(),
+});
+
+export const addStakeInputSchema = object({
+  amount: number().required(),
 });
 
 export const getProjectInputSchema = object({

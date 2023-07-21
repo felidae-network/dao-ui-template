@@ -3,21 +3,15 @@ import { useState } from 'react';
 import { Button, Modal, Table } from 'react-daisyui';
 import { AiOutlinePlus } from 'react-icons/ai';
 
-import { useGetAdmin } from '@/hooks/messages';
-import { useGetMemberInfoByAddress } from '@/hooks/messages/useGetMemberInfoByAddress';
 import {
   IGetTicket,
   IGetTicketList,
   useGetTicketList,
 } from '@/hooks/messages/useGetTicketList';
-import { useGetMembersTicket } from '@/hooks/useGetMembersTicketList';
 
 import { LoadingSpinner } from '@/components/loading';
 import { CreateTicket } from '@/components/tickets/CreateTicket';
 import { UpdateTicketStatus } from '@/components/tickets/TicketStatus';
-
-import { useSubstrateState } from '@/context/substrate/SubstrateContextProvider';
-import { useUser } from '@/context/user/UserContextProvider';
 
 interface TicketListProps {
   children?: React.ReactNode;
@@ -29,43 +23,9 @@ export const TicketList: React.FC<TicketListProps> = () => {
     useState(false);
   const [updateTicketModalVisible, setUpdateTicketModalVisible] =
     useState(false);
-  const { user } = useUser();
-  const { loading: getAdminLoading, decodedOutput: getAdminDecodedOutput } =
-    useGetAdmin();
-  console.log('getAdminLoading', getAdminLoading);
 
-  const { currentAccount, api } = useSubstrateState();
-  console.log('api', api);
-
-  const isAdmin = getAdminDecodedOutput?.value == currentAccount?.address;
-  const {
-    loading: getMemberInfoloading,
-    decodedOutput: decodedOutputMembersInfo,
-  } = useGetMemberInfoByAddress({ memberAddress: currentAccount?.address });
-  console.log('decodedOutputMembersInfo', decodedOutputMembersInfo?.value.Ok);
-  console.log('getMemberInfoloading', getMemberInfoloading);
   const [selectedTicket, setSelectedTicket] = useState<IGetTicket>();
-  const {
-    loading: getMembersTicketListLoading,
-    decodedOutput: getMembersTicketListdecodeOutput,
-  } = useGetMembersTicket({
-    memberId: user?.memberId as unknown as number,
-  });
-  console.log('useget', user?.memberId as unknown as number);
-  console.log(
-    'getMembersTicketListdecodeOutput',
-    getMembersTicketListdecodeOutput?.value.Ok
-  );
-  console.log('user', user);
-  console.log('isAdmin', isAdmin);
 
-  let ticketListToMap: IGetTicketList | undefined;
-  if (isAdmin) {
-    ticketListToMap = decodedOutput?.value as unknown as IGetTicketList;
-  } else {
-    ticketListToMap = getMembersTicketListdecodeOutput?.value.Ok;
-  }
-  console.log('ticketmap', ticketListToMap);
   return (
     <div>
       <Modal
@@ -118,15 +78,18 @@ export const TicketList: React.FC<TicketListProps> = () => {
         </Table.Head>
 
         <Table.Body>
-          {loading && getMembersTicketListLoading ? (
+          {loading ? (
             <div className='flex items-center justify-center'>
               <LoadingSpinner />
             </div>
           ) : (
             <>
-              {ticketListToMap && ticketListToMap.length ? (
+              {decodedOutput &&
+              decodedOutput.value &&
+              !decodedOutput.isError &&
+              decodedOutput.value.length ? (
                 <>
-                  {(ticketListToMap as unknown as IGetTicketList).map(
+                  {(decodedOutput.value as unknown as IGetTicketList).map(
                     (ticket, index) => (
                       <Table.Row key={ticket.ticketId}>
                         <span>{index + 1}</span>
