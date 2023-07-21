@@ -1,5 +1,6 @@
 import { ContractPromise } from '@polkadot/api-contract';
 import React, { useContext, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
 import { CONTRACT_ADDRESS } from '@/config';
 import { ContractContext } from '@/context/contract/ContractContext';
@@ -67,19 +68,25 @@ const ContractContextProvider = (props: ContractContextProviderProps) => {
       ...transformUserInput(contract.registry, message.args, argValues)
     );
 
-    await new Promise((resolve) => {
-      value.signAndSend(
-        account,
-        {
-          signer: injector?.signer || undefined,
-        },
-        async (result) => {
-          if (result.isFinalized || result.isInBlock) {
-            await cb(result);
-            resolve(true);
+    // eslint-disable-next-line no-async-promise-executor
+    await new Promise(async (resolve, reject) => {
+      try {
+        await value.signAndSend(
+          account,
+          {
+            signer: injector?.signer || undefined,
+          },
+          async (result) => {
+            if (result.isFinalized || result.isInBlock) {
+              await cb(result);
+              resolve(true);
+            }
           }
-        }
-      );
+        );
+      } catch (error) {
+        reject(error);
+        toast.error('Transaction cancelled');
+      }
     });
   };
 
