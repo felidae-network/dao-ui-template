@@ -4,7 +4,6 @@ import { Button, Modal, Table } from 'react-daisyui';
 import { AiOutlinePlus } from 'react-icons/ai';
 
 import { useGetAdmin } from '@/hooks/messages';
-import { useGetMemberInfoByAddress } from '@/hooks/messages/useGetMemberInfoByAddress';
 import {
   IGetTicket,
   IGetTicketList,
@@ -30,20 +29,12 @@ export const TicketList: React.FC<TicketListProps> = () => {
   const [updateTicketModalVisible, setUpdateTicketModalVisible] =
     useState(false);
   const { user } = useUser();
-  const { loading: getAdminLoading, decodedOutput: getAdminDecodedOutput } =
-    useGetAdmin();
-  console.log('getAdminLoading', getAdminLoading);
+  const { decodedOutput: getAdminDecodedOutput } = useGetAdmin();
 
-  const { currentAccount, api } = useSubstrateState();
-  console.log('api', api);
+  const { currentAccount } = useSubstrateState();
 
   const isAdmin = getAdminDecodedOutput?.value == currentAccount?.address;
-  const {
-    loading: getMemberInfoloading,
-    decodedOutput: decodedOutputMembersInfo,
-  } = useGetMemberInfoByAddress({ memberAddress: currentAccount?.address });
-  console.log('decodedOutputMembersInfo', decodedOutputMembersInfo?.value.Ok);
-  console.log('getMemberInfoloading', getMemberInfoloading);
+
   const [selectedTicket, setSelectedTicket] = useState<IGetTicket>();
   const {
     loading: getMembersTicketListLoading,
@@ -51,13 +42,6 @@ export const TicketList: React.FC<TicketListProps> = () => {
   } = useGetMembersTicket({
     memberId: user?.memberId as unknown as number,
   });
-  console.log('useget', user?.memberId as unknown as number);
-  console.log(
-    'getMembersTicketListdecodeOutput',
-    getMembersTicketListdecodeOutput?.value.Ok
-  );
-  console.log('user', user);
-  console.log('isAdmin', isAdmin);
 
   let ticketListToMap: IGetTicketList | undefined;
   if (isAdmin) {
@@ -65,7 +49,7 @@ export const TicketList: React.FC<TicketListProps> = () => {
   } else {
     ticketListToMap = getMembersTicketListdecodeOutput?.value.Ok;
   }
-  console.log('ticketmap', ticketListToMap);
+
   return (
     <div>
       <Modal

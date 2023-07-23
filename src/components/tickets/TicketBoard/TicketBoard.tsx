@@ -56,11 +56,7 @@ export const TicketBoard = () => {
   } = useGetMembersTicket({
     memberId: user?.memberId as unknown as number,
   });
-  const {
-    setArgValues,
-    mutate,
-    loading: updateStatusLoading,
-  } = useUpdateTaskStatus();
+  const { mutate, loading: updateStatusLoading } = useUpdateTaskStatus();
   const [columns, _setColumns] = useState(allColumns);
 
   const [createTicketModalVisible, setCreateTicketModalVisible] =
@@ -111,11 +107,6 @@ export const TicketBoard = () => {
     }
 
     if (source.droppableId === destination.droppableId) return;
-
-    setArgValues({
-      ticketId: draggableId,
-      ticketStatus: destination.droppableId,
-    });
 
     const mutateValue = await mutate({
       ticketId: draggableId,

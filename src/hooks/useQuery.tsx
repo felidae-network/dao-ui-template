@@ -115,7 +115,11 @@ export function useQuery<DecodedValueType = unknown, ArgValueType = unknown>(
   );
 
   const call = useCallback(
-    async (message: AbiMessage, outcome: ContractExecResult) => {
+    async (
+      message: AbiMessage,
+      outcome: ContractExecResult,
+      manualArgs?: ArgValueType
+    ) => {
       if (!message) return setError({ message: 'Message was not selected' });
       const { storageDeposit, gasRequired } = outcome;
       const { value: userInput } = storageDepositLimit;
@@ -135,8 +139,11 @@ export function useQuery<DecodedValueType = unknown, ArgValueType = unknown>(
       };
 
       if (queryOptions.mutate) {
-        await callMessage<ArgValueType>(message, options, argValues, (res) =>
-          setResult(res)
+        await callMessage<ArgValueType>(
+          message,
+          options,
+          manualArgs || argValues,
+          (res) => setResult(res)
         );
       }
     },
@@ -158,7 +165,7 @@ export function useQuery<DecodedValueType = unknown, ArgValueType = unknown>(
       try {
         setLoading(true);
         const o = await dryRun(message, args);
-        await call(message, o);
+        await call(message, o, args);
         setLoading(false);
         return getDecodedOutput<DecodedValueType>(
           o,
