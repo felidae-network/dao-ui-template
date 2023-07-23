@@ -3,7 +3,14 @@ import { KeyringAddress } from '@polkadot/ui-keyring/types';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as React from 'react';
-import { Breadcrumbs, Button, Card, Dropdown, Navbar } from 'react-daisyui';
+import {
+  Avatar,
+  Breadcrumbs,
+  Button,
+  Card,
+  Dropdown,
+  Navbar,
+} from 'react-daisyui';
 import { AiOutlineWallet } from 'react-icons/ai';
 import { RxHamburgerMenu } from 'react-icons/rx';
 
@@ -17,8 +24,10 @@ import {
   useSubstrate,
   useSubstrateState,
 } from '@/context/substrate/SubstrateContextProvider';
+import { useUser } from '@/context/user/UserContextProvider';
 
 export default function Header() {
+  const { user } = useUser();
   const router = useRouter();
   const { setCurrentAccount } = useSubstrate();
   const { currentAccount } = useSubstrateState();
@@ -75,14 +84,15 @@ export default function Header() {
                 </Dropdown.Menu>
               </Dropdown>
               <Dropdown horizontal='left' vertical='bottom'>
-                <Button color='ghost' className='avatar' shape='circle'>
-                  <div className='w-10 rounded-full'>
-                    <img
-                      alt=''
-                      src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-                    />
-                  </div>
-                </Button>
+                <Avatar
+                  className='cursor-pointer'
+                  size='xs'
+                  online
+                  shape='circle'
+                  border
+                  borderColor='primary'
+                  letters={user?.name[0]}
+                />
                 <Dropdown.Menu className='menu-compact w-52'>
                   <li>
                     <Link href='/profile' className='justify-between'>

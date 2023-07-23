@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Avatar } from 'react-daisyui';
 
 import Layout from '@/components/layout/Layout';
 import Seo from '@/components/Seo';
@@ -65,6 +66,22 @@ export default function ProfilePage() {
                     <p>{user.name}</p>
                   </div>
                 </div>
+
+                <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
+                  <dt className='text-sm font-medium leading-6'>Avatar</dt>
+                  <div className='mt-1 text-sm leading-6'>
+                    <p>
+                      <Avatar
+                        size='sm'
+                        shape='circle'
+                        border
+                        borderColor='primary'
+                        letters={user?.name[0]}
+                      />
+                    </p>
+                  </div>
+                </div>
+
                 <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
                   <dt className='text-sm font-medium leading-6'>Address</dt>
                   <div className='mt-1 text-sm leading-6'>
