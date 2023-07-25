@@ -29,6 +29,7 @@ export enum CONTRACT_MESSAGES {
   GET_TICKET_LIST = 'getTicketList',
   DISTRIBUTE_GOVERNANCE_TOKEN = 'distributeGovernanceToken',
   TIME_LOG = 'logTime',
+  TIME_EXTRA_LOG = 'logExtraTime',
   GET_STAKE_FOR_ACCOUNT = 'getStakeForAccount',
   EARLY_WITHDRAWAL = 'earlyWithdraw',
   READ_TIMESTAMPS = 'readTimestamp',

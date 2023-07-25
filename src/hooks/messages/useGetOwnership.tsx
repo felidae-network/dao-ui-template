@@ -11,5 +11,5 @@ export const useGetOwnership = () => {
     CONTRACT_MESSAGES.GET_OWNERSHIP
   );
 
-  return useQuery(messageInfo);
+  return useQuery<{ Ok: string }>(messageInfo);
 };

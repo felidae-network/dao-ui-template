@@ -77,7 +77,7 @@ export default function HomePage() {
                     onChange={(e) => setAddress(e.target.value)}
                     placeholder='Account Address'
                     className='w-full'
-                    defaultValue={accounts[0].address}
+                    defaultValue={accounts[0]?.address}
                   >
                     {accounts &&
                       accounts.map((account) => (

@@ -125,8 +125,9 @@ export const closeTaskInputSchema = object({
 });
 
 export const timeLogInputSchema = object({
-  taskId: number().required(),
-  time: number().required(),
+  ticketId: number().required(),
+  hours: number().required(),
+  minutes: number().required(),
 });
 
 export const calculateEfficiencyInputSchema = object({

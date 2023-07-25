@@ -9,6 +9,7 @@ import { validateSchema } from '@/helpers/validateSchema';
 
 import { CONTRACT_MESSAGES } from '@/types/enums';
 import { addStakeInput } from '@/types/schemaTypes';
+
 export const useAddStake = () => {
   const { contract } = useContract();
   const [validationErrors, setValidationErrors] =

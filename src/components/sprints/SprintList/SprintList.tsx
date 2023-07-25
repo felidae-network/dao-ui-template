@@ -1,9 +1,16 @@
+// SprintList.tsx
+
 import Link from 'next/link';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Modal, Table } from 'react-daisyui';
 import { AiOutlinePlus } from 'react-icons/ai';
 
-import { useGetProjectList } from '@/hooks/messages';
+import {
+  IGetProject,
+  useGetProjectInfo,
+  useGetProjectList,
+} from '@/hooks/messages';
+import { Sprint } from '@/hooks/messages';
 import { useGetDaoId } from '@/hooks/messages/useGetDaoId';
 
 import { LoadingSpinner } from '@/components/loading';
@@ -12,13 +19,98 @@ interface SprintListProps {
   children?: React.ReactNode;
 }
 
+function update_sprint(sprint: Sprint): { startDate: number; endDate: number } {
+  if (!sprint) {
+    console.error('Sprint information is not available.');
+    return { startDate: 0, endDate: 0 };
+  }
+
+  // Constants
+  const one_day_in_milliseconds = 24 * 60 * 60 * 1000;
+  const seven_days_in_milliseconds = 7 * 24 * 60 * 60 * 1000;
+
+  // Calculate new dates
+  const new_start_date = sprint.endDate + one_day_in_milliseconds;
+  const final_end_date = new_start_date + seven_days_in_milliseconds;
+
+  // Return updated sprint information
+  return {
+    startDate: new_start_date as unknown as number,
+    endDate: final_end_date as unknown as number,
+  };
+}
+
 export const SprintList: React.FC<SprintListProps> = () => {
   const { decodedOutput, loading, refetch } = useGetProjectList();
   const [createModalOpen, setCreateModalOpen] = useState<boolean>(false);
-  // const [updateModalOpen, setUpdateModalOpen] = useState<boolean>(false);
   const { decodedOutput: getDaoIdDecodedOutput, loading: getDaoIdLoading } =
     useGetDaoId();
-  // const [selectedProject, setSelectedProject] = useState<IGetProject>();
+
+  // Call useGetProjectInfo directly inside the component
+  const {
+    loading: projectInfoLoading,
+    decodedOutput: projectInfoDecodedOutput,
+  } = useGetProjectInfo({
+    projectId: 1, // Replace with the actual projectId you want to use
+  });
+  console.log('projectInfoLoading', projectInfoLoading);
+  // Function to update the sprint dates and refetch the project information
+  const updateSprintDates = (projectInfo: IGetProject) => {
+    // If projectInfo is not loaded or there's an error, return
+    if (!projectInfo) {
+      console.error('Project information is not available.');
+      return;
+    }
+
+    // Get the current sprint from projectInfo
+    const sprint = projectInfo.sprint;
+
+    // Calculate updated dates
+    const updatedSprint = update_sprint(sprint);
+
+    // Update the sprint start and end dates
+    sprint.startDate = updatedSprint.startDate as unknown as string;
+    sprint.endDate = updatedSprint.endDate as unknown as string;
+
+    // Perform any other actions needed after updating the dates
+    // For example, you might want to save the updated sprint information back to the server.
+
+    // Refetch the project information to update the UI with the new dates
+    refetch();
+  };
+  console.log(
+    'updateSprintDates',
+    updateSprintDates(
+      projectInfoDecodedOutput?.value.Ok as unknown as IGetProject
+    )
+  );
+  // Call the updateSprintDates function periodically (every week)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // updateSprintDates(projectInfoDecodedOutput);
+    }, 7 * 24 * 60 * 60 * 1000); // 7 days in milliseconds
+
+    // Cleanup the interval on component unmount
+    return () => clearInterval(interval);
+  }, [projectInfoDecodedOutput]);
+
+  // Function to calculate updated sprint information and format the sprint name
+  const getFormattedSprintName = (
+    project: IGetProject,
+    projectInfo: IGetProject
+  ): string => {
+    if (!projectInfo) {
+      console.error('Project information is not available.');
+      return '';
+    }
+
+    const sprint = projectInfo.sprint;
+    const updatedSprint = update_sprint(sprint);
+
+    return `Sprint_${new Date(
+      updatedSprint.startDate
+    ).toDateString()}_${new Date(updatedSprint.endDate).toDateString()}`;
+  };
 
   return (
     <div>
@@ -31,18 +123,7 @@ export const SprintList: React.FC<SprintListProps> = () => {
           refetchProjects={() => refetch()}
         />
       </Modal>
-      {/* {selectedProject && (
-        // <Modal
-        //   open={updateModalOpen}
-        //   onClickBackdrop={() => setUpdateModalOpen(false)}
-        // >
-        //   <UpdateProjectStatus
-        //     toggleVisible={() => setUpdateModalOpen(!updateModalOpen)}
-        //     refetchProjects={() => refetch()}
-        //     project={selectedProject!}
-        //   />
-        // </Modal>
-      )} */}
+
       <div className='mb-3 flex items-center justify-between'>
         <h3>Your Sprints</h3>
         <Button
@@ -95,13 +176,7 @@ export const SprintList: React.FC<SprintListProps> = () => {
                           </Button>
                         </Link>
                       </span>
-                      <span>
-                        {`Sprint_${new Date(
-                          parseInt(project.sprint.startDate)
-                        ).toDateString()}_${new Date(
-                          parseInt(project.sprint.endDate)
-                        ).toDateString()}`}
-                      </span>
+                      <span>{getFormattedSprintName(project, project)}</span>
                       <span>
                         {new Date(
                           parseInt(project.sprint.startDate)

@@ -3,6 +3,12 @@ import { useQuery } from '@/hooks/useQuery';
 import { useContract } from '@/context/contract/ContractContextProvider';
 
 import { CONTRACT_MESSAGES } from '@/types/enums';
+export interface Sprint {
+  projectId: string;
+  startDate: string;
+  endDate: string;
+  action: string;
+}
 
 export interface IGetProject {
   assignedTo: string | null;
