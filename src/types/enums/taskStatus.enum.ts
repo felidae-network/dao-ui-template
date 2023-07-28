@@ -7,5 +7,4 @@ export enum TaskStatusEnum {
   LiveDeployed = 'Live Deployed',
   Closed = 'Closed',
   Completed = 'Completed',
-  None = 'None',
 }
