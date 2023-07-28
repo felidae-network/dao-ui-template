@@ -55,7 +55,7 @@ export const SprintList: React.FC<SprintListProps> = () => {
   });
   console.log('projectInfoLoading', projectInfoLoading);
   // Function to update the sprint dates and refetch the project information
-  const updateSprintDates = (projectInfo: IGetProject) => {
+  const _updateSprintDates = (projectInfo: IGetProject) => {
     // If projectInfo is not loaded or there's an error, return
     if (!projectInfo) {
       console.error('Project information is not available.');
@@ -78,12 +78,7 @@ export const SprintList: React.FC<SprintListProps> = () => {
     // Refetch the project information to update the UI with the new dates
     refetch();
   };
-  console.log(
-    'updateSprintDates',
-    updateSprintDates(
-      projectInfoDecodedOutput?.value.Ok as unknown as IGetProject
-    )
-  );
+
   // Call the updateSprintDates function periodically (every week)
   useEffect(() => {
     const interval = setInterval(() => {

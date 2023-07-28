@@ -24,8 +24,7 @@ export default function ProfilePage() {
   const { user } = useUser();
   const [balance, setBalance] = useState(0);
   const [nonce, setNoce] = useState();
-  console.log('user', user);
-  console.log('account', currentAccount);
+
   useEffect(() => {
     (async () => {
       if (currentAccount) {
@@ -85,7 +84,7 @@ export default function ProfilePage() {
                 <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>
                   <dt className='text-sm font-medium leading-6'>Address</dt>
                   <div className='mt-1 text-sm leading-6'>
-                    <p>{currentAccount.address}</p>
+                    <p>{currentAccount?.address}</p>
                   </div>
                 </div>
                 <div className='px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0'>

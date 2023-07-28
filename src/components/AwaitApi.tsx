@@ -32,7 +32,7 @@ export function AwaitApis({
   if (
     !web3Injected &&
     apiState === 'READY' &&
-    !chainProps.systemChainType.isDevelopment &&
+    !chainProps?.systemChainType?.isDevelopment &&
     isKeyringLoaded()
   ) {
     return <h1>extension error</h1>;
