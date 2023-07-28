@@ -89,9 +89,11 @@ export const TicketModal: React.FC<TicketModalProps> = ({
                 </div>
               </div>
 
-              {currentAccount.address === ticket.assignedTo && (
-                <TimeLogAccordion ticket={ticket} />
-              )}
+              {ticket.ticketStatus ===
+                TaskStatusEnum.InProgress.replace(/\s/g, '') &&
+                currentAccount.address === ticket.assignedTo && (
+                  <TimeLogAccordion ticket={ticket} />
+                )}
             </div>
           </div>
         </div>
