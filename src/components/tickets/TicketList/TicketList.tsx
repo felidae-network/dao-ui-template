@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { Button, Modal, Table } from 'react-daisyui';
 import { AiOutlinePlus } from 'react-icons/ai';
+import { TfiCup } from 'react-icons/tfi';
 
 import { useGetAdmin } from '@/hooks/messages';
 import {
@@ -13,6 +14,7 @@ import { useGetMembersTicket } from '@/hooks/useGetMembersTicketList';
 
 import { LoadingSpinner } from '@/components/loading';
 import { CreateTicket } from '@/components/tickets/CreateTicket';
+import { SetConfidence } from '@/components/tickets/SetConfidence';
 import { UpdateTicketStatus } from '@/components/tickets/TicketStatus';
 
 import { useSubstrateState } from '@/context/substrate/SubstrateContextProvider';
@@ -28,6 +30,9 @@ export const TicketList: React.FC<TicketListProps> = () => {
     useState(false);
   const [updateTicketModalVisible, setUpdateTicketModalVisible] =
     useState(false);
+  const [setConfidenceModalVisible, setSetConfidenceModalVisible] =
+    useState(false);
+
   const { user } = useUser();
   const { decodedOutput: getAdminDecodedOutput } = useGetAdmin();
 
@@ -54,7 +59,7 @@ export const TicketList: React.FC<TicketListProps> = () => {
     <div>
       <Modal
         open={createTicketModalVisible}
-        onClickBackdrop={() => setCreateTicketModalVisible(!false)}
+        onClickBackdrop={() => setCreateTicketModalVisible(false)}
       >
         <CreateTicket
           toggleVisible={() =>
@@ -63,6 +68,18 @@ export const TicketList: React.FC<TicketListProps> = () => {
           refetchTickets={() => refetch()}
         />
       </Modal>
+
+      <Modal
+        open={setConfidenceModalVisible}
+        onClickBackdrop={() => setSetConfidenceModalVisible(false)}
+      >
+        <SetConfidence
+          toggleVisible={() =>
+            setSetConfidenceModalVisible(!createTicketModalVisible)
+          }
+        />
+      </Modal>
+
       {selectedTicket && (
         <Modal
           open={updateTicketModalVisible}
@@ -81,14 +98,26 @@ export const TicketList: React.FC<TicketListProps> = () => {
           />
         </Modal>
       )}
+
       <div className='mb-3 flex items-center justify-between'>
         <h3>Your Tickets</h3>
-        <Button
-          onClick={() => setCreateTicketModalVisible(true)}
-          startIcon={<AiOutlinePlus />}
-        >
-          Add New
-        </Button>
+        <div>
+          <Button
+            className='mr-2'
+            onClick={() => setSetConfidenceModalVisible(true)}
+            startIcon={<TfiCup />}
+            variant='outline'
+          >
+            Set Confidence
+          </Button>
+
+          <Button
+            onClick={() => setCreateTicketModalVisible(true)}
+            startIcon={<AiOutlinePlus />}
+          >
+            Add New
+          </Button>
+        </div>
       </div>
 
       <Table zebra={true} className='w-full'>

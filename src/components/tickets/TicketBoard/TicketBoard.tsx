@@ -9,6 +9,7 @@ import {
 import { Button, Modal } from 'react-daisyui';
 import { toast } from 'react-hot-toast';
 import { AiOutlinePlus } from 'react-icons/ai';
+import { TfiCup } from 'react-icons/tfi';
 
 import { useUpdateTaskStatus } from '@/hooks/messages';
 import { IGetTicket } from '@/hooks/messages/useGetTicketList';
@@ -16,6 +17,7 @@ import { useGetMembersTicket } from '@/hooks/useGetMembersTicketList';
 
 import { LoadingSpinner } from '@/components/loading';
 import { CreateTicket } from '@/components/tickets/CreateTicket';
+import { SetConfidence } from '@/components/tickets/SetConfidence';
 import {
   Ticket,
   TicketModal,
@@ -60,6 +62,8 @@ export const TicketBoard = () => {
   const [columns, _setColumns] = useState(allColumns);
 
   const [createTicketModalVisible, setCreateTicketModalVisible] =
+    useState(false);
+  const [setConfidenceModalVisible, setSetConfidenceModalVisible] =
     useState(false);
 
   const [ticketModalVisible, setTicketModalVisible] = useState(false);
@@ -136,6 +140,17 @@ export const TicketBoard = () => {
         />
       </Modal>
 
+      <Modal
+        open={setConfidenceModalVisible}
+        onClickBackdrop={() => setSetConfidenceModalVisible(false)}
+      >
+        <SetConfidence
+          toggleVisible={() =>
+            setSetConfidenceModalVisible(!createTicketModalVisible)
+          }
+        />
+      </Modal>
+
       {selectedTicket && (
         <Modal
           open={ticketModalVisible}
@@ -148,6 +163,27 @@ export const TicketBoard = () => {
           />
         </Modal>
       )}
+
+      <div className='mb-3 flex items-center justify-between'>
+        <h3>Your Tickets</h3>
+        <div>
+          <Button
+            className='mr-2'
+            onClick={() => setSetConfidenceModalVisible(true)}
+            startIcon={<TfiCup />}
+            variant='outline'
+          >
+            Set Confidence
+          </Button>
+
+          <Button
+            onClick={() => setCreateTicketModalVisible(true)}
+            startIcon={<AiOutlinePlus />}
+          >
+            Add New
+          </Button>
+        </div>
+      </div>
 
       <div className='flex overflow-x-scroll'>
         {columnsWithData.map((column) => (
