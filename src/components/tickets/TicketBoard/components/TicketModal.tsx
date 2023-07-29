@@ -5,6 +5,7 @@ import { IGetTicket } from '@/hooks/messages/useGetTicketList';
 
 import { TimeLogAccordion } from '@/components/tickets/TicketBoard/components/TimeLogAccordion';
 
+import { TOTAL_HOURS_PER_WEEEK } from '@/constant';
 import { useSubstrateState } from '@/context/substrate/SubstrateContextProvider';
 
 import { TaskStatusEnum } from '@/types/enums/taskStatus.enum';
@@ -97,7 +98,12 @@ export const TicketModal: React.FC<TicketModalProps> = ({
               {ticket.ticketStatus ===
                 TaskStatusEnum.InProgress.replace(/\s/g, '') &&
                 currentAccount.address === ticket.assignedTo && (
-                  <TimeLogAccordion ticket={ticket} />
+                  <TimeLogAccordion
+                    isExtraTime={
+                      Number(ticket.totaltimeloggedin) === TOTAL_HOURS_PER_WEEEK
+                    }
+                    ticket={ticket}
+                  />
                 )}
             </div>
           </div>
