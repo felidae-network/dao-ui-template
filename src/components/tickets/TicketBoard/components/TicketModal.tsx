@@ -69,7 +69,12 @@ export const TicketModal: React.FC<TicketModalProps> = ({
               <label className='label'>
                 <span className='label-text font-bold'>STATUS</span>
               </label>
-              <Select color='info' placeholder='Ticket Type' className='w-full'>
+              <Select
+                value={String(ticket.ticketStatus)}
+                color='info'
+                placeholder='Ticket Type'
+                className='w-full'
+              >
                 {Object.keys(TaskStatusEnum).map((ticketType) => (
                   <option value={ticketType} key={ticketType}>
                     {ticketType}
